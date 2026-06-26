@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WealthOS | Unified Investing Platform</title>
+  
+  <!-- Modern Font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css?v=1.2">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Redesigned Sticky Top Navbar -->
+    <header class="navbar glass-nav">
+      <div class="nav-container">
+        <div class="brand-section" data-goto="hero">
+          <div class="logo-container">
+            <i data-lucide="zap" style="stroke-width: 3px; color: #fff;"></i>
+          </div>
+          <div class="brand-info">
+            <h1>Nexbit</h1>
+            <span>Unified Investing</span>
+          </div>
+        </div>
+        
+        <nav class="nav-links" id="spotlight-nav">
+          <!-- Spotlight pill that slides to active item -->
+          <div class="nav-spotlight-pill" id="nav-spotlight-pill"></div>
+          <!-- Radial cursor glow overlay -->
+          <div class="nav-spotlight-cursor" id="nav-spotlight-cursor"></div>
+          <li class="nav-item active" data-page="hero">
+            <a href="#hero">
+              <span>Home</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="profile">
+            <a href="#profile">
+              <span>Profile</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="dashboard">
+            <a href="#dashboard">
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="portfolio">
+            <a href="#portfolio">
+              <span>Portfolio</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="invest">
+            <a href="#invest">
+              <span>Invest</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="goals">
+            <a href="#goals">
+              <span>Goals</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="learn">
+            <a href="#learn">
+              <span>Learn</span>
+            </a>
+          </li>
+          <li class="nav-item" data-page="buddy">
+            <a href="#buddy">
+              <span>Finance Buddy</span>
+            </a>
+          </li>
+        </nav>
+        
+        <div class="search-container">
+          <i data-lucide="search"></i>
+          <input type="text" class="search-input" id="global-search-input" placeholder="Search stocks, MF, gold…">
+          <div class="search-results-dropdown" id="search-dropdown"></div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="topbar-btn" id="topbar-bell-btn" title="View Notifications">
+            <i data-lucide="bell"></i>
+            <div class="unread-dot" id="topbar-bell-dot"></div>
+            <span class="nav-badge count-badge" id="sidebar-notif-count">3</span>
+          </button>
+          
+          <div class="user-pill" id="sidebar-settings-btn">
+            <div class="user-avatar" id="sidebar-avatar">AA</div>
+            <div class="user-info-pill">
+              <span class="user-name-pill" id="sidebar-user-name">Arpit Agarwal</span>
+            </div>
+            <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--text-secondary);"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Shell Wrapper -->
+    <div class="main-wrapper">
+      
+      <!-- Content Area -->
+      <main class="content-area">
+
+        <!-- 1. Hero Page / Section -->
+        <section id="hero-page" class="page active landing-section">
+          <div class="hero-container">
+            <div class="hero-left">
+              <span class="badge badge-success coming-soon-badge">COMING SOON</span>
+              <h1 class="hero-title">Get More Done.<br>Without the Stress.</h1>
+              <p class="hero-subtitle">Plan, track, and grow your investments in one simple, powerful workspace. Stay focused, collaborate better, and never miss a deadline again.</p>
+              <div class="hero-buttons">
+                <button class="btn btn-primary btn-download" id="action-hero-download">
+                  DOWNLOAD NOW <i data-lucide="arrow-right"></i>
+                </button>
+                <button class="btn btn-secondary btn-learn-more" id="action-hero-learn">
+                  LEARN MORE
+                </button>
+              </div>
+              <div class="hero-rating">
+                <div class="stars">
+                  <i data-lucide="star" class="star-icon fill"></i>
+                  <i data-lucide="star" class="star-icon fill"></i>
+                  <i data-lucide="star" class="star-icon fill"></i>
+                  <i data-lucide="star" class="star-icon fill"></i>
+                  <i data-lucide="star" class="star-icon fill"></i>
+                </div>
+                <span class="rating-text"><strong>4.9/5</strong> AVERAGE RATING</span>
+              </div>
+            </div>
+            
+            <div class="hero-right">
+              <div class="phone-mockup">
+                <div class="phone-notch"></div>
+                <div class="phone-screen">
+                  <div class="phone-header">
+                    <span class="phone-time">9:41</span>
+                    <div class="phone-icons">
+                      <i data-lucide="signal" style="width: 12px; height: 12px;"></i>
+                      <i data-lucide="wifi" style="width: 12px; height: 12px;"></i>
+                      <i data-lucide="battery" style="width: 12px; height: 12px;"></i>
+                    </div>
+                  </div>
+                  
+                  <div class="phone-app-content">
+                    <div class="phone-app-header">
+                      <span class="phone-app-title">My tasks</span>
+                      <div class="phone-app-actions">
+                        <i data-lucide="search" style="width: 16px; height: 16px;"></i>
+                        <div class="phone-avatar">AA</div>
+                      </div>
+                    </div>
+                    
+                    <div class="phone-section-title">TOP PRIORITY</div>
+                    
+                    <div class="phone-tasks-list">
+                      <div class="phone-task-card checked">
+                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
+                        <div class="phone-task-info">
+                          <span class="phone-task-name">Final Design Review</span>
+                          <span class="phone-task-project">Produlis App</span>
+                        </div>
+                        <span class="phone-priority-badge high">High Priority</span>
+                      </div>
+                      
+                      <div class="phone-task-card">
+                        <div class="phone-task-check"></div>
+                        <div class="phone-task-info">
+                          <span class="phone-task-name">Landing page</span>
+                          <span class="phone-task-project">Feb 20</span>
+                        </div>
+                      </div>
+                      
+                      <div class="phone-task-card checked">
+                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
+                        <div class="phone-task-info">
+                          <span class="phone-task-name">Wireframe Homepage</span>
+                          <span class="phone-task-project">Temlis</span>
+                        </div>
+                        <span class="phone-priority-badge high">High Priority</span>
+                      </div>
+                      
+                      <div class="phone-task-card checked">
+                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
+                        <div class="phone-task-info">
+                          <span class="phone-task-name">User Testing</span>
+                          <span class="phone-task-project">Produlis App</span>
+                        </div>
+                        <span class="phone-priority-badge low">Low Priority</span>
+                      </div>
+                      
+                      <div class="phone-task-card checked animate-pulse">
+                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
+                        <div class="phone-task-info">
+                          <span class="phone-task-name">Final Design Review</span>
+                          <span class="phone-task-project">Produlis App</span>
+                        </div>
+                        <span class="phone-priority-badge high">High Priority</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Floating goals widget on phone screen -->
+                  <div class="phone-floating-widget">
+                    <div class="widget-header">
+                      <div class="widget-icon-bg">
+                        <i data-lucide="clock" style="width: 14px; height: 14px; color: var(--color-success);"></i>
+                      </div>
+                      <div class="widget-meta">
+                        <span class="widget-label">Goals</span>
+                        <span class="widget-value-title">Rona Zepri</span>
+                      </div>
+                    </div>
+                    <div class="widget-stats-grid">
+                      <div class="widget-stat">
+                        <span class="widget-stat-lbl">Task</span>
+                        <span class="widget-stat-val">10/20</span>
+                      </div>
+                      <div class="widget-stat">
+                        <span class="widget-stat-lbl">Time</span>
+                        <span class="widget-stat-val">10h/20h</span>
+                      </div>
+                      <div class="widget-stat">
+                        <span class="widget-stat-lbl">Projects</span>
+                        <span class="widget-stat-val">5/10</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="phone-nav-bar">
+                    <i data-lucide="home" style="width: 18px; height: 18px; color: var(--color-equity);"></i>
+                    <i data-lucide="check-square" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 1b. Profile Page (positioned after Home for scroll order) -->
+        <section id="profile-page" class="page">
+          <div class="profile-grid">
+            
+            <!-- Left col: User Card & Risk profile -->
+            <div style="display:flex; flex-direction:column; gap:24px;">
+              
+              <!-- User Details card -->
+              <div class="glass-card profile-card">
+                <div class="profile-avatar-lg" id="profile-avatar-letters">AA</div>
+                <div class="profile-details">
+                  <div class="profile-name" id="profile-full-name">Arpit Agarwal</div>
+                  <div class="profile-mobile" id="profile-masked-phone">+91 ••••• ••982</div>
+                  <div style="margin-top:6px;">
+                    <span class="badge badge-success">
+                      <i data-lucide="shield-check" style="width:12px;height:12px;"></i> KYC Verified
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Risk profile card -->
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <h4 class="card-title">Risk Profile</h4>
+                </div>
+                <div class="risk-level-badge moderate" id="profile-risk-label">Moderate Risk Tolerance</div>
+                <p class="risk-desc" id="profile-risk-desc">
+                  You are comfortable with steady growth and moderate short-term fluctuations. Your suggested model allocation is 50% equities &amp; equity mutual funds, 30% fixed deposits/debt, and 20% gold/hedges.
+                </p>
+                <button class="btn btn-secondary" id="profile-retake-quiz-btn">
+                  Retake Risk Quiz
+                </button>
+              </div>
+              
+            </div>
+            
+            <!-- Right col: Aggregated Accounts & Toggle Settings -->
+            <div style="display:flex; flex-direction:column; gap:24px;">
+              
+              <!-- Linked accounts card -->
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <h4 class="card-title">Linked Data Consents</h4>
+                  <button class="btn btn-secondary" id="profile-link-consent-btn" style="padding:6px 12px; font-size:0.75rem;">
+                    <i data-lucide="plus" style="width:14px;height:14px;"></i> Link More
+                  </button>
+                </div>
+                
+                <div id="linked-accounts-container">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+              
+              <!-- Notification toggles settings -->
+              <div class="glass-card">
+                <div class="card-header-row" style="margin-bottom:20px;">
+                  <h4 class="card-title">Alert &amp; Drift Rules</h4>
+                </div>
+                
+                <div class="toggle-settings-list" id="notification-settings-list">
+                  <!-- Generated via JS -->
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+        </section>
+
+        <!-- 2. Impacts Page / Section -->
+        <section id="impacts-page" class="page landing-section">
+          <div class="impacts-header-row">
+            <div class="impacts-intro">
+              <span class="badge badge-info">OUR IMPACTS</span>
+              <h2 class="section-title">Real Results.<br>Real Impact.</h2>
+            </div>
+            <div class="impacts-desc-container">
+              <p class="section-desc">See how thousands of users are transforming the way they work. From faster project completion to less stress, our platform helps you achieve more—every single day.</p>
+            </div>
+          </div>
+          
+          <div class="impacts-grid">
+            <!-- Card 1 -->
+            <div class="glass-card impact-card user-trust-card">
+              <div class="avatar-group-row">
+                <div class="avatar-group">
+                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop');"></div>
+                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop');"></div>
+                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop');"></div>
+                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&fit=crop');"></div>
+                </div>
+                <span class="trust-label">TRUST USER WORLD WIDE</span>
+              </div>
+              <p class="impact-text">Our platform helps you stay focused, meet deadlines, and achieve more every single day.</p>
+              <div class="impact-stat-big">10000+</div>
+              <span class="impact-stat-desc">Active users managing their daily work with ease</span>
+            </div>
+            
+            <!-- Card 2 (Dark styled glass card) -->
+            <div class="glass-card impact-card dark-impact-card">
+              <p class="impact-text text-white">Every task completed, every deadline met—our numbers reflect real progress made by real people like you.</p>
+              <div class="impact-rating-row">
+                <div class="impact-rating-val">4.9<span class="rating-max">/5</span></div>
+                <div class="rating-stars-column">
+                  <div class="stars gold">
+                    <i data-lucide="star" class="star-icon fill text-warning"></i>
+                    <i data-lucide="star" class="star-icon fill text-warning"></i>
+                    <i data-lucide="star" class="star-icon fill text-warning"></i>
+                    <i data-lucide="star" class="star-icon fill text-warning"></i>
+                    <i data-lucide="star" class="star-icon fill text-warning"></i>
+                  </div>
+                  <span class="stars-sub">Average user rating</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="glass-card impact-card">
+              <p class="impact-text">Our platform is built to deliver measurable results. From improved efficiency to stronger team collaboration, our impact is reflected in the numbers.</p>
+              <div class="impact-stat-large">99.9%</div>
+              <span class="impact-stat-desc">Uptime for reliable performance</span>
+            </div>
+            
+            <!-- Card 4 (Horizontal small card) -->
+            <div class="glass-card impact-card horizontal-impact-card">
+              <div class="stopwatch-icon-bg">
+                <i data-lucide="clock" class="text-success"></i>
+              </div>
+              <div class="horizontal-impact-text">
+                <strong>3X FASTER PROJECT COMPLETION</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Features Page / Section -->
+        <section id="features-page" class="page landing-section">
+          <div class="section-center-header">
+            <span class="badge badge-info">OUR FEATURES</span>
+            <h2 class="section-title">Features designed for your success.</h2>
+            <p class="section-subtitle">Explore the features designed to keep you organized and on track.</p>
+          </div>
+          
+          <div class="features-grid">
+            <!-- Feature Card 1 -->
+            <div class="glass-card feature-card-item">
+              <div class="feature-icon-badge">
+                <i data-lucide="clock"></i>
+              </div>
+              <h3 class="feature-title">Smart Task Organization</h3>
+              <p class="feature-desc">Create, prioritize, and categorize tasks with ease. Use tags, due dates, and custom lists to stay on top of everything.</p>
+              
+              <div class="feature-mini-graphic">
+                <div class="mini-task-card">
+                  <div class="checked-dot"><i data-lucide="check" style="width:10px;height:10px;"></i></div>
+                  <span class="mini-task-name">User Testing</span>
+                  <span class="mini-priority normal">Normal</span>
+                </div>
+                <div class="mini-task-card">
+                  <div class="checked-dot"><i data-lucide="check" style="width:10px;height:10px;"></i></div>
+                  <span class="mini-task-name">Homepage Review</span>
+                  <span class="mini-priority high">High Priority</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature Card 2 -->
+            <div class="glass-card feature-card-item">
+              <div class="feature-icon-badge">
+                <i data-lucide="clock"></i>
+              </div>
+              <h3 class="feature-title">Visual Progress Tracking</h3>
+              <p class="feature-desc">Kanban boards, timelines, and progress charts help you see what's done, what's next, and what needs attention.</p>
+              
+              <div class="feature-mini-graphic flex-center">
+                <div class="mini-phone-view">
+                  <div class="mini-phone-header">
+                    <span class="lbl-small">9:41</span>
+                    <i data-lucide="clock" style="width:10px;height:10px;color:var(--color-success)"></i>
+                  </div>
+                  <div class="mini-phone-body">
+                    <span class="welcome-lbl">Good morning, Rona 🔥</span>
+                    <div class="work-time-card">
+                      <span class="work-title">Work this week</span>
+                      <span class="work-timer font-mono">21:38:27</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature Card 3 -->
+            <div class="glass-card feature-card-item">
+              <div class="feature-icon-badge">
+                <i data-lucide="clock"></i>
+              </div>
+              <h3 class="feature-title">Smart Reminders & Notifications</h3>
+              <p class="feature-desc">Never miss a deadline again. Get notified at the right time, on the right device.</p>
+              
+              <div class="feature-mini-graphic flex-center">
+                <div class="mini-goals-widget">
+                  <div class="widget-header-small">
+                    <i data-lucide="clock" style="width:12px;height:12px;color:var(--color-success)"></i>
+                    <span class="widget-title-small">Goals - Rona Zepri</span>
+                  </div>
+                  <div class="widget-grid-small">
+                    <div class="grid-col"><span class="lbl-dim">Task</span><strong>10/20</strong></div>
+                    <div class="grid-col"><span class="lbl-dim">Time</span><strong>10h/20h</strong></div>
+                    <div class="grid-col"><span class="lbl-dim">Projects</span><strong>5/10</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature Card 4 -->
+            <div class="glass-card feature-card-item">
+              <div class="feature-icon-badge">
+                <i data-lucide="clock"></i>
+              </div>
+              <h3 class="feature-title">Team Collaboration</h3>
+              <p class="feature-desc">Collaborate with your team in real time. Share tasks, projects, and files to get work done together.</p>
+              
+              <div class="feature-mini-graphic flex-center">
+                <div class="mini-collab-widget">
+                  <div class="collab-avatars">
+                    <div class="collab-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop');"></div>
+                    <div class="collab-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop');"></div>
+                    <div class="collab-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop');"></div>
+                    <div class="collab-icon-plus"><i data-lucide="plus" style="width:10px;height:10px;color:white;"></i></div>
+                  </div>
+                  <span class="collab-text">Team Assigned</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. How It Works Page / Section -->
+        <section id="how-it-works-page" class="page landing-section">
+          <div class="section-center-header">
+            <span class="badge badge-info">HOW IT WORKS</span>
+            <h2 class="section-title">Get started in 3 simple steps.</h2>
+            <p class="section-subtitle">Explore the features designed to keep you organized and on track.</p>
+          </div>
+          
+          <div class="steps-grid">
+            <!-- Step 1 -->
+            <div class="glass-card step-card">
+              <span class="step-num-badge">STEP 1</span>
+              <h3 class="step-title">Download App</h3>
+              <p class="step-desc">App is available on App Store and Play Store.</p>
+              
+              <div class="step-graphic-hex">
+                <div class="hex-grid-container">
+                  <div class="hex-cell dark"><i data-lucide="zap" style="color:var(--color-gold);"></i></div>
+                  <div class="hex-cell blue"><i data-lucide="eye" style="color:var(--color-equity);"></i></div>
+                  <div class="hex-cell orange"><i data-lucide="atom" style="color:var(--color-crypto);"></i></div>
+                </div>
+                <button class="btn btn-secondary btn-download-hex">DOWNLOAD NEXTBIT</button>
+              </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="glass-card step-card flex-between">
+              <div>
+                <span class="step-num-badge">STEP 2</span>
+                <h3 class="step-title">Set up your account</h3>
+                <p class="step-desc">Easily create your profile and start adding tasks.</p>
+              </div>
+              <div class="step-card-placeholder">
+                <div class="avatar-large-glow">AA</div>
+                <div class="glow-dots-row">
+                  <div class="dot-glow active"></div>
+                  <div class="dot-glow"></div>
+                  <div class="dot-glow"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="glass-card step-card flex-between">
+              <div>
+                <span class="step-num-badge">STEP 3</span>
+                <h3 class="step-title">Get to work</h3>
+                <p class="step-desc">Organize your tasks, track progress, and achieve more.</p>
+              </div>
+              <div class="step-card-placeholder">
+                <div class="progress-ring-mini">
+                  <svg viewBox="0 0 36 36" class="circular-chart green">
+                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path class="circle" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <text x="18" y="20.35" class="percentage">75%</text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Dashboard Page -->
+        <section id="dashboard-page" class="page active">
+          <div class="welcome-row">
+            <div class="welcome-info">
+              <h3 id="dashboard-greeting">Good afternoon, Arpit</h3>
+              <div class="welcome-sub">
+                <span id="dashboard-date">Thursday, June 25, 2026</span>
+                <span class="badge badge-success" id="market-status-badge"><i data-lucide="clock" style="width:12px;height:12px;"></i> Markets Open</span>
+              </div>
+            </div>
+            <div class="welcome-actions">
+              <button class="btn btn-secondary" id="action-add-funds">
+                <i data-lucide="wallet"></i> Add Funds
+              </button>
+              <button class="btn btn-primary" id="action-start-sip">
+                <i data-lucide="calendar"></i> Start SIP
+              </button>
+            </div>
+          </div>
+          
+          <!-- AI detect nudge card -->
+          <div class="nudge-card" id="dashboard-nudge">
+            <div class="nudge-content">
+              <span class="nudge-icon"><i data-lucide="alert-triangle"></i></span>
+              <div class="nudge-text">
+                <strong>Rebalancing suggested</strong> — equity is at 58%, above your 50% target. Consider moving ₹18,000 to debt funds.
+              </div>
+            </div>
+            <div class="nudge-close" id="close-dashboard-nudge">
+              <i data-lucide="x"></i>
+            </div>
+          </div>
+          
+          <!-- Bento Grid -->
+          <div class="bento-grid">
+
+            <!-- HERO: Total Portfolio Value (6/12 cols × 2 rows) -->
+            <div class="glass-card stat-card bento-hero b-c3 b-r2">
+              <div class="stat-header">
+                <span class="stat-label">Total Portfolio Value</span>
+                <i data-lucide="trending-up" class="stat-icon" style="color:rgba(255,255,255,0.7)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-total-value">₹4,82,310</div>
+              <div class="stat-sub">
+                <span class="badge badge-success" id="dashboard-day-change">+₹4,250 (+0.89%)</span>
+                <span>today</span>
+              </div>
+              <div class="stat-sparkline" style="margin-top:auto;">
+                <svg id="sparkline-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="sparkline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.35)" stop-opacity="1"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,0)" stop-opacity="1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M 0 25 L 15 22 L 30 26 L 45 18 L 60 12 L 75 16 L 90 8 L 100 5 L 100 30 L 0 30 Z" fill="url(#sparkline-grad)"/>
+                  <path d="M 0 25 L 15 22 L 30 26 L 45 18 L 60 12 L 75 16 L 90 8 L 100 5" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Overall Gain (3/12 cols, green accent) -->
+            <div class="glass-card stat-card bento-accent-green b-c1 b-r1">
+              <div class="stat-header">
+                <span class="stat-label" style="color:var(--color-success)">Overall Gain</span>
+                <i data-lucide="arrow-up-right" class="stat-icon" style="color:var(--color-success)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-overall-gain-pct" style="color:var(--color-success)">+12.69%</div>
+              <div class="stat-sub">
+                <span class="badge badge-success" id="dashboard-overall-gain-abs">+₹54,310</span>
+              </div>
+            </div>
+
+            <!-- XIRR (3/12 cols, violet accent) -->
+            <div class="glass-card stat-card bento-accent-violet b-c1 b-r1">
+              <div class="stat-header">
+                <span class="stat-label" style="color:var(--color-fd)">XIRR Return</span>
+                <i data-lucide="percent" class="stat-icon" style="color:var(--color-fd)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-xirr" style="color:var(--color-fd)">14.85%</div>
+              <div class="stat-sub"><span>Annualised since inception</span></div>
+            </div>
+
+            <!-- Total Invested (3/12 cols, sky accent) -->
+            <div class="glass-card stat-card bento-accent-sky b-c1 b-r1">
+              <div class="stat-header">
+                <span class="stat-label" style="color:var(--color-nps)">Total Invested</span>
+                <i data-lucide="landmark" class="stat-icon" style="color:var(--color-nps)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-total-invested" style="color:var(--color-nps)">₹4,28,000</div>
+              <div class="stat-sub">
+                <span>Across</span>
+                <strong id="dashboard-asset-count">5 asset classes</strong>
+              </div>
+            </div>
+
+            <!-- Asset Allocation (6/12 cols) -->
+            <div class="glass-card b-c3 b-r1">
+              <div class="card-header-row">
+                <h4 class="card-title">Asset Allocation</h4>
+                <a href="#portfolio" class="card-link" data-goto="portfolio">View all <i data-lucide="arrow-right" style="width:14px;"></i></a>
+              </div>
+              <div class="allocation-bar" id="allocation-bar-container"></div>
+              <div class="allocation-list" id="allocation-list-legend"></div>
+            </div>
+
+            <!-- Top Holdings — dark card (12/12 cols × 2 rows) -->
+            <div class="glass-card bento-dark b-c6 b-r2">
+              <div class="card-header-row">
+                <h4 class="card-title">Top Holdings</h4>
+                <a href="#portfolio" class="card-link" data-goto="portfolio" style="color:#93c5fd;">Full list <i data-lucide="arrow-right" style="width:14px;"></i></a>
+              </div>
+              <div class="holdings-list" id="dashboard-holdings-list"></div>
+            </div>
+
+            <!-- Recent Transactions (full width) -->
+            <div class="glass-card b-c6 b-r1">
+              <div class="card-header-row">
+              <div class="transactions-list" id="dashboard-transactions-list"></div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 4. Portfolio Page -->
+        <section id="portfolio-page" class="page">
+          <!-- Filter Tabs -->
+          <div class="filter-tabs-container" id="portfolio-filters">
+            <button class="filter-tab active" data-filter="all">All Assets</button>
+            <button class="filter-tab" data-filter="equity">Equities</button>
+            <button class="filter-tab" data-filter="mf">Mutual Funds</button>
+            <button class="filter-tab" data-filter="gold">Digital Gold</button>
+            <button class="filter-tab" data-filter="fd">Fixed Deposits</button>
+            <button class="filter-tab" data-filter="nps">NPS</button>
+            <button class="filter-tab" data-filter="crypto">Crypto</button>
+          </div>
+
+          <div class="bento-grid">
+
+            <!-- Performance Chart – wide hero (8/12 cols × 2 rows) -->
+            <div class="glass-card b-c4 b-r2">
+              <div class="card-header-row">
+                <h4 class="card-title">Portfolio Performance</h4>
+                <div class="timeframe-selector">
+                  <button class="tf-btn" data-tf="1w">1W</button>
+                  <button class="tf-btn" data-tf="1m">1M</button>
+                  <button class="tf-btn active" data-tf="3m">3M</button>
+                  <button class="tf-btn" data-tf="1y">1Y</button>
+                  <button class="tf-btn" data-tf="all">ALL</button>
+                </div>
+              </div>
+              <div class="portfolio-chart-wrapper">
+                <canvas id="portfolioMainChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Holdings Breakdown – sidebar (4/12 cols × 2 rows) -->
+            <div class="glass-card b-c2 b-r2" style="display:flex; flex-direction:column;">
+              <div class="card-header-row">
+                <h4 class="card-title">Holdings</h4>
+                <div style="display:flex; gap:8px;">
+                  <select class="numeric-input" id="portfolio-sort-select" style="padding:6px 10px; font-size:0.75rem;">
+                    <option value="value">Value ↓</option>
+                    <option value="return">Returns %</option>
+                    <option value="name">Name</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; margin-bottom:10px;">
+                <button class="btn btn-secondary" id="portfolio-export-csv-btn" style="padding:6px 12px; font-size:0.75rem; width:100%; justify-content:center;">
+                  <i data-lucide="download" style="width:14px;height:14px;"></i> Export CSV
+                </button>
+              </div>
+              <div style="flex:1; overflow-y:auto;">
+                <table class="portfolio-table">
+                  <thead>
+                    <tr>
+                      <th>Asset</th>
+                      <th style="text-align:right;">Value</th>
+                      <th style="text-align:right;">Return</th>
+                    </tr>
+                  </thead>
+                  <tbody id="portfolio-holdings-table-body">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </section>
+        
+        <!-- 5. Invest Page -->
+        <section id="invest-page" class="page">
+          <div class="filter-tabs-container" id="invest-category-tabs">
+            <button class="filter-tab active" data-category="mf">Mutual Funds</button>
+            <button class="filter-tab" data-category="equity">Equities (Direct Stock)</button>
+            <button class="filter-tab" data-category="gold">Digital Gold</button>
+            <button class="filter-tab" data-category="fd">Fixed Deposits</button>
+          </div>
+          
+          <div class="chips-container" id="invest-sub-filters">
+            <button class="chip-btn active" data-sub="all">All</button>
+            <button class="chip-btn" data-sub="equity">Equity funds</button>
+            <button class="chip-btn" data-sub="debt">Debt funds</button>
+            <button class="chip-btn" data-sub="hybrid">Hybrid</button>
+            <button class="chip-btn" data-sub="elss">ELSS (Tax Saving)</button>
+            <button class="chip-btn" data-sub="index">Index funds</button>
+          </div>
+          
+          <!-- Fund Cards bento grid -->
+          <div class="bento-grid" id="invest-funds-grid">
+            <!-- Dynamically populated from JS -->
+          </div>
+        </section>
+        
+        <!-- 6. Goals Page -->
+        <section id="goals-page" class="page">
+          <div class="welcome-row">
+            <div class="welcome-info">
+              <h3 id="goals-summary-text">Active Targets: 3 goals</h3>
+              <div class="welcome-sub">
+                <span>Tracking a total savings of ₹95,00,000 for your long-term roadmap</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="action-new-goal">
+              <i data-lucide="plus"></i> New Goal
+            </button>
+          </div>
+          
+          <!-- Achievement Milestone Nudge -->
+          <div class="nudge-card nudge-success" id="goals-milestone-nudge">
+            <div class="nudge-content">
+              <span class="nudge-icon"><i data-lucide="award"></i></span>
+              <div class="nudge-text">
+                <strong>Europe Trip is on track!</strong> You'll hit your ₹3,00,000 target one month early based on recent extra SIP allocations.
+              </div>
+            </div>
+            <div class="nudge-close" id="close-goals-nudge">
+              <i data-lucide="x"></i>
+            </div>
+          </div>
+          
+          <!-- Goal Cards Grid -->
+          <div class="dashboard-grid" id="goals-cards-grid">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+        
+        <!-- 7. Learn Page -->
+        <section id="learn-page" class="page">
+          <div class="learn-tabs">
+            <button class="learn-tab active" data-tab="explainers" onclick="switchLearnTab(this, 'explainers')">Explainers & Literacy</button>
+            <button class="learn-tab" data-tab="calculators" onclick="switchLearnTab(this, 'calculators')">Calculators</button>
+            <button class="learn-tab" data-tab="quizzes" onclick="switchLearnTab(this, 'quizzes')">Finance Quizzes</button>
+          </div>
+          
+          <!-- TAB 1: Explainers -->
+          <div class="learn-section active" id="learn-explainers-section">
+            <div class="dashboard-grid" id="explainers-grid">
+              <!-- Grid of 6 explainers (Populated from JS) -->
+            </div>
+          </div>
+          
+          <!-- TAB 2: Calculators -->
+          <div class="learn-section" id="learn-calculators-section">
+            <div style="display:flex; gap:12px; margin-bottom:20px; overflow-x:auto; padding-bottom:4px;">
+              <button class="chip-btn active" id="calc-tab-sip">SIP Calculator</button>
+              <button class="chip-btn" id="calc-tab-cagr">CAGR Calculator</button>
+              <button class="chip-btn" id="calc-tab-inflation">Inflation Calculator</button>
+              <button class="chip-btn" id="calc-tab-fd">FD Returns</button>
+              <button class="chip-btn" id="calc-tab-goals">Goal Planner</button>
+            </div>
+            
+            <!-- Calculator Container -->
+            <div class="glass-card">
+              <div class="calculator-grid" id="calculator-inner-box">
+                <!-- Dynamically swapped via JS (defaulting to SIP) -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- TAB 3: Quizzes -->
+          <div class="learn-section" id="learn-quizzes-section">
+            <div class="glass-card quiz-container" id="quiz-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+        </section>
+        
+        <!-- 8. Finance Buddy Page -->
+        <section id="buddy-page" class="page">
+          <div class="chat-layout">
+            
+            <!-- Left panel: Chat Interface (Wider) -->
+            <div class="glass-card chat-panel">
+              <div class="chat-header">
+                <div class="chat-header-left">
+                  <div class="chat-buddy-title">
+                    <span>AI Finance Buddy</span>
+                    <span class="badge badge-info">AI Beta</span>
+                  </div>
+                  <span class="chat-buddy-subtitle">Powered by AI · Educational purposes only, not formal investment advice</span>
+                </div>
+                <div class="status-badge">
+                  <div class="status-dot"></div>
+                  <span>Online</span>
+                </div>
+              </div>
+              
+              <!-- Chat window messages -->
+              <div class="chat-messages-container" id="chat-messages">
+                <!-- Initial welcome message from AI Buddy -->
+                <div class="message-wrapper ai">
+                  <div class="message-avatar">AI</div>
+                  <div class="message-bubble">
+                    <p>Namaste! I am your WealthOS Finance Buddy. I can analyse your current portfolio and give you financial literacy tips, rebalancing guides, or tax estimates.</p>
+                    <p>How can I help you today?</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Suggested Question Chips -->
+              <div class="suggested-chips" id="suggested-questions-row">
+                <button class="suggested-chip">What is my portfolio risk?</button>
+                <button class="suggested-chip">How much SIP for ₹1 Cr in 20 years?</button>
+                <button class="suggested-chip">Explain ELSS tax saving</button>
+                <button class="suggested-chip">Should I rebalance now?</button>
+              </div>
+              
+              <!-- Input bar -->
+              <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input-field" placeholder="Ask about asset allocation, SIP math, rebalancing...">
+                <button class="btn btn-primary" id="chat-send-btn" style="padding: 12px 20px;">
+                  <i data-lucide="send"></i>
+                </button>
+              </div>
+              
+              <!-- Disclaimer footer -->
+              <div class="disclaimer-box">
+                <i data-lucide="alert-circle" style="width:14px; height:14px; flex-shrink:0;"></i>
+                <span>Finance Buddy provides general financial information for educational purposes only. This is not formal investment advice. Please consult a SEBI Registered Investment Advisor (RIA) before making investment decisions.</span>
+              </div>
+            </div>
+            
+            <!-- Right panel: Portfolio Health -->
+            <div class="health-panel">
+              
+              <!-- Health score card -->
+              <div class="glass-card health-score-hero">
+                <div class="stat-label" style="margin-bottom:12px;">Portfolio Health Score</div>
+                <div class="health-score-val" id="health-score-num">7.2</div>
+                <div class="health-score-label" id="health-score-txt">Good Health</div>
+                
+                <div class="health-subscores">
+                  <div class="health-subscore-item">
+                    <div class="health-subscore-label">
+                      <span>Diversification</span>
+                      <strong id="health-score-div">8/10</strong>
+                    </div>
+                    <div class="health-subscore-bar-bg">
+                      <div class="health-subscore-bar-fill" id="health-bar-div" style="width: 80%;"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="health-subscore-item">
+                    <div class="health-subscore-label">
+                      <span>Risk Alignment</span>
+                      <strong id="health-score-risk">6/10</strong>
+                    </div>
+                    <div class="health-subscore-bar-bg">
+                      <div class="health-subscore-bar-fill" id="health-bar-risk" style="width: 60%; background:var(--color-warning);"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="health-subscore-item">
+                    <div class="health-subscore-label">
+                      <span>Goal Progress</span>
+                      <strong id="health-score-goals">7/10</strong>
+                    </div>
+                    <div class="health-subscore-bar-bg">
+                      <div class="health-subscore-bar-fill" id="health-bar-goals" style="width: 70%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Advisor connect nudge -->
+              <div class="glass-card" style="border-color: rgba(59, 130, 246, 0.2);">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                  <i data-lucide="users" style="color:var(--color-equity);"></i>
+                  <strong style="font-size:0.95rem;">Talk to a human advisor</strong>
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.4; margin-bottom:16px;">
+                  Book a free 30-minute discovery call with a certified SEBI Registered Investment Advisor (RIA) to optimize your allocation plan.
+                </p>
+                <button class="btn btn-primary" id="buddy-book-call-btn" style="width:100%; justify-content:center;">
+                  Book Free RIA Session
+                </button>
+              </div>
+              
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- 9. Notifications Page -->
+        <section id="notifications-page" class="page">
+          <div class="notif-header-row">
+            <h3 style="font-size:1.2rem; font-weight:700;">Alert History</h3>
+            <button class="btn btn-secondary" id="notif-mark-read-btn">
+              <i data-lucide="check-check"></i> Mark all read
+            </button>
+          </div>
+          
+          <div class="notif-list" id="notifications-feed">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+        
+        <!-- (Profile page moved above, see section 1b) -->
+        
+      </main>
+    </div>
+    
+  </div>
+
+  <!-- MODALS OVERLAYS -->
+
+  <!-- Add Funds Modal -->
+  <div class="modal-overlay" id="modal-add-funds">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-funds"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Add Capital to Wallet</h3>
+      <div class="modal-form-group">
+        <label for="fund-amount-input">Amount (INR)</label>
+        <input type="number" id="fund-amount-input" placeholder="Enter amount, e.g. 25000" min="500">
+      </div>
+      <div class="modal-form-group">
+        <label for="fund-bank-select">Source Account</label>
+        <select id="fund-bank-select">
+          <option value="sbi">SBI Savings Account (•••• 4321)</option>
+          <option value="hdfc">HDFC Checking Account (•••• 9876)</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-funds-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-funds-btn">Add ₹ Funds</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start SIP Modal -->
+  <div class="modal-overlay" id="modal-start-sip">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-sip"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Schedule New Auto-SIP</h3>
+      <div class="modal-form-group">
+        <label for="sip-target-select">Select Asset Fund</label>
+        <select id="sip-target-select">
+          <!-- Populated from funds list in JS -->
+        </select>
+      </div>
+      <div class="modal-form-group">
+        <label for="sip-amount-input">Monthly SIP Amount (INR)</label>
+        <input type="number" id="sip-amount-input" value="5000" min="500">
+      </div>
+      <div class="modal-form-group">
+        <label for="sip-date-input">SIP Date (Monthly)</label>
+        <select id="sip-date-input">
+          <option value="1">1st of the month</option>
+          <option value="5" selected>5th of the month</option>
+          <option value="10">10th of the month</option>
+          <option value="15">15th of the month</option>
+          <option value="25">25th of the month</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-sip-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-sip-btn">Register SIP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invest Checkout Modal -->
+  <div class="modal-overlay" id="modal-invest-checkout">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-checkout"><i data-lucide="x"></i></div>
+      <h3 class="modal-title" id="checkout-title">Confirm Purchase</h3>
+      
+      <div style="background:rgba(0,0,0,0.15); padding:16px; border-radius:var(--border-radius-md); margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-glass);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--text-secondary)">Asset Class:</span>
+          <strong id="checkout-asset-class">Mutual Fund</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--text-secondary)">NAV / Price:</span>
+          <strong id="checkout-asset-nav">₹124.50</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-secondary)">Risk Metric:</span>
+          <strong id="checkout-asset-risk" style="color:var(--color-warning);">Moderate Risk</strong>
+        </div>
+      </div>
+      
+      <div class="modal-form-group">
+        <label for="checkout-amount-input">Investment Amount (INR)</label>
+        <input type="number" id="checkout-amount-input" value="10000" min="1000">
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-checkout-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-checkout-btn">Complete Purchase</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Goal Modal -->
+  <div class="modal-overlay" id="modal-new-goal">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-goal"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Track a New Financial Target</h3>
+      <div class="modal-form-group">
+        <label for="goal-name-input">Goal Name</label>
+        <input type="text" id="goal-name-input" placeholder="e.g. Retirement, Home Downpayment">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-target-amount-input">Target Amount (INR)</label>
+        <input type="number" id="goal-target-amount-input" placeholder="e.g. 5000000" min="5000">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-year-input">Target Achievement Year</label>
+        <input type="number" id="goal-year-input" value="2035" min="2026">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-sip-input">Link monthly SIP amount (Optional, INR)</label>
+        <input type="number" id="goal-sip-input" value="10000" min="0">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-icon-select">Select Icon / Avatar type</label>
+        <select id="goal-icon-select">
+          <option value="house">🏠 House / Real Estate</option>
+          <option value="trip">✈️ Europe Trip / Vacation</option>
+          <option value="car">🚗 Tesla / Electric Vehicle</option>
+          <option value="retire">🌴 Wealth Accumulation</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-goal-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-goal-btn">Launch Target</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Quiz Modal -->
+  <div class="modal-overlay" id="modal-risk-quiz">
+    <div class="modal-content" style="max-width:550px;">
+      <div class="modal-close-btn" id="close-modal-quiz"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Risk Profile Diagnostic</h3>
+      
+      <div id="quiz-question-container">
+        <!-- Swapped dynamically in JS -->
+      </div>
+      
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="quiz-modal-cancel">Cancel Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book RIA Call Modal -->
+  <div class="modal-overlay" id="modal-book-call">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-call"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Schedule Certified RIA Call</h3>
+      <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.4; margin-bottom:20px;">
+        Connect with a certified SEBI Registered Investment Advisor (RIA) to align your mutual fund choices with your actual risk appetite and goal milestones.
+      </p>
+      <div class="modal-form-group">
+        <label for="call-date-input">Select Date</label>
+        <input type="date" id="call-date-input" value="2026-06-30">
+      </div>
+      <div class="modal-form-group">
+        <label for="call-time-input">Preferred Slot</label>
+        <select id="call-time-input">
+          <option value="10:00">10:00 AM - 10:30 AM IST</option>
+          <option value="14:00" selected>02:00 PM - 02:30 PM IST</option>
+          <option value="16:30">04:30 PM - 05:00 PM IST</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-call-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-call-btn">Book Free Call</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Core JS Logic -->
+  <script src="app.js?v=1.2"></script>
+</body>
+</html>
