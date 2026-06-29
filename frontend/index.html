@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WealthOS | Unified Investing Platform</title>
+  <title>AssetBridge | Unified Investing Platform</title>
   
   <!-- Modern Font from Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
             <i data-lucide="zap" style="stroke-width: 3px; color: #fff;"></i>
           </div>
           <div class="brand-info">
-            <h1>Nexbit</h1>
+            <h1>AssetBridge</h1>
             <span>Unified Investing</span>
           </div>
         </div>
@@ -116,7 +116,7 @@
           <div class="hero-container">
             <div class="hero-left">
               <span class="badge badge-success coming-soon-badge">COMING SOON</span>
-              <h1 class="hero-title">Get More Done.<br>Without the Stress.</h1>
+              <h1 class="hero-title">One App for All Your<br>Investments</h1>
               <p class="hero-subtitle">Plan, track, and grow your investments in one simple, powerful workspace. Stay focused, collaborate better, and never miss a deadline again.</p>
               <div class="hero-buttons">
                 <button class="btn btn-primary btn-download" id="action-hero-download">
@@ -497,54 +497,86 @@
           
           <div class="steps-grid">
             <!-- Step 1 -->
-            <div class="glass-card step-card">
-              <span class="step-num-badge">STEP 1</span>
-              <h3 class="step-title">Download App</h3>
-              <p class="step-desc">App is available on App Store and Play Store.</p>
-              
-              <div class="step-graphic-hex">
-                <div class="hex-grid-container">
-                  <div class="hex-cell dark"><i data-lucide="zap" style="color:var(--color-gold);"></i></div>
-                  <div class="hex-cell blue"><i data-lucide="eye" style="color:var(--color-equity);"></i></div>
-                  <div class="hex-cell orange"><i data-lucide="atom" style="color:var(--color-crypto);"></i></div>
-                </div>
-                <button class="btn btn-secondary btn-download-hex">DOWNLOAD NEXTBIT</button>
+            <div class="glass-card step-card" style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+              <div style="margin-bottom: 24px;">
+                <span class="step-num-badge" style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP 1</span>
               </div>
+              
+              <div class="step-graphic" style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                <i data-lucide="smartphone" style="color: #a78bfa; width: 36px; height: 36px; margin-bottom: 12px;"></i>
+                <h4 style="color: white; font-size: 14px; font-weight: 600; text-align: center; margin-bottom: 16px;">Sign up with your mobile number</h4>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                  <button style="background: rgba(0,208,156,0.15); border: 1px solid rgba(0,208,156,0.3); color: #00d09c; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">App Store</button>
+                  <button style="background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #3b82f6; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Play Store</button>
+                </div>
+              </div>
+              
+              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">Create your account</h3>
+              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Sign up using your mobile number and OTP. Complete a quick KYC in under 2 minutes — fully digital, no paperwork needed.</p>
             </div>
             
             <!-- Step 2 -->
-            <div class="glass-card step-card flex-between">
-              <div>
-                <span class="step-num-badge">STEP 2</span>
-                <h3 class="step-title">Set up your account</h3>
-                <p class="step-desc">Easily create your profile and start adding tasks.</p>
+            <div class="glass-card step-card" style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+              <div style="margin-bottom: 24px;">
+                <span class="step-num-badge" style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP 2</span>
               </div>
-              <div class="step-card-placeholder">
-                <div class="avatar-large-glow">AA</div>
-                <div class="glow-dots-row">
-                  <div class="dot-glow active"></div>
-                  <div class="dot-glow"></div>
-                  <div class="dot-glow"></div>
+              
+              <div class="step-graphic" style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; gap: 12px; justify-content: center; position: relative; overflow: hidden;">
+                <!-- Faded out item above -->
+                <div style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.4;">
+                  <i data-lucide="bar-chart-2" style="color: #60a5fa; width: 18px; height: 18px;"></i>
+                  <span style="color: white; font-size: 13px;">HDFC Bank — Linked ✓</span>
+                </div>
+                <!-- Main item -->
+                <div style="background: rgba(255,255,255,0.08); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                  <i data-lucide="trending-up" style="color: #8b5cf6; width: 18px; height: 18px;"></i>
+                  <span style="color: white; font-size: 13px; font-weight: 500;">Zerodha Demat — Linked ✓</span>
+                </div>
+                <!-- Pending item -->
+                <div style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                  <i data-lucide="pie-chart" style="color: #fbbf24; width: 18px; height: 18px;"></i>
+                  <span style="color: white; font-size: 13px;">MF Central — Linking...</span>
                 </div>
               </div>
+              
+              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">Link all your accounts</h3>
+              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Use RBI's Account Aggregator framework to securely link your bank, demat, and mutual fund accounts — one consent, all your data.</p>
             </div>
             
             <!-- Step 3 -->
-            <div class="glass-card step-card flex-between">
-              <div>
-                <span class="step-num-badge">STEP 3</span>
-                <h3 class="step-title">Get to work</h3>
-                <p class="step-desc">Organize your tasks, track progress, and achieve more.</p>
+            <div class="glass-card step-card" style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+              <div style="margin-bottom: 24px;">
+                <span class="step-num-badge" style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP 3</span>
               </div>
-              <div class="step-card-placeholder">
-                <div class="progress-ring-mini">
-                  <svg viewBox="0 0 36 36" class="circular-chart green">
-                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="circle" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <text x="18" y="20.35" class="percentage">75%</text>
-                  </svg>
+              
+              <div class="step-graphic" style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: flex-end; position: relative;">
+                <div style="position: absolute; top: 20px; left: 24px; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 1px;">YOUR NETWORTH GROWTH</div>
+                
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 80px; margin-top: 30px;">
+                  <!-- Bars with green, blue, purple colors -->
+                  <div style="width: 12%; background: #10b981; height: 30%; border-radius: 3px 3px 0 0;"></div>
+                  <div style="width: 12%; background: #10b981; height: 45%; border-radius: 3px 3px 0 0;"></div>
+                  <div style="width: 12%; background: #10b981; height: 40%; border-radius: 3px 3px 0 0;"></div>
+                  
+                  <div style="width: 12%; background: #3b82f6; height: 55%; border-radius: 3px 3px 0 0;"></div>
+                  <div style="width: 12%; background: #3b82f6; height: 60%; border-radius: 3px 3px 0 0;"></div>
+                  <div style="width: 12%; background: #3b82f6; height: 75%; border-radius: 3px 3px 0 0;"></div>
+                  
+                  <div style="width: 12%; background: #8b5cf6; height: 85%; border-radius: 3px 3px 0 0;"></div>
+                  <div style="width: 12%; background: #8b5cf6; height: 100%; border-radius: 3px 3px 0 0;"></div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.4);">
+                  <span>Jan</span>
+                  <span>Apr</span>
+                  <span>Jul</span>
+                  <span>Oct</span>
+                  <span>Now</span>
                 </div>
               </div>
+              
+              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">Track, plan & grow</h3>
+              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Your unified dashboard is ready. Set goals, get AI insights, start SIPs, and watch your wealth compound — all in one place.</p>
             </div>
           </div>
         </section>
@@ -582,92 +614,91 @@
             </div>
           </div>
           
-          <!-- Bento Grid -->
-          <div class="bento-grid">
-
-            <!-- HERO: Total Portfolio Value (6/12 cols × 2 rows) -->
-            <div class="glass-card stat-card bento-hero b-c3 b-r2">
-              <div class="stat-header">
-                <span class="stat-label">Total Portfolio Value</span>
-                <i data-lucide="trending-up" class="stat-icon" style="color:rgba(255,255,255,0.7)"></i>
+          <!-- Agent-style Bento Grid for Finance -->
+          <div class="agent-bento-grid" id="dashboard-agent-grid">
+            
+            <!-- Card 1: Asset Flow (Agent Pipeline style) -->
+            <div class="feat-card col-span-1 h-260">
+              <div class="feat-card-header">
+                <h3 class="feat-card-title">Asset Flow</h3>
+                <p class="feat-card-desc">Visualise how your investments are distributed across assets.</p>
               </div>
-              <div class="stat-value" id="dashboard-total-value">₹4,82,310</div>
-              <div class="stat-sub">
-                <span class="badge badge-success" id="dashboard-day-change">+₹4,250 (+0.89%)</span>
-                <span>today</span>
-              </div>
-              <div class="stat-sparkline" style="margin-top:auto;">
-                <svg id="sparkline-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="sparkline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="rgba(255,255,255,0.35)" stop-opacity="1"/>
-                      <stop offset="100%" stop-color="rgba(255,255,255,0)" stop-opacity="1"/>
-                    </linearGradient>
-                  </defs>
-                  <path d="M 0 25 L 15 22 L 30 26 L 45 18 L 60 12 L 75 16 L 90 8 L 100 5 L 100 30 L 0 30 Z" fill="url(#sparkline-grad)"/>
-                  <path d="M 0 25 L 15 22 L 30 26 L 45 18 L 60 12 L 75 16 L 90 8 L 100 5" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+              <div class="feat-card-visual" id="card1-visual">
+                <!-- SVG node graph will be rendered here by JS -->
               </div>
             </div>
 
-            <!-- Overall Gain (3/12 cols, green accent) -->
-            <div class="glass-card stat-card bento-accent-green b-c1 b-r1">
-              <div class="stat-header">
-                <span class="stat-label" style="color:var(--color-success)">Overall Gain</span>
-                <i data-lucide="arrow-up-right" class="stat-icon" style="color:var(--color-success)"></i>
+            <!-- Card 2: Portfolio Metrics (Token Monitor style) -->
+            <div class="feat-card col-span-1 h-260">
+              <div class="feat-card-header">
+                <h3 class="feat-card-title">Portfolio Metrics</h3>
+                <p class="feat-card-desc">Track overall gains and active SIP values in real-time.</p>
               </div>
-              <div class="stat-value" id="dashboard-overall-gain-pct" style="color:var(--color-success)">+12.69%</div>
-              <div class="stat-sub">
-                <span class="badge badge-success" id="dashboard-overall-gain-abs">+₹54,310</span>
-              </div>
-            </div>
-
-            <!-- XIRR (3/12 cols, violet accent) -->
-            <div class="glass-card stat-card bento-accent-violet b-c1 b-r1">
-              <div class="stat-header">
-                <span class="stat-label" style="color:var(--color-fd)">XIRR Return</span>
-                <i data-lucide="percent" class="stat-icon" style="color:var(--color-fd)"></i>
-              </div>
-              <div class="stat-value" id="dashboard-xirr" style="color:var(--color-fd)">14.85%</div>
-              <div class="stat-sub"><span>Annualised since inception</span></div>
-            </div>
-
-            <!-- Total Invested (3/12 cols, sky accent) -->
-            <div class="glass-card stat-card bento-accent-sky b-c1 b-r1">
-              <div class="stat-header">
-                <span class="stat-label" style="color:var(--color-nps)">Total Invested</span>
-                <i data-lucide="landmark" class="stat-icon" style="color:var(--color-nps)"></i>
-              </div>
-              <div class="stat-value" id="dashboard-total-invested" style="color:var(--color-nps)">₹4,28,000</div>
-              <div class="stat-sub">
-                <span>Across</span>
-                <strong id="dashboard-asset-count">5 asset classes</strong>
+              <div class="feat-card-visual flex-col-between" id="card2-visual">
+                <div class="metrics-row" id="card2-metrics-row">
+                  <!-- Metrics populated by JS -->
+                </div>
+                <div class="metrics-chart-container">
+                  <div class="metrics-bars" id="card2-bars"></div>
+                  <div class="metrics-labels" id="card2-labels"></div>
+                </div>
               </div>
             </div>
 
-            <!-- Asset Allocation (6/12 cols) -->
-            <div class="glass-card b-c3 b-r1">
-              <div class="card-header-row">
-                <h4 class="card-title">Asset Allocation</h4>
-                <a href="#portfolio" class="card-link" data-goto="portfolio">View all <i data-lucide="arrow-right" style="width:14px;"></i></a>
+            <!-- Card 3: Recent Transactions (Activity Feed style) -->
+            <div class="feat-card col-span-1 h-260">
+              <div class="feat-card-header">
+                <h3 class="feat-card-title">Recent Transactions</h3>
+                <p class="feat-card-desc">Real-time logs of SIPs, deposits, and dividends.</p>
               </div>
-              <div class="allocation-bar" id="allocation-bar-container"></div>
-              <div class="allocation-list" id="allocation-list-legend"></div>
+              <div class="feat-card-visual relative-center overflow-hidden" id="card3-visual">
+                <div class="transactions-stack" id="card3-stack">
+                  <!-- Transaction items populated by JS -->
+                </div>
+              </div>
             </div>
 
-            <!-- Top Holdings — dark card (12/12 cols × 2 rows) -->
-            <div class="glass-card bento-dark b-c6 b-r2">
-              <div class="card-header-row">
-                <h4 class="card-title">Top Holdings</h4>
-                <a href="#portfolio" class="card-link" data-goto="portfolio" style="color:#93c5fd;">Full list <i data-lucide="arrow-right" style="width:14px;"></i></a>
+            <!-- Card 4: Asset Allocation (Knowledge Base style) -->
+            <div class="feat-card col-span-2 h-260">
+              <div class="feat-card-header">
+                <h3 class="feat-card-title">Asset Allocation</h3>
+                <p class="feat-card-desc">Breakdown of your portfolio across different asset classes.</p>
               </div>
-              <div class="holdings-list" id="dashboard-holdings-list"></div>
+              <div class="feat-card-visual flex-row-gap p-3" id="card4-visual">
+                <div class="allocation-bars-container">
+                  <p class="section-label">ASSET CLASSES</p>
+                  <div class="allocation-bars-list" id="card4-bars-list">
+                    <!-- Populated by JS -->
+                  </div>
+                  <div class="live-indicator">
+                    <div class="pulse-dot-wrapper">
+                      <div class="pulse-dot-ring"></div>
+                      <div class="pulse-dot-center"></div>
+                    </div>
+                    <span>Live allocation active</span>
+                  </div>
+                </div>
+                <div class="divider-vertical"></div>
+                <div class="allocation-log-container">
+                  <p class="section-label">TOP MOVERS</p>
+                  <div class="allocation-log-list" id="card4-log-list">
+                    <!-- Populated by JS -->
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <!-- Recent Transactions (full width) -->
-            <div class="glass-card b-c6 b-r1">
-              <div class="card-header-row">
-              <div class="transactions-list" id="dashboard-transactions-list"></div>
+            <!-- Card 5: Top Holdings (Tool Inspector style) -->
+            <div class="feat-card col-span-1 h-260">
+              <div class="feat-card-header">
+                <h3 class="feat-card-title">Top Holdings</h3>
+                <p class="feat-card-desc">Monitor your best performing assets and their returns.</p>
+              </div>
+              <div class="feat-card-visual flex-center" id="card5-visual">
+                <div class="grid-2x2 w-full" id="card5-grid">
+                  <!-- Holdings populated by JS -->
+                </div>
+              </div>
             </div>
 
           </div>
@@ -865,7 +896,7 @@
                 <div class="message-wrapper ai">
                   <div class="message-avatar">AI</div>
                   <div class="message-bubble">
-                    <p>Namaste! I am your WealthOS Finance Buddy. I can analyse your current portfolio and give you financial literacy tips, rebalancing guides, or tax estimates.</p>
+                    <p>Namaste! I am your AssetBridge Finance Buddy. I can analyse your current portfolio and give you financial literacy tips, rebalancing guides, or tax estimates.</p>
                     <p>How can I help you today?</p>
                   </div>
                 </div>

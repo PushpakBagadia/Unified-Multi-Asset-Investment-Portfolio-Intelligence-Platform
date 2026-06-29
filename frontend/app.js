@@ -1,4 +1,4 @@
-// WealthOS Unified Investing Dashboard - App Core Logic
+// AssetBridge Unified Investing Dashboard - App Core Logic
 
 // 1. Initial State Definition
 const state = {
@@ -281,165 +281,311 @@ function calculatePortfolioMetrics() {
 
 // 5. Render Core Components
 
-// A. Update Dashboard Numbers and Stats
+// A. Update Dashboard Numbers and Stats (New Agent Bento Grid)
 function renderDashboard() {
   const metrics = calculatePortfolioMetrics();
   
-  // Stat Card 1
-  document.getElementById('dashboard-total-value').textContent = formatRupee(metrics.totalVal);
-  
-  // Stat Card 2
-  document.getElementById('dashboard-total-invested').textContent = formatRupee(metrics.totalInv);
-  const assetClassesCount = new Set(state.holdings.map(h => h.category)).size;
-  document.getElementById('dashboard-asset-count').textContent = `${assetClassesCount} asset classes`;
-  
-  // Stat Card 3
-  const overallGainPctElement = document.getElementById('dashboard-overall-gain-pct');
-  overallGainPctElement.textContent = `${metrics.overallGainPct >= 0 ? '+' : ''}${metrics.overallGainPct.toFixed(2)}%`;
-  overallGainPctElement.className = `stat-value ${metrics.overallGainPct >= 0 ? 'color-success' : 'color-danger'}`;
-  
-  const overallGainAbsElement = document.getElementById('dashboard-overall-gain-abs');
-  overallGainAbsElement.textContent = `${metrics.overallGainVal >= 0 ? '+' : ''}${formatRupee(metrics.overallGainVal)}`;
-  overallGainAbsElement.className = `badge ${metrics.overallGainVal >= 0 ? 'badge-success' : 'badge-danger'}`;
-  
-  // Render Nudge closed / open state
+  // Nudge logic
   const isNudgeClosed = localStorage.getItem('nudge-dismissed-rebalance') === 'true';
   const nudgeCard = document.getElementById('dashboard-nudge');
-  if (isNudgeClosed) {
-    nudgeCard.style.display = 'none';
-  } else {
-    nudgeCard.style.display = 'flex';
+  if (nudgeCard) {
+    nudgeCard.style.display = isNudgeClosed ? 'none' : 'flex';
   }
   
-  // Render Allocation Segmented Bar
-  renderAssetAllocationBar(metrics.totalVal);
-  
-  // Render Top Holdings (max 5)
-  renderTopHoldings();
-  
-  // Render Recent Transactions (max 5)
-  renderRecentTransactions();
+  renderCard1AssetFlow();
+  renderCard2Metrics(metrics);
+  renderCard3Transactions();
+  renderCard4Allocation(metrics.totalVal);
+  renderCard5TopHoldings(metrics.totalVal);
 }
 
-function renderAssetAllocationBar(totalPortfolioValue) {
-  const barContainer = document.getElementById('allocation-bar-container');
-  const legendContainer = document.getElementById('allocation-list-legend');
+// Card 1: Asset Flow SVG Graph
+let flowInterval;
+function renderCard1AssetFlow() {
+  const container = document.getElementById('card1-visual');
+  if (!container) return;
   
-  barContainer.innerHTML = '';
-  legendContainer.innerHTML = '';
+  // Just static visual with rotating active state for simplicity in Vanilla JS
+  container.innerHTML = `
+    <svg class="w-full h-full absolute inset-0" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet">
+      <!-- Grid -->
+      <pattern id="clean-grid" width="16" height="16" patternUnits="userSpaceOnUse">
+        <circle cx="1.5" cy="1.5" r="0.75" fill="rgba(0,0,0,0.1)"></circle>
+      </pattern>
+      <rect width="100%" height="100%" fill="url(#clean-grid)"></rect>
+      
+      <!-- Connectors -->
+      <path d="M 60 120 L 160 120" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+      <path d="M 160 120 L 260 50" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+      <path d="M 160 120 L 260 120" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+      <path d="M 160 120 L 260 190" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+      
+      <!-- Nodes -->
+      <foreignObject x="40" y="100" width="40" height="40" class="overflow-visible">
+        <div class="w-full h-full rounded-xl bg-blue-600 text-white flex items-center justify-center text-xs font-bold shadow-md" style="background:var(--color-equity)">P</div>
+      </foreignObject>
+      <foreignObject x="150" y="110" width="20" height="20" class="overflow-visible">
+        <div id="router-node" class="w-full h-full rounded-full border-2 border-blue-400 bg-white shadow-sm flex items-center justify-center transition-all duration-300">
+           <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+        </div>
+      </foreignObject>
+      
+      <foreignObject x="240" y="30" width="40" height="40" class="overflow-visible">
+        <div class="w-full h-full rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md transition-all duration-300 flow-node" style="background:var(--color-mf)">EQ</div>
+      </foreignObject>
+      <foreignObject x="240" y="100" width="40" height="40" class="overflow-visible">
+        <div class="w-full h-full rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md transition-all duration-300 flow-node" style="background:var(--color-gold)">GD</div>
+      </foreignObject>
+      <foreignObject x="240" y="170" width="40" height="40" class="overflow-visible">
+        <div class="w-full h-full rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md transition-all duration-300 flow-node" style="background:var(--color-fd)">DB</div>
+      </foreignObject>
+    </svg>
+  `;
   
-  // Aggregate by category
+  if (flowInterval) clearInterval(flowInterval);
+  let step = 0;
+  const nodes = container.querySelectorAll('.flow-node');
+  flowInterval = setInterval(() => {
+    if(nodes.length === 0) return;
+    nodes.forEach(n => n.style.transform = 'scale(1)');
+    if (nodes[step]) nodes[step].style.transform = 'scale(1.15)';
+    step = (step + 1) % nodes.length;
+  }, 2000);
+}
+
+// Card 2: Portfolio Metrics
+function renderCard2Metrics(metrics) {
+  const row = document.getElementById('card2-metrics-row');
+  const bars = document.getElementById('card2-bars');
+  const labels = document.getElementById('card2-labels');
+  if (!row || !bars || !labels) return;
+  
+  const gainColor = metrics.overallGainVal >= 0 ? 'text-emerald-500' : 'text-rose-500';
+  const gainSign = metrics.overallGainVal >= 0 ? '+' : '';
+  
+  row.innerHTML = `
+    <div class="metric-box">
+      <div class="metric-box-inner active">
+        <div class="flex flex-col min-w-0">
+          <span class="text-[9px] text-gray-500 font-mono uppercase tracking-widest">Total Value</span>
+          <span class="text-[14px] font-bold font-mono text-gray-800 mt-1">${formatRupee(metrics.totalVal)}</span>
+          <div class="flex items-center gap-1.5 mt-1.5">
+            <span class="text-[9px] font-mono font-bold ${gainColor}">${gainSign}${metrics.overallGainPct.toFixed(2)}%</span>
+            <span class="text-[8px] text-gray-400 font-mono">overall</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="metric-box">
+      <div class="metric-box-inner">
+        <div class="flex flex-col min-w-0">
+          <span class="text-[9px] text-gray-500 font-mono uppercase tracking-widest">Total Invested</span>
+          <span class="text-[14px] font-bold font-mono text-gray-800 mt-1">${formatRupee(metrics.totalInv)}</span>
+          <div class="flex items-center gap-1.5 mt-1.5">
+            <span class="text-[9px] font-mono font-bold text-violet-500">14.8%</span>
+            <span class="text-[8px] text-gray-400 font-mono">XIRR</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  // Generate random daily bars
+  const heights = [40, 55, 45, 75, 60, 85, 95];
+  const days = ["M", "T", "W", "T", "F", "S", "S"];
+  
+  bars.innerHTML = '';
+  labels.innerHTML = '';
+  heights.forEach((h, i) => {
+    bars.innerHTML += `
+      <div class="metric-bar">
+        <div class="metric-bar-fill" style="height:0%;" data-target="${h}%"></div>
+      </div>
+    `;
+    labels.innerHTML += `<span>${days[i]}</span>`;
+  });
+  
+  // Animate bars on load
+  setTimeout(() => {
+    bars.querySelectorAll('.metric-bar-fill').forEach(fill => {
+      fill.style.height = fill.getAttribute('data-target');
+    });
+  }, 100);
+}
+
+// Card 3: Recent Transactions Stack
+let txInterval;
+function renderCard3Transactions() {
+  const stack = document.getElementById('card3-stack');
+  if (!stack) return;
+  
+  const recent = state.transactions.slice(0, 5);
+  stack.innerHTML = '';
+  
+  recent.forEach((t, i) => {
+    const isBuy = t.type === 'BUY';
+    const color = isBuy ? 'var(--color-success)' : 'var(--color-danger)';
+    
+    const div = document.createElement('div');
+    div.className = 'tx-item';
+    div.innerHTML = `
+      <div class="tx-item-icon" style="background:${color}">
+        <i data-lucide="${isBuy ? 'arrow-down-left' : 'arrow-up-right'}" style="width:16px; height:16px;"></i>
+      </div>
+      <div class="tx-item-content">
+        <div class="tx-item-top">
+          <span class="tx-item-name">${t.assetName}</span>
+          <span class="tx-item-status" style="background:rgba(0,0,0,0.05); color:${color}">${t.type}</span>
+        </div>
+        <div class="tx-item-desc">${t.typeLabel} · ${t.units} units</div>
+      </div>
+      <div class="flex flex-col items-end gap-1">
+        <span class="text-[11px] font-bold font-mono" style="color:${color}">${isBuy?'+':'-'}${formatRupee(t.amount)}</span>
+        <span class="tx-item-time">${t.date}</span>
+      </div>
+    `;
+    stack.appendChild(div);
+  });
+  lucide.createIcons();
+  
+  if (txInterval) clearInterval(txInterval);
+  let activeIdx = 0;
+  
+  const updateStack = () => {
+    const items = Array.from(stack.children);
+    items.forEach((item, i) => {
+      let slot = i - activeIdx;
+      const N = items.length;
+      if (slot > Math.floor(N / 2)) slot -= N;
+      if (slot < -Math.floor(N / 2)) slot += N;
+      
+      const abs = Math.abs(slot);
+      const isVisible = abs <= 2;
+      const yOffset = slot === 0 ? 0 : slot === 1 ? 40 : slot === 2 ? 70 : slot === -1 ? -40 : slot === -2 ? -70 : 150;
+      const scale = slot === 0 ? 1 : abs === 1 ? 0.93 : 0.87;
+      const opacity = slot === 0 ? 1 : abs === 1 ? 0.65 : 0.38;
+      const zIndex = slot === 0 ? 30 : abs === 1 ? 20 : 10;
+      
+      item.style.transform = `translateY(${yOffset}px) scale(${scale})`;
+      item.style.opacity = isVisible ? opacity : 0;
+      item.style.zIndex = zIndex;
+    });
+    activeIdx = (activeIdx + 1) % items.length;
+  };
+  
+  updateStack();
+  txInterval = setInterval(updateStack, 2500);
+}
+
+// Card 4: Asset Allocation Namespaces
+let allocInterval;
+function renderCard4Allocation(totalVal) {
+  const barsList = document.getElementById('card4-bars-list');
+  const logList = document.getElementById('card4-log-list');
+  if (!barsList || !logList) return;
+  
   const categories = {
-    equity: { name: "Equities", val: 0, color: "eq" },
-    mf: { name: "Mutual Funds", val: 0, color: "mf" },
-    gold: { name: "Digital Gold", val: 0, color: "gold" },
-    fd: { name: "Fixed Deposits", val: 0, color: "fd" },
-    nps: { name: "NPS Benefits", val: 0, color: "nps" },
-    crypto: { name: "Crypto", val: 0, color: "crypto" }
+    equity: { name: "Equities", val: 0, color: "bg-indigo-500" },
+    mf: { name: "Mut Funds", val: 0, color: "bg-emerald-500" },
+    gold: { name: "Gold", val: 0, color: "bg-amber-500" },
+    fd: { name: "Debt/FD", val: 0, color: "bg-violet-500" }
   };
   
   state.holdings.forEach(h => {
-    if (categories[h.category]) {
-      categories[h.category].val += h.currentValue;
-    }
+    if (h.category === 'nps') categories.fd.val += h.currentValue;
+    else if (categories[h.category]) categories[h.category].val += h.currentValue;
   });
   
-  Object.keys(categories).forEach(catKey => {
-    const cat = categories[catKey];
-    if (cat.val > 0) {
-      const pct = (cat.val / totalPortfolioValue) * 100;
-      
-      // 1. Draw segment in bar
-      const seg = document.createElement('div');
-      seg.className = `allocation-seg ${cat.color}`;
-      seg.style.width = `${pct}%`;
-      seg.setAttribute('data-percentage', pct.toFixed(0));
-      barContainer.appendChild(seg);
-      
-      // 2. Draw item in legend
-      const item = document.createElement('div');
-      item.className = 'allocation-item';
-      item.innerHTML = `
-        <div class="allocation-item-label">
-          <span class="allocation-dot ${cat.color}"></span>
-          <span>${cat.name}</span>
-        </div>
-        <span class="allocation-val">${pct.toFixed(1)}%</span>
-      `;
-      legendContainer.appendChild(item);
-    }
-  });
-}
-
-function renderTopHoldings() {
-  const container = document.getElementById('dashboard-holdings-list');
-  container.innerHTML = '';
-  
-  // Sort holdings descending by value
-  const sortedHoldings = [...state.holdings]
-    .sort((a, b) => b.currentValue - a.currentValue)
-    .slice(0, 5);
+  barsList.innerHTML = '';
+  Object.keys(categories).forEach(k => {
+    const cat = categories[k];
+    const pct = totalVal > 0 ? (cat.val / totalVal) * 100 : 0;
     
-  sortedHoldings.forEach(h => {
-    const row = document.createElement('div');
-    row.className = 'holding-row';
-    row.innerHTML = `
-      <div class="holding-info">
-        <div class="holding-avatar ${h.category}">${h.shortName.substring(0, 4)}</div>
-        <div class="holding-details">
-          <span class="holding-name">${h.name}</span>
-          <span class="holding-sub">${h.category.toUpperCase()} · ${h.units.toFixed(2)} units</span>
+    barsList.innerHTML += `
+      <div class="alloc-row" data-cat="${k}">
+        <div class="alloc-icon"><i data-lucide="layers" style="width:16px;"></i></div>
+        <div class="alloc-name">${cat.name}</div>
+        <div class="alloc-track">
+          <div class="alloc-fill ${cat.color}" data-w="${pct}%"></div>
         </div>
-      </div>
-      <div class="holding-right">
-        <div class="holding-value">
-          <div class="holding-val-num">${formatRupee(h.currentValue)}</div>
-          <span class="badge ${h.returnPct >= 0 ? 'badge-success' : 'badge-danger'}" style="font-size:0.68rem; margin-top:2px;">
-            ${h.returnPct >= 0 ? '+' : ''}${h.returnPct.toFixed(1)}%
-          </span>
-        </div>
+        <div class="alloc-val">${pct.toFixed(0)}%</div>
       </div>
     `;
-    container.appendChild(row);
+  });
+  lucide.createIcons();
+  
+  setTimeout(() => {
+    barsList.querySelectorAll('.alloc-fill').forEach(fill => {
+      fill.style.width = fill.getAttribute('data-w');
+    });
+  }, 100);
+  
+  // Cycle active state
+  if(allocInterval) clearInterval(allocInterval);
+  let idx = 0;
+  const rows = barsList.querySelectorAll('.alloc-row');
+  allocInterval = setInterval(() => {
+    rows.forEach(r => r.classList.remove('active'));
+    if(rows[idx]) rows[idx].classList.add('active');
+    idx = (idx + 1) % rows.length;
+  }, 2000);
+  
+  // Top movers log
+  const movers = [...state.holdings].sort((a,b) => b.returnPct - a.returnPct).slice(0, 4);
+  logList.innerHTML = '';
+  movers.forEach(m => {
+    logList.innerHTML += `
+      <div class="log-item">
+        <div class="log-item-top">
+          <span class="log-badge" style="background:rgba(52,211,153,0.15); color:var(--color-success)">+${m.returnPct.toFixed(1)}%</span>
+          <span class="log-time">${m.category.toUpperCase()}</span>
+        </div>
+        <div class="log-text">${m.name}</div>
+      </div>
+    `;
   });
 }
 
-function renderRecentTransactions() {
-  const container = document.getElementById('dashboard-transactions-list');
-  container.innerHTML = '';
+// Card 5: Top Holdings
+function renderCard5TopHoldings(totalVal) {
+  const grid = document.getElementById('card5-grid');
+  if (!grid) return;
   
-  const recent = state.transactions.slice(0, 5);
+  const top = [...state.holdings].sort((a, b) => b.currentValue - a.currentValue).slice(0, 4);
+  grid.innerHTML = '';
   
-  recent.forEach(t => {
-    const row = document.createElement('div');
-    row.className = 'transaction-row';
+  const colors = ["bg-sky-500", "bg-emerald-500", "bg-amber-500", "bg-violet-500"];
+  
+  top.forEach((h, i) => {
+    const color = colors[i % colors.length];
+    const pct = totalVal > 0 ? (h.currentValue / totalVal) * 100 : 0;
     
-    const isBuy = t.type === 'BUY';
-    const badgeClass = isBuy ? 'badge-success' : 'badge-danger';
-    
-    row.innerHTML = `
-      <div class="transaction-info">
-        <div class="transaction-avatar" style="background:${isBuy ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)'}; color:${isBuy ? 'var(--color-success)' : 'var(--color-danger)'}; font-size:0.75rem; border:1px solid ${isBuy ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'}">
-          ${t.type}
-        </div>
-        <div class="transaction-details">
-          <span class="transaction-name">${t.assetName}</span>
-          <span class="transaction-sub">${t.date} · ${t.typeLabel}</span>
-        </div>
-      </div>
-      <div class="transaction-right">
-        <div class="transaction-val-text">
-          <div class="transaction-val-num" style="color:${isBuy ? 'var(--color-success)' : 'var(--color-danger)'}">
-            ${isBuy ? '+' : '-'}${formatRupee(t.amount)}
+    grid.innerHTML += `
+      <div class="holding-card">
+        <div class="hc-top">
+          <div class="hc-icon ${color}"><i data-lucide="briefcase" style="width:14px;"></i></div>
+          <div class="hc-val-col">
+            <span class="hc-val">${formatRupee(h.currentValue)}</span>
+            <span class="hc-sub">Valuation</span>
           </div>
-          <span class="transaction-sub" style="font-size:0.68rem;">
-            ${t.units} units at ${formatRupee(t.price)}
-          </span>
+        </div>
+        <div class="hc-bot">
+          <div class="hc-bot-text">
+            <span class="hc-name">${h.shortName}</span>
+            <span class="hc-ret" style="color:${h.returnPct>=0?'var(--color-success)':'var(--color-danger)'}">${h.returnPct>=0?'+':''}${h.returnPct.toFixed(1)}%</span>
+          </div>
+          <div class="hc-track">
+            <div class="hc-fill ${color}" data-w="${pct}%"></div>
+          </div>
         </div>
       </div>
     `;
-    container.appendChild(row);
   });
+  
+  lucide.createIcons();
+  setTimeout(() => {
+    grid.querySelectorAll('.hc-fill').forEach(f => f.style.width = f.getAttribute('data-w'));
+  }, 150);
 }
 
 // B. Portfolio View Render
@@ -1511,11 +1657,11 @@ function initExportCSV() {
     const link = document.createElement('a');
     
     if (navigator.msSaveBlob) { // IE 10+
-      navigator.msSaveBlob(blob, 'wealthos_holdings.csv');
+      navigator.msSaveBlob(blob, 'assetbridge_holdings.csv');
     } else {
       const url = URL.createObjectURL(blob);
-      link.href = url;
-      link.setAttribute('download', 'wealthos_holdings_report.csv');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'assetbridge_holdings_report.csv');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
