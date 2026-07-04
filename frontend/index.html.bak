@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WealthOS | Unified Investing Platform</title>
+  
+  <!-- Modern Font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css?v=1.1">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- 1. Sidebar -->
+    <aside class="sidebar">
+      <div class="brand-section">
+        <div class="logo-container">
+          <i data-lucide="trending-up" style="stroke-width: 3px;"></i>
+        </div>
+        <div class="brand-info">
+          <h1>WealthOS</h1>
+          <span>Unified Investing</span>
+        </div>
+      </div>
+      
+      <nav class="nav-links">
+        <li class="nav-item active" data-page="dashboard">
+          <a href="#dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="portfolio">
+          <a href="#portfolio">
+            <i data-lucide="pie-chart"></i>
+            <span>Portfolio</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="invest">
+          <a href="#invest">
+            <i data-lucide="compass"></i>
+            <span>Invest</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="goals">
+          <a href="#goals">
+            <i data-lucide="target"></i>
+            <span>Goals</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="learn">
+          <a href="#learn">
+            <i data-lucide="book-open"></i>
+            <span>Learn</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="buddy">
+          <a href="#buddy">
+            <i data-lucide="bot"></i>
+            <span>Finance Buddy</span>
+            <span class="nav-badge ai-badge">AI</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="notifications">
+          <a href="#notifications">
+            <i data-lucide="bell"></i>
+            <span>Notifications</span>
+            <span class="nav-badge count-badge" id="sidebar-notif-count">3</span>
+          </a>
+        </li>
+        <li class="nav-item" data-page="profile">
+          <a href="#profile">
+            <i data-lucide="user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+      </nav>
+      
+      <!-- Bottom User Card -->
+      <div class="user-card">
+        <div class="user-avatar" id="sidebar-avatar">AA</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-user-name">Arpit Agarwal</div>
+          <div class="kyc-status">
+            <i data-lucide="shield-check"></i>
+            <span>KYC Verified</span>
+          </div>
+        </div>
+        <div class="settings-dots" id="sidebar-settings-btn">
+          <i data-lucide="more-vertical"></i>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Shell Wrapper -->
+    <div class="main-wrapper">
+      
+      <!-- 2. Top Bar -->
+      <header class="topbar">
+        <div class="page-title">
+          <h2 id="current-page-title">Dashboard</h2>
+        </div>
+        
+        <div class="search-container">
+          <i data-lucide="search"></i>
+          <input type="text" class="search-input" id="global-search-input" placeholder="Search stocks, MF, gold…">
+          
+          <!-- Autocomplete results dropdown -->
+          <div class="search-results-dropdown" id="search-dropdown">
+            <!-- Populated via Javascript -->
+          </div>
+        </div>
+        
+        <div class="topbar-actions">
+          <button class="topbar-btn" id="topbar-bell-btn" title="View Notifications">
+            <i data-lucide="bell"></i>
+            <div class="unread-dot" id="topbar-bell-dot"></div>
+          </button>
+          <button class="topbar-btn" id="topbar-settings-btn" title="Settings">
+            <i data-lucide="settings"></i>
+          </button>
+        </div>
+      </header>
+      
+      <!-- Content Area -->
+      <main class="content-area">
+        
+        <!-- 3. Dashboard Page -->
+        <section id="dashboard-page" class="page active">
+          <div class="welcome-row">
+            <div class="welcome-info">
+              <h3 id="dashboard-greeting">Good afternoon, Arpit</h3>
+              <div class="welcome-sub">
+                <span id="dashboard-date">Thursday, June 25, 2026</span>
+                <span class="badge badge-success" id="market-status-badge"><i data-lucide="clock" style="width:12px;height:12px;"></i> Markets Open</span>
+              </div>
+            </div>
+            <div class="welcome-actions">
+              <button class="btn btn-secondary" id="action-add-funds">
+                <i data-lucide="wallet"></i> Add Funds
+              </button>
+              <button class="btn btn-primary" id="action-start-sip">
+                <i data-lucide="calendar"></i> Start SIP
+              </button>
+            </div>
+          </div>
+          
+          <!-- AI detect nudge card -->
+          <div class="nudge-card" id="dashboard-nudge">
+            <div class="nudge-content">
+              <span class="nudge-icon"><i data-lucide="alert-triangle"></i></span>
+              <div class="nudge-text">
+                <strong>Rebalancing suggested</strong> — equity is at 58%, above your 50% target. Consider moving ₹18,000 to debt funds.
+              </div>
+            </div>
+            <div class="nudge-close" id="close-dashboard-nudge">
+              <i data-lucide="x"></i>
+            </div>
+          </div>
+          
+          <!-- Four Stat Cards -->
+          <div class="dashboard-grid">
+            
+            <!-- Card 1: Total Value -->
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Portfolio Value</span>
+                <i data-lucide="trending-up" class="stat-icon" style="color:var(--color-success)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-total-value">₹4,82,310</div>
+              <div class="stat-sub">
+                <span class="badge badge-success" id="dashboard-day-change">+₹4,250 (+0.89%)</span>
+                <span>today</span>
+              </div>
+              <div class="stat-sparkline">
+                <svg id="sparkline-svg" viewBox="0 0 100 30" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="sparkline-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="var(--color-success)" stop-opacity="0.2"/>
+                      <stop offset="100%" stop-color="var(--color-success)" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M 0 25 L 15 22 L 30 26 L 45 18 L 60 12 L 75 16 L 90 8 L 100 5 L 100 30 L 0 30 Z" fill="url(#sparkline-grad)"/>
+                  <path d="M 0 25 L 15 22 L 30 26 L 45 18 L 60 12 L 75 16 L 90 8 L 100 5" fill="none" stroke="var(--color-success)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- Card 2: Total Invested -->
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Total Invested</span>
+                <i data-lucide="landmark" class="stat-icon"></i>
+              </div>
+              <div class="stat-value" id="dashboard-total-invested">₹4,28,000</div>
+              <div class="stat-sub">
+                <span>Deployed across</span>
+                <strong id="dashboard-asset-count">5 asset classes</strong>
+              </div>
+            </div>
+            
+            <!-- Card 3: Overall Gain -->
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span class="stat-label">Overall Gain</span>
+                <i data-lucide="arrow-up-right" class="stat-icon" style="color:var(--color-success)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-overall-gain-pct">+12.69%</div>
+              <div class="stat-sub">
+                <span class="badge badge-success" id="dashboard-overall-gain-abs">+₹54,310</span>
+                <span>returns</span>
+              </div>
+            </div>
+            
+            <!-- Card 4: XIRR -->
+            <div class="glass-card stat-card">
+              <div class="stat-header">
+                <span class="stat-label">XIRR (Annual Return)</span>
+                <i data-lucide="percent" class="stat-icon" style="color:var(--color-equity)"></i>
+              </div>
+              <div class="stat-value" id="dashboard-xirr">14.85%</div>
+              <div class="stat-sub">
+                <span>Annualised returns since inception</span>
+              </div>
+            </div>
+            
+            <!-- Row 2: Asset Allocation -->
+            <div class="glass-card col-span-2">
+              <div class="card-header-row">
+                <h4 class="card-title">Asset Allocation</h4>
+                <a href="#portfolio" class="card-link" data-goto="portfolio">View all <i data-lucide="arrow-right" style="width:14px;"></i></a>
+              </div>
+              
+              <div class="allocation-bar" id="allocation-bar-container">
+                <!-- Segments will be drawn via JS based on state -->
+              </div>
+              
+              <div class="allocation-list" id="allocation-list-legend">
+                <!-- Items populated via JS -->
+              </div>
+            </div>
+            
+            <!-- Row 2: Top Holdings -->
+            <div class="glass-card col-span-2">
+              <div class="card-header-row">
+                <h4 class="card-title">Top Holdings</h4>
+                <a href="#portfolio" class="card-link" data-goto="portfolio">Full list <i data-lucide="arrow-right" style="width:14px;"></i></a>
+              </div>
+              <div class="holdings-list" id="dashboard-holdings-list">
+                <!-- Populated via JS (max 5 rows) -->
+              </div>
+            </div>
+            
+            <!-- Row 3: Recent Transactions -->
+            <div class="glass-card col-span-4">
+              <div class="card-header-row">
+                <h4 class="card-title">Recent Transactions</h4>
+              </div>
+              <div class="transactions-list" id="dashboard-transactions-list">
+                <!-- Populated via JS (max 5 rows) -->
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- 4. Portfolio Page -->
+        <section id="portfolio-page" class="page">
+          <!-- Filter Tabs -->
+          <div class="filter-tabs-container" id="portfolio-filters">
+            <button class="filter-tab active" data-filter="all">All Assets</button>
+            <button class="filter-tab" data-filter="equity">Equities</button>
+            <button class="filter-tab" data-filter="mf">Mutual Funds</button>
+            <button class="filter-tab" data-filter="gold">Digital Gold</button>
+            <button class="filter-tab" data-filter="fd">Fixed Deposits</button>
+            <button class="filter-tab" data-filter="nps">NPS</button>
+            <button class="filter-tab" data-filter="crypto">Crypto</button>
+          </div>
+          
+          <div class="dashboard-grid">
+            <!-- Portfolio Chart Card (Left, span 2) -->
+            <div class="glass-card col-span-2">
+              <div class="card-header-row">
+                <h4 class="card-title">Portfolio Performance</h4>
+                <div class="timeframe-selector">
+                  <button class="tf-btn" data-tf="1w">1W</button>
+                  <button class="tf-btn" data-tf="1m">1M</button>
+                  <button class="tf-btn active" data-tf="3m">3M</button>
+                  <button class="tf-btn" data-tf="1y">1Y</button>
+                  <button class="tf-btn" data-tf="all">ALL</button>
+                </div>
+              </div>
+              
+              <div class="portfolio-chart-wrapper">
+                <canvas id="portfolioMainChart"></canvas>
+              </div>
+            </div>
+            
+            <!-- Holdings List Card (Right, span 2) -->
+            <div class="glass-card col-span-2" style="display:flex; flex-direction:column;">
+              <div class="card-header-row">
+                <h4 class="card-title">Holdings Breakdown</h4>
+                <div style="display:flex; gap:10px;">
+                  <select class="numeric-input" id="portfolio-sort-select" style="padding:6px 12px; font-size:0.78rem;">
+                    <option value="value">Sort: Value</option>
+                    <option value="return">Sort: Returns %</option>
+                    <option value="name">Sort: Name</option>
+                  </select>
+                  <button class="btn btn-secondary" id="portfolio-export-csv-btn" style="padding:6px 12px; font-size:0.78rem;">
+                    <i data-lucide="download" style="width:14px;height:14px;"></i> Export CSV
+                  </button>
+                </div>
+              </div>
+              
+              <div style="flex:1; overflow-y:auto; max-height:300px; margin-top:8px;">
+                <table class="portfolio-table">
+                  <thead>
+                    <tr>
+                      <th>Asset Class & Name</th>
+                      <th style="text-align:right;">Holdings Details</th>
+                      <th style="text-align:right;">Current Value</th>
+                      <th style="text-align:right;">Returns</th>
+                    </tr>
+                  </thead>
+                  <tbody id="portfolio-holdings-table-body">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- 5. Invest Page -->
+        <section id="invest-page" class="page">
+          <div class="filter-tabs-container" id="invest-category-tabs">
+            <button class="filter-tab active" data-category="mf">Mutual Funds</button>
+            <button class="filter-tab" data-category="equity">Equities (Direct Stock)</button>
+            <button class="filter-tab" data-category="gold">Digital Gold</button>
+            <button class="filter-tab" data-category="fd">Fixed Deposits</button>
+          </div>
+          
+          <div class="chips-container" id="invest-sub-filters">
+            <button class="chip-btn active" data-sub="all">All</button>
+            <button class="chip-btn" data-sub="equity">Equity funds</button>
+            <button class="chip-btn" data-sub="debt">Debt funds</button>
+            <button class="chip-btn" data-sub="hybrid">Hybrid</button>
+            <button class="chip-btn" data-sub="elss">ELSS (Tax Saving)</button>
+            <button class="chip-btn" data-sub="index">Index funds</button>
+          </div>
+          
+          <!-- Fund Cards grid (3 columns) -->
+          <div class="dashboard-grid" id="invest-funds-grid">
+            <!-- Dynamically populated from JS (grid of 3) -->
+          </div>
+        </section>
+        
+        <!-- 6. Goals Page -->
+        <section id="goals-page" class="page">
+          <div class="welcome-row">
+            <div class="welcome-info">
+              <h3 id="goals-summary-text">Active Targets: 3 goals</h3>
+              <div class="welcome-sub">
+                <span>Tracking a total savings of ₹95,00,000 for your long-term roadmap</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="action-new-goal">
+              <i data-lucide="plus"></i> New Goal
+            </button>
+          </div>
+          
+          <!-- Achievement Milestone Nudge -->
+          <div class="nudge-card nudge-success" id="goals-milestone-nudge">
+            <div class="nudge-content">
+              <span class="nudge-icon"><i data-lucide="award"></i></span>
+              <div class="nudge-text">
+                <strong>Europe Trip is on track!</strong> You'll hit your ₹3,00,000 target one month early based on recent extra SIP allocations.
+              </div>
+            </div>
+            <div class="nudge-close" id="close-goals-nudge">
+              <i data-lucide="x"></i>
+            </div>
+          </div>
+          
+          <!-- Goal Cards Grid -->
+          <div class="dashboard-grid" id="goals-cards-grid">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+        
+        <!-- 7. Learn Page -->
+        <section id="learn-page" class="page">
+          <div class="learn-tabs">
+            <button class="learn-tab active" data-tab="explainers" onclick="switchLearnTab(this, 'explainers')">Explainers & Literacy</button>
+            <button class="learn-tab" data-tab="calculators" onclick="switchLearnTab(this, 'calculators')">Calculators</button>
+            <button class="learn-tab" data-tab="quizzes" onclick="switchLearnTab(this, 'quizzes')">Finance Quizzes</button>
+          </div>
+          
+          <!-- TAB 1: Explainers -->
+          <div class="learn-section active" id="learn-explainers-section">
+            <div class="dashboard-grid" id="explainers-grid">
+              <!-- Grid of 6 explainers (Populated from JS) -->
+            </div>
+          </div>
+          
+          <!-- TAB 2: Calculators -->
+          <div class="learn-section" id="learn-calculators-section">
+            <div style="display:flex; gap:12px; margin-bottom:20px; overflow-x:auto; padding-bottom:4px;">
+              <button class="chip-btn active" id="calc-tab-sip">SIP Calculator</button>
+              <button class="chip-btn" id="calc-tab-cagr">CAGR Calculator</button>
+              <button class="chip-btn" id="calc-tab-inflation">Inflation Calculator</button>
+              <button class="chip-btn" id="calc-tab-fd">FD Returns</button>
+              <button class="chip-btn" id="calc-tab-goals">Goal Planner</button>
+            </div>
+            
+            <!-- Calculator Container -->
+            <div class="glass-card">
+              <div class="calculator-grid" id="calculator-inner-box">
+                <!-- Dynamically swapped via JS (defaulting to SIP) -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- TAB 3: Quizzes -->
+          <div class="learn-section" id="learn-quizzes-section">
+            <div class="glass-card quiz-container" id="quiz-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+        </section>
+        
+        <!-- 8. Finance Buddy Page -->
+        <section id="buddy-page" class="page">
+          <div class="chat-layout">
+            
+            <!-- Left panel: Chat Interface (Wider) -->
+            <div class="glass-card chat-panel">
+              <div class="chat-header">
+                <div class="chat-header-left">
+                  <div class="chat-buddy-title">
+                    <span>AI Finance Buddy</span>
+                    <span class="badge badge-info">AI Beta</span>
+                  </div>
+                  <span class="chat-buddy-subtitle">Powered by AI · Educational purposes only, not formal investment advice</span>
+                </div>
+                <div class="status-badge">
+                  <div class="status-dot"></div>
+                  <span>Online</span>
+                </div>
+              </div>
+              
+              <!-- Chat window messages -->
+              <div class="chat-messages-container" id="chat-messages">
+                <!-- Initial welcome message from AI Buddy -->
+                <div class="message-wrapper ai">
+                  <div class="message-avatar">AI</div>
+                  <div class="message-bubble">
+                    <p>Namaste! I am your WealthOS Finance Buddy. I can analyse your current portfolio and give you financial literacy tips, rebalancing guides, or tax estimates.</p>
+                    <p>How can I help you today?</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Suggested Question Chips -->
+              <div class="suggested-chips" id="suggested-questions-row">
+                <button class="suggested-chip">What is my portfolio risk?</button>
+                <button class="suggested-chip">How much SIP for ₹1 Cr in 20 years?</button>
+                <button class="suggested-chip">Explain ELSS tax saving</button>
+                <button class="suggested-chip">Should I rebalance now?</button>
+              </div>
+              
+              <!-- Input bar -->
+              <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input-field" placeholder="Ask about asset allocation, SIP math, rebalancing...">
+                <button class="btn btn-primary" id="chat-send-btn" style="padding: 12px 20px;">
+                  <i data-lucide="send"></i>
+                </button>
+              </div>
+              
+              <!-- Disclaimer footer -->
+              <div class="disclaimer-box">
+                <i data-lucide="alert-circle" style="width:14px; height:14px; flex-shrink:0;"></i>
+                <span>Finance Buddy provides general financial information for educational purposes only. This is not formal investment advice. Please consult a SEBI Registered Investment Advisor (RIA) before making investment decisions.</span>
+              </div>
+            </div>
+            
+            <!-- Right panel: Portfolio Health -->
+            <div class="health-panel">
+              
+              <!-- Health score card -->
+              <div class="glass-card health-score-hero">
+                <div class="stat-label" style="margin-bottom:12px;">Portfolio Health Score</div>
+                <div class="health-score-val" id="health-score-num">7.2</div>
+                <div class="health-score-label" id="health-score-txt">Good Health</div>
+                
+                <div class="health-subscores">
+                  <div class="health-subscore-item">
+                    <div class="health-subscore-label">
+                      <span>Diversification</span>
+                      <strong id="health-score-div">8/10</strong>
+                    </div>
+                    <div class="health-subscore-bar-bg">
+                      <div class="health-subscore-bar-fill" id="health-bar-div" style="width: 80%;"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="health-subscore-item">
+                    <div class="health-subscore-label">
+                      <span>Risk Alignment</span>
+                      <strong id="health-score-risk">6/10</strong>
+                    </div>
+                    <div class="health-subscore-bar-bg">
+                      <div class="health-subscore-bar-fill" id="health-bar-risk" style="width: 60%; background:var(--color-warning);"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="health-subscore-item">
+                    <div class="health-subscore-label">
+                      <span>Goal Progress</span>
+                      <strong id="health-score-goals">7/10</strong>
+                    </div>
+                    <div class="health-subscore-bar-bg">
+                      <div class="health-subscore-bar-fill" id="health-bar-goals" style="width: 70%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Advisor connect nudge -->
+              <div class="glass-card" style="border-color: rgba(59, 130, 246, 0.2);">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                  <i data-lucide="users" style="color:var(--color-equity);"></i>
+                  <strong style="font-size:0.95rem;">Talk to a human advisor</strong>
+                </div>
+                <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.4; margin-bottom:16px;">
+                  Book a free 30-minute discovery call with a certified SEBI Registered Investment Advisor (RIA) to optimize your allocation plan.
+                </p>
+                <button class="btn btn-primary" id="buddy-book-call-btn" style="width:100%; justify-content:center;">
+                  Book Free RIA Session
+                </button>
+              </div>
+              
+            </div>
+            
+          </div>
+        </section>
+        
+        <!-- 9. Notifications Page -->
+        <section id="notifications-page" class="page">
+          <div class="notif-header-row">
+            <h3 style="font-size:1.2rem; font-weight:700;">Alert History</h3>
+            <button class="btn btn-secondary" id="notif-mark-read-btn">
+              <i data-lucide="check-check"></i> Mark all read
+            </button>
+          </div>
+          
+          <div class="notif-list" id="notifications-feed">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+        
+        <!-- 10. Profile Page -->
+        <section id="profile-page" class="page">
+          <div class="profile-grid">
+            
+            <!-- Left col: User Card & Risk profile -->
+            <div style="display:flex; flex-direction:column; gap:24px;">
+              
+              <!-- User Details card -->
+              <div class="glass-card profile-card">
+                <div class="profile-avatar-lg" id="profile-avatar-letters">AA</div>
+                <div class="profile-details">
+                  <div class="profile-name" id="profile-full-name">Arpit Agarwal</div>
+                  <div class="profile-mobile" id="profile-masked-phone">+91 ••••• ••982</div>
+                  <div style="margin-top:6px;">
+                    <span class="badge badge-success">
+                      <i data-lucide="shield-check" style="width:12px;height:12px;"></i> KYC Verified
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Risk profile card -->
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <h4 class="card-title">Risk Profile</h4>
+                </div>
+                <div class="risk-level-badge moderate" id="profile-risk-label">Moderate Risk Tolerance</div>
+                <p class="risk-desc" id="profile-risk-desc">
+                  You are comfortable with steady growth and moderate short-term fluctuations. Your suggested model allocation is 50% equities & equity mutual funds, 30% fixed deposits/debt, and 20% gold/hedges.
+                </p>
+                <button class="btn btn-secondary" id="profile-retake-quiz-btn">
+                  Retake Risk Quiz
+                </button>
+              </div>
+              
+            </div>
+            
+            <!-- Right col: Aggregated Accounts & Toggle Settings -->
+            <div style="display:flex; flex-direction:column; gap:24px;">
+              
+              <!-- Linked accounts card -->
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <h4 class="card-title">Linked Data Consents</h4>
+                  <button class="btn btn-secondary" id="profile-link-consent-btn" style="padding:6px 12px; font-size:0.75rem;">
+                    <i data-lucide="plus" style="width:14px;height:14px;"></i> Link More
+                  </button>
+                </div>
+                
+                <div id="linked-accounts-container">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+              
+              <!-- Notification toggles settings -->
+              <div class="glass-card">
+                <div class="card-header-row" style="margin-bottom:20px;">
+                  <h4 class="card-title">Alert & Drift Rules</h4>
+                </div>
+                
+                <div class="toggle-settings-list" id="notification-settings-list">
+                  <!-- Generated via JS -->
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+        </section>
+        
+      </main>
+    </div>
+    
+  </div>
+
+  <!-- MODALS OVERLAYS -->
+
+  <!-- Add Funds Modal -->
+  <div class="modal-overlay" id="modal-add-funds">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-funds"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Add Capital to Wallet</h3>
+      <div class="modal-form-group">
+        <label for="fund-amount-input">Amount (INR)</label>
+        <input type="number" id="fund-amount-input" placeholder="Enter amount, e.g. 25000" min="500">
+      </div>
+      <div class="modal-form-group">
+        <label for="fund-bank-select">Source Account</label>
+        <select id="fund-bank-select">
+          <option value="sbi">SBI Savings Account (•••• 4321)</option>
+          <option value="hdfc">HDFC Checking Account (•••• 9876)</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-funds-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-funds-btn">Add ₹ Funds</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start SIP Modal -->
+  <div class="modal-overlay" id="modal-start-sip">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-sip"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Schedule New Auto-SIP</h3>
+      <div class="modal-form-group">
+        <label for="sip-target-select">Select Asset Fund</label>
+        <select id="sip-target-select">
+          <!-- Populated from funds list in JS -->
+        </select>
+      </div>
+      <div class="modal-form-group">
+        <label for="sip-amount-input">Monthly SIP Amount (INR)</label>
+        <input type="number" id="sip-amount-input" value="5000" min="500">
+      </div>
+      <div class="modal-form-group">
+        <label for="sip-date-input">SIP Date (Monthly)</label>
+        <select id="sip-date-input">
+          <option value="1">1st of the month</option>
+          <option value="5" selected>5th of the month</option>
+          <option value="10">10th of the month</option>
+          <option value="15">15th of the month</option>
+          <option value="25">25th of the month</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-sip-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-sip-btn">Register SIP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invest Checkout Modal -->
+  <div class="modal-overlay" id="modal-invest-checkout">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-checkout"><i data-lucide="x"></i></div>
+      <h3 class="modal-title" id="checkout-title">Confirm Purchase</h3>
+      
+      <div style="background:rgba(0,0,0,0.15); padding:16px; border-radius:var(--border-radius-md); margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-glass);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--text-secondary)">Asset Class:</span>
+          <strong id="checkout-asset-class">Mutual Fund</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--text-secondary)">NAV / Price:</span>
+          <strong id="checkout-asset-nav">₹124.50</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-secondary)">Risk Metric:</span>
+          <strong id="checkout-asset-risk" style="color:var(--color-warning);">Moderate Risk</strong>
+        </div>
+      </div>
+      
+      <div class="modal-form-group">
+        <label for="checkout-amount-input">Investment Amount (INR)</label>
+        <input type="number" id="checkout-amount-input" value="10000" min="1000">
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-checkout-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-checkout-btn">Complete Purchase</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add New Goal Modal -->
+  <div class="modal-overlay" id="modal-new-goal">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-goal"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Track a New Financial Target</h3>
+      <div class="modal-form-group">
+        <label for="goal-name-input">Goal Name</label>
+        <input type="text" id="goal-name-input" placeholder="e.g. Retirement, Home Downpayment">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-target-amount-input">Target Amount (INR)</label>
+        <input type="number" id="goal-target-amount-input" placeholder="e.g. 5000000" min="5000">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-year-input">Target Achievement Year</label>
+        <input type="number" id="goal-year-input" value="2035" min="2026">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-sip-input">Link monthly SIP amount (Optional, INR)</label>
+        <input type="number" id="goal-sip-input" value="10000" min="0">
+      </div>
+      <div class="modal-form-group">
+        <label for="goal-icon-select">Select Icon / Avatar type</label>
+        <select id="goal-icon-select">
+          <option value="house">🏠 House / Real Estate</option>
+          <option value="trip">✈️ Europe Trip / Vacation</option>
+          <option value="car">🚗 Tesla / Electric Vehicle</option>
+          <option value="retire">🌴 Wealth Accumulation</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-goal-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-goal-btn">Launch Target</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Risk Quiz Modal -->
+  <div class="modal-overlay" id="modal-risk-quiz">
+    <div class="modal-content" style="max-width:550px;">
+      <div class="modal-close-btn" id="close-modal-quiz"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Risk Profile Diagnostic</h3>
+      
+      <div id="quiz-question-container">
+        <!-- Swapped dynamically in JS -->
+      </div>
+      
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="quiz-modal-cancel">Cancel Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Book RIA Call Modal -->
+  <div class="modal-overlay" id="modal-book-call">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-call"><i data-lucide="x"></i></div>
+      <h3 class="modal-title">Schedule Certified RIA Call</h3>
+      <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.4; margin-bottom:20px;">
+        Connect with a certified SEBI Registered Investment Advisor (RIA) to align your mutual fund choices with your actual risk appetite and goal milestones.
+      </p>
+      <div class="modal-form-group">
+        <label for="call-date-input">Select Date</label>
+        <input type="date" id="call-date-input" value="2026-06-30">
+      </div>
+      <div class="modal-form-group">
+        <label for="call-time-input">Preferred Slot</label>
+        <select id="call-time-input">
+          <option value="10:00">10:00 AM - 10:30 AM IST</option>
+          <option value="14:00" selected>02:00 PM - 02:30 PM IST</option>
+          <option value="16:30">04:30 PM - 05:00 PM IST</option>
+        </select>
+      </div>
+      <div class="modal-footer-actions">
+        <button class="btn btn-secondary" id="cancel-call-btn">Cancel</button>
+        <button class="btn btn-primary" id="confirm-call-btn">Book Free Call</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Core JS Logic -->
+  <script src="app.js?v=1.1"></script>
+</body>
+</html>
