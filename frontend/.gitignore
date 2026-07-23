@@ -1,0 +1,8 @@
+# Ignore local environment variables with actual secrets
+.env
+.env.local
+.env.development.local
+
+# Ignore node modules
+node_modules/
+dist/

@@ -1,5 +1,50 @@
 // AssetBridge Unified Investing Dashboard - App Core Logic
+//0. FIREBASE AUTH
+// 1. Firebase SDK Imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  onAuthStateChanged,
+  updateProfile 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// 2. Paste your Firebase Keys from Step 1
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+
+// 3. Track Auth State Changes and sync with AssetBridge state
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Update active user state from Firebase account
+    state.user.fullName = user.displayName || user.email.split('@')[0];
+    state.user.firstName = state.user.fullName.split(' ')[0];
+    state.user.email = user.email;
+
+    // Update UI headers
+    const sidebarUserName = document.getElementById('sidebar-user-name');
+    const sidebarAvatar = document.getElementById('sidebar-avatar');
+    if (sidebarUserName) sidebarUserName.textContent = state.user.fullName;
+    if (sidebarAvatar) sidebarAvatar.textContent = state.user.fullName.split(' ').map(n => n[0]).join('').toUpperCase();
+
+    renderAll();
+  } else {
+    // User is signed out -> Open login modal automatically
+    document.getElementById('modal-auth').classList.add('active');
+  }
+});
 // 1. Initial State Definition
 const state = {
   user: {
@@ -1681,7 +1726,54 @@ function initExportCSV() {
 
 // 11. Modal Controllers Integration
 function setupModals() {
-  
+  let isSignUpMode = false;
+
+  const modal = document.getElementById('modal-auth');
+  const title = document.getElementById('auth-modal-title');
+  const nameGroup = document.getElementById('auth-name-group');
+  const toggleBtn = document.getElementById('auth-toggle-mode-btn');
+  const submitBtn = document.getElementById('auth-submit-btn');
+
+  // Toggle between Sign In and Sign Up UI
+  toggleBtn.addEventListener('click', () => {
+    isSignUpMode = !isSignUpMode;
+    title.textContent = isSignUpMode ? "Create AssetBridge Account" : "Sign In to AssetBridge";
+    nameGroup.style.display = isSignUpMode ? "flex" : "none";
+    submitBtn.textContent = isSignUpMode ? "Create Account" : "Sign In";
+    toggleBtn.textContent = isSignUpMode ? "Already have an account? Sign In" : "Need an account? Sign Up";
+  });
+
+  // Handle Form Submission
+  submitBtn.addEventListener('click', async () => {
+    const email = document.getElementById('auth-email-input').value.trim();
+    const password = document.getElementById('auth-password-input').value.trim();
+    const fullName = document.getElementById('auth-name-input').value.trim();
+
+    if (!email || !password) return alert("Please fill in email and password.");
+
+    try {
+      if (isSignUpMode) {
+        // Create user in Firebase
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        if (fullName) {
+          await updateProfile(cred.user, { displayName: fullName });
+        }
+        alert("Account created successfully!");
+      } else {
+        // Sign in existing user
+        await signInWithEmailAndPassword(auth, email, password);
+      }
+      modal.classList.remove('active');
+    } catch (err) {
+      alert(`Auth Error: ${err.message}`);
+    }
+  });
+
+  // Close modal button
+  document.getElementById('close-modal-auth').addEventListener('click', () => {
+    modal.classList.remove('active');
+  });
+
   // Generic open/close functions
   const openModal = (id) => document.getElementById(id).classList.add('active');
   const closeModal = (id) => document.getElementById(id).classList.remove('active');
