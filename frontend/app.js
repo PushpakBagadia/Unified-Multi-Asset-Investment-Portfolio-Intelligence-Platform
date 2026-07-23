@@ -231,9 +231,11 @@ function navigateToPage(pageId) {
   
   // Update active nav link
   navItems.forEach(nav => {
+    const wasActive = nav.classList.contains('active');
     nav.classList.remove('active');
     if (nav.getAttribute('data-page') === pageId) {
       nav.classList.add('active');
+      if (!wasActive) window.dispatchEvent(new Event('navActiveChanged'));
     }
   });
 
@@ -271,7 +273,10 @@ function initScrollSpy() {
         // Highlight corresponding nav item
         navItems.forEach(item => {
           if (item.getAttribute('data-page') === id) {
-            item.classList.add('active');
+            if (!item.classList.contains('active')) {
+              item.classList.add('active');
+              window.dispatchEvent(new Event('navActiveChanged'));
+            }
           } else {
             item.classList.remove('active');
           }
@@ -1610,6 +1615,38 @@ function bindPortfolioEvents() {
   }
 }
 
+function bindInvestEvents() {
+  const categoryTabs = document.querySelectorAll('#invest-category-tabs .filter-tab');
+  const subFiltersContainer = document.getElementById('invest-sub-filters');
+  const subFilterChips = document.querySelectorAll('#invest-sub-filters .chip-btn');
+
+  categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      categoryTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      const category = tab.getAttribute('data-category');
+      
+      // Show sub-filters only for Mutual Funds (mf)
+      if (category === 'mf') {
+        if (subFiltersContainer) subFiltersContainer.style.display = 'flex';
+      } else {
+        if (subFiltersContainer) subFiltersContainer.style.display = 'none';
+      }
+      
+      renderInvestCatalog();
+    });
+  });
+
+  subFilterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      subFilterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderInvestCatalog();
+    });
+  });
+}
+
 // 9. Autocomplete Search Utility
 function initSearchAutocomplete() {
   const searchInput = document.getElementById('global-search-input');
@@ -2322,6 +2359,7 @@ Here is a helpful summary of what we know:
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   bindPortfolioEvents();
+  bindInvestEvents();
   initSearchAutocomplete();
   initExportCSV();
   setupModals();
@@ -2394,49 +2432,37 @@ function initSpotlightNavbar() {
   const cursor = document.getElementById('nav-spotlight-cursor');
   if (!nav || !pill || !cursor) return;
 
-  // Position the pill over a given nav <li> element
-  function movePillTo(el) {
+  // Position the pill over the currently active nav <li> element
+  function movePillToActive() {
+    const active = nav.querySelector('.nav-item.active');
+    if (!active) return;
     const navRect = nav.getBoundingClientRect();
-    const elRect  = el.getBoundingClientRect();
-    pill.style.left  = (elRect.left - navRect.left) + 'px';
-    pill.style.width = elRect.width + 'px';
+    const activeRect = active.getBoundingClientRect();
+    pill.style.left  = (activeRect.left - navRect.left) + 'px';
+    pill.style.width = activeRect.width + 'px';
     pill.style.opacity = '1';
   }
 
-  // Move pill to the current active item immediately (no transition on first paint)
-  function snapPillToActive() {
-    const active = nav.querySelector('.nav-item.active');
-    if (!active) return;
+  // On load, snap to active without animation
+  function initializePill() {
     pill.style.transition = 'none';
-    movePillTo(active);
+    movePillToActive();
     // Re-enable transition after next frame
     requestAnimationFrame(() => {
+      // The CSS specifies the transition, so we just clear the inline override
       pill.style.transition = '';
     });
   }
 
-  // On load, snap to active without animation
-  snapPillToActive();
+  initializePill();
 
-  // Also re-snap whenever window resizes (pill position is absolute px)
-  window.addEventListener('resize', snapPillToActive);
-
-  // Hover: slide pill to hovered item
-  nav.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('mouseenter', () => movePillTo(item));
-    item.addEventListener('mouseleave', () => {
-      // Return to active item
-      const active = nav.querySelector('.nav-item.active');
-      if (active) movePillTo(active);
-    });
+  // Listen for the custom event when active item changes (from scroll or click)
+  window.addEventListener('navActiveChanged', () => {
+    movePillToActive(); // Animate to new active item
   });
 
-  // After navigation click the active class changes — re-snap pill
-  const origNavigateToPage = window.navigateToPage;
-  nav.addEventListener('click', () => {
-    // Wait for active class to be set (navigateToPage runs synchronously)
-    requestAnimationFrame(() => snapPillToActive());
-  });
+  // Re-snap whenever window resizes (pill position is absolute px)
+  window.addEventListener('resize', initializePill);
 
   // Cursor glow: track mouse position relative to nav and update the ::before pseudo
   nav.addEventListener('mousemove', (e) => {

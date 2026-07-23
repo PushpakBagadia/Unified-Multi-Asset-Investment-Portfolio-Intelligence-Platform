@@ -110,34 +110,10 @@ body {
   flex-shrink: 0;
 }
 
-.logo-container {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--border-radius-md);
-  background: linear-gradient(135deg, var(--color-equity), var(--color-mf));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-}
-
-.brand-info h1 {
-  font-size: 1.15rem;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-  background: linear-gradient(to right, #1e40af, #2563eb);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.brand-info span {
-  font-size: 0.65rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  display: block;
-  margin-top: -2px;
+.brand-logo-img {
+  height: 44px; /* Adjust based on navbar height */
+  width: auto;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -165,8 +141,8 @@ body {
     0 0 0 1px rgba(37, 99, 235, 0.4),
     0 4px 16px rgba(37, 99, 235, 0.35),
     0 0 32px rgba(37, 99, 235, 0.2);
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+  transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15),
+              width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15),
               opacity 0.2s ease;
   pointer-events: none;
   z-index: 0;
