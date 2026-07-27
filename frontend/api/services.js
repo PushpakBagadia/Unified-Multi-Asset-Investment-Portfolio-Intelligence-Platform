@@ -263,6 +263,11 @@ export function searchStocks(query) {
   return apiRequest(ENDPOINTS.marketSearch, { params: { q: query } });
 }
 
+/** GET /api/market/search?q=...&type=mutualfund */
+export function searchMutualFunds(query) {
+  return apiRequest(ENDPOINTS.marketSearch, { params: { q: query, type: 'mutualfund' } });
+}
+
 /** GET /api/market/quote/:symbol */
 export function getStockQuote(symbol) {
   return apiRequest(ENDPOINTS.marketQuote(symbol));

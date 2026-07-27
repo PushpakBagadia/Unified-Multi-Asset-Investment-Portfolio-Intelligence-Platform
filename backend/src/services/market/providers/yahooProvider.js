@@ -14,13 +14,19 @@ const INDEX_SYMBOLS = {
 // catches correctly since it's invalid image data, not a network failure.
 const getLogoUrl = (symbol) => `https://financialmodelingprep.com/image-stock/${symbol}.png`;
 
-const search = async (query) => {
+// Yahoo's search mixes commodity futures, mutual fund scheme codes, and equities
+// all together for a given query — quoteType is what actually distinguishes them.
+// Defaults to EQUITY (plain stock search); pass quoteType: 'MUTUALFUND' for funds.
+const search = async (query, { quoteType = 'EQUITY' } = {}) => {
   const result = await yahooFinance.search(query);
   return result.quotes
-    .filter((q) => q.symbol && q.isYahooFinance !== false)
+    .filter((q) => q.symbol && q.isYahooFinance !== false && q.quoteType === quoteType)
     .map((q) => ({
+      // Indian mutual fund scheme codes often have no shortname — longname carries
+      // the actual human-readable fund name in that case (e.g. "0P0001RK6V.BO" vs
+      // "HDFC Pharma and Healthcare Reg IDCW-P").
       symbol: q.symbol,
-      name: q.shortname || q.longname || q.symbol,
+      name: q.longname || q.shortname || q.symbol,
       exchange: q.exchange,
       type: q.quoteType,
       logoUrl: getLogoUrl(q.symbol),
@@ -31,7 +37,7 @@ const getQuote = async (symbol) => {
   const quote = await yahooFinance.quote(symbol);
   return {
     symbol: quote.symbol,
-    name: quote.shortName || quote.longName || quote.symbol,
+    name: quote.longName || quote.shortName || quote.symbol,
     price: quote.regularMarketPrice,
     change: quote.regularMarketChange,
     changePercent: quote.regularMarketChangePercent,
@@ -43,6 +49,10 @@ const getQuote = async (symbol) => {
     currency: quote.currency,
     exchange: quote.fullExchangeName,
     marketState: quote.marketState,
+    // Mutual funds don't have volume/marketCap, but do have these return metrics —
+    // undefined for regular equities, populated for MUTUALFUND quotes.
+    ytdReturn: quote.ytdReturn,
+    threeMonthReturn: quote.trailingThreeMonthReturns,
     logoUrl: getLogoUrl(quote.symbol),
   };
 };

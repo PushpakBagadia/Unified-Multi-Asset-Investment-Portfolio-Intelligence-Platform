@@ -1274,6 +1274,74 @@ body {
 .fund-stat-val.up {
   color: var(--color-success);
 }
+.fund-stat-val.down {
+  color: var(--color-danger);
+}
+
+/* Market Indices Ticker Strip (Dashboard) */
+.market-indices-strip {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.market-index-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: var(--border-radius-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass);
+  flex: 1;
+  min-width: 180px;
+}
+.market-index-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.market-index-price {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.market-index-change {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+.market-index-change.up { color: var(--color-success); }
+.market-index-change.down { color: var(--color-danger); }
+.market-indices-loading {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  padding: 10px 0;
+}
+
+/* Stock Chart Modal */
+.modal-content-wide {
+  max-width: 680px;
+}
+.stock-chart-range-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+.stock-chart-range-tabs .chip-btn {
+  cursor: pointer;
+}
+.stock-chart-canvas-wrap {
+  position: relative;
+  height: 280px;
+  margin-bottom: 8px;
+}
+.stock-chart-loading {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 40px 0;
+}
 
 .chips-container {
   display: flex;

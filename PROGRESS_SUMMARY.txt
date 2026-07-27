@@ -1,0 +1,173 @@
+PROGRESS SUMMARY — AssetBridge / Unified Multi-Asset Investment Platform
+=========================================================================
+Covers everything done in this working session, in chronological order.
+
+
+1. ENVIRONMENT & CREDENTIALS SETUP
+-----------------------------------
+- Added the Firebase Admin SDK service account credentials (project ID, client
+  email, private key) to the root .env file. These are read by
+  backend/src/config/firebase.js via process.env, with the private key's
+  escaped \n sequences converted to real newlines.
+- Fixed VITE_API_BASE_URL in .env, which was pointing at the wrong port
+  (8000) — corrected to 5000, matching where the backend actually runs.
+- Confirmed .env is gitignored and was never committed to git history (checked
+  via `git log --all`), so none of these credentials are exposed on GitHub.
+
+
+2. MONGODB ATLAS CONNECTION
+----------------------------
+- Backend initially crashed on startup because the MongoDB Atlas cluster
+  rejected the connection ("IP not whitelisted"). This required action on
+  the Atlas dashboard (Network Access → Add IP Address) — external to the
+  code, done on your end.
+- Later, you provided a new MongoDB connection string (different cluster:
+  "unifiedinvestment"). Updated MONGO_URI in .env and verified the backend
+  connects successfully.
+
+
+3. DEV SERVERS
+---------------
+- Backend: `npm run dev` in backend/ (nodemon + Express) — runs on port 5000.
+- Frontend: `npm run dev` in frontend/ (Vite) — runs on port 5173 (or next
+  free port, e.g. 5174 if 5173 is still occupied by a stale process).
+- Verified both servers running together, MongoDB connected, Firebase Admin
+  SDK initialized without errors.
+
+
+4. PHASE 1 — YAHOO FINANCE INTEGRATION (BACKEND)
+--------------------------------------------------
+Built a provider-layer architecture so the app isn't tied directly to
+yahoo-finance2 — a future data source (e.g. Upstox) can be swapped in later
+without touching controllers or the frontend:
+
+    Controller → MarketService → YahooProvider
+
+Files created:
+- backend/src/services/market/providers/yahooProvider.js
+  Wraps the yahoo-finance2 library. Handles:
+    - search(query)        — stock/fund symbol search
+    - getQuote(symbol)      — live price, change %, volume, market cap
+    - getChart(symbol, ..)  — historical candles (had to translate a "range"
+                              string like "1mo" into period1/period2 dates,
+                              since yahoo-finance2 v4's chart() requires exact
+                              dates, not a range shortcut)
+    - getIndices()          — NIFTY 50, SENSEX, BANK NIFTY live quotes
+- backend/src/services/market/marketService.js — thin pass-through to the
+  active provider (currently yahooProvider).
+- backend/src/controllers/marketController.js — request/response handling
+  for each endpoint.
+- backend/src/routes/marketRoutes.js — route wiring.
+- Mounted at /api/market in backend/src/app.js.
+
+Endpoints (all tested and working):
+    GET /api/market/search?q=reliance
+    GET /api/market/quote/RELIANCE.NS
+    GET /api/market/chart/RELIANCE.NS
+    GET /api/market/indices
+
+Note: yahoo-finance2 installed as v4, which changed its API from a plain
+export to a class you instantiate (`new YahooFinance()`) — the provider
+was adapted accordingly.
+
+
+5. CONNECTING THE FRONTEND TO THE BACKEND
+--------------------------------------------
+- Installed and wired up `cors` middleware in backend/src/app.js
+  (`app.use(cors())`) — without it, the browser blocked every request from
+  the frontend (localhost:5173/5174) to the backend (localhost:5000) with a
+  CORS error.
+- Added frontend service functions (frontend/api/services.js) and endpoint
+  paths (frontend/api/endpoints.js) for: searchStocks, getStockQuote,
+  getStockChart, getMarketIndices.
+
+
+6. LIVE STOCK SEARCH — GLOBAL NAVBAR
+----------------------------------------
+- The navbar search box (id="global-search-input") previously only searched
+  a hardcoded mock array (state.fundsCatalog). It now ALSO calls the backend
+  /api/market/search endpoint in parallel and shows real, live stock results
+  in a separate "Live Stocks" section of the dropdown.
+- Fixed a bug in the original implementation where a stale "No results
+  found" message never got removed once live results arrived (the code was
+  checking the wrong DOM attribute).
+- Redesigned the dropdown's visual styling from scratch — it had literally
+  no CSS rules defined for its result items before (unstyled divs). Added:
+  section labels ("Mutual Funds & More" / "Live Stocks"), a loading state
+  ("Searching live stocks…"), hover highlighting, and a proper empty state.
+
+
+7. INVEST PAGE — EQUITIES TAB NOW SHOWS ONLY REAL DATA
+----------------------------------------------------------
+- Previously the "Equities (Direct Stock)" tab on the Invest page showed 2
+  hardcoded mock entries (Tata Motors, Reliance). These were removed.
+- Added a dedicated search box on that tab. Typing a company/symbol now
+  fetches live search results AND live quotes from the backend, rendering
+  real price + day-change % cards. An empty state prompts you to search
+  when the tab first opens.
+- Clicking a live stock result in the navbar dropdown now jumps straight to
+  this tab, auto-fills the symbol, and triggers the same live search —
+  i.e. clicking a stock takes you to the correct type-specific view.
+
+
+8. STOCK LOGOS
+----------------
+- First attempt: Clearbit Logo API (guessing a company's domain from its
+  name). This technically worked in code, but real-world testing showed
+  Clearbit is blocked by Firefox's built-in tracking protection (and many
+  ad-blockers), so most users would silently see zero logos.
+- Switched to Financial Modeling Prep's public logo-by-ticker endpoint
+  (financialmodelingprep.com/image-stock/{SYMBOL}.png), which doesn't
+  require guessing a domain and isn't on tracker blocklists. Confirmed
+  working for real stocks (e.g. TCS, HDFC Bank); correctly falls back to a
+  colored-initials avatar for tickers/mutual-fund codes with no logo
+  (invalid image data triggers the <img> element's onerror handler).
+
+
+9. CLICKING A STOCK NOW LEADS TO A FULL BUY FLOW
+----------------------------------------------------
+- Stock result cards on the Equities tab now have an "Invest Now" button.
+- Clicking it opens the same checkout modal used for mock mutual funds, but
+  adapted to show the stock's real live price and day change instead of a
+  fake "1Y Yield".
+- Confirming a purchase creates a holding using the REAL live price (previously
+  every mock fund purchase used a hardcoded dummy price of ₹120 regardless of
+  the asset — stocks now use their actual price for unit calculation).
+- Holdings are now matched/accumulated by ticker symbol for stocks (to avoid
+  collisions from 2-letter initials, e.g. two different stocks both starting
+  "TC"), while mock funds keep their original initials-based matching.
+- NOTE: This purchase flow is still entirely simulated client-side state
+  (same as it always was for mock mutual funds/gold/FD) — there is no real
+  backend order-execution or persistence to MongoDB yet. A refresh will lose
+  any simulated holdings, same as before this session's changes.
+
+
+10. PRE-PUSH SECURITY REVIEW
+--------------------------------
+Before you push to GitHub, checked:
+- .env (containing real Firebase private key + MongoDB credentials) is
+  gitignored and has never appeared in git history — confirmed clean.
+- No hardcoded secrets found in any new or modified file — everything reads
+  from process.env.
+- Two non-blocking advisories (not secrets, just hygiene):
+    a) CORS is currently wide open (`cors()` with no origin restriction) —
+       fine for local dev, should be restricted to your real frontend domain
+       before any production deployment.
+    b) `npm audit` reports 15 vulnerabilities (8 moderate, 7 high) in the
+       backend, all transitive dependencies pulled in by firebase-admin
+       itself (not something this session introduced) — worth a
+       `npm audit fix` pass at some point, not urgent.
+Conclusion: safe to push.
+
+
+WHAT'S STILL PENDING (per the original roadmap)
+----------------------------------------------------
+- Phase 2: Mutual Funds integration (MFAPI-based endpoints) — not started.
+- Phase 3: Unified Search endpoint (/api/search merging stocks + mutual
+  funds into one response) — not started. Also worth noting: Yahoo's search
+  API currently mixes mutual fund scheme codes into "stock" results, which
+  Phase 3 should filter out by result type.
+- Phase 4: AI-driven analytics/recommendations — not started, intentionally
+  deferred until market data is fully reliable per your own roadmap.
+- Real backend persistence for stock purchases/holdings (currently
+  simulated client-side only, as noted in section 9).

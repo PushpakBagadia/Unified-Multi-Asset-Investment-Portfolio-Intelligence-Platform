@@ -2,7 +2,7 @@ const yahooProvider = require('./providers/yahooProvider');
 
 const provider = yahooProvider;
 
-const search = (query) => provider.search(query);
+const search = (query, options) => provider.search(query, options);
 const getQuote = (symbol) => provider.getQuote(symbol);
 const getChart = (symbol, options) => provider.getChart(symbol, options);
 const getIndices = () => provider.getIndices();

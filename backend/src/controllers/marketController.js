@@ -1,15 +1,17 @@
 const marketService = require('../services/market/marketService');
 
-// GET /api/market/search?q=reliance
+// GET /api/market/search?q=reliance[&type=mutualfund]
 const searchMarket = async (req, res) => {
-  const { q } = req.query;
+  const { q, type } = req.query;
 
   if (!q) {
     return res.status(400).json({ message: 'Query parameter "q" is required' });
   }
 
+  const quoteType = type === 'mutualfund' ? 'MUTUALFUND' : 'EQUITY';
+
   try {
-    const results = await marketService.search(q);
+    const results = await marketService.search(q, { quoteType });
     res.status(200).json(results);
   } catch (error) {
     res.status(500).json({ message: 'Failed to search market', error: error.message });

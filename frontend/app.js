@@ -1,7 +1,7 @@
 // AssetBridge Unified Investing Dashboard - App Core Logic
 //0. FIREBASE AUTH
 // 1. Firebase SDK Imports
-import { searchStocks, getStockQuote } from './api/index.js';
+import { searchStocks, searchMutualFunds, getStockQuote, getStockChart, getMarketIndices } from './api/index.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
   getAuth, 
@@ -700,6 +700,8 @@ function renderPortfolioBreakdown() {
 
 // C. Invest View Render
 let lastEquitySearchResults = [];
+let lastMutualFundSearchResults = [];
+let catalogSearchQuery = ''; // free-text filter for the gold/fd tabs (client-side, mock data)
 
 function renderInvestCatalog() {
   const grid = document.getElementById('invest-funds-grid');
@@ -714,6 +716,16 @@ function renderInvestCatalog() {
     return;
   }
 
+  if (category === 'mf') {
+    const searchInputEl = document.getElementById('invest-stock-search-input');
+    const hasLiveQuery = searchInputEl && searchInputEl.value.trim().length > 0;
+    if (hasLiveQuery) {
+      renderMutualFundResults(lastMutualFundSearchResults);
+      return;
+    }
+    // No search yet — fall through to the curated mock catalog below.
+  }
+
   // Sub filter chip
   const activeChip = document.querySelector('#invest-sub-filters .chip-btn.active');
   const subFilter = activeChip ? activeChip.getAttribute('data-sub') : 'all';
@@ -722,6 +734,19 @@ function renderInvestCatalog() {
 
   if (category === 'mf' && subFilter !== 'all') {
     catalog = catalog.filter(f => f.subCategory === subFilter);
+  }
+
+  if (catalogSearchQuery) {
+    catalog = catalog.filter(f => f.name.toLowerCase().includes(catalogSearchQuery));
+  }
+
+  if (!catalog.length) {
+    grid.innerHTML = `
+      <div class="glass-card b-c4 b-r1" style="text-align:center; padding:32px; color:var(--text-muted);">
+        No results found${catalogSearchQuery ? ` for "${catalogSearchQuery}"` : ''}.
+      </div>
+    `;
+    return;
   }
 
   catalog.forEach((fund, index) => {
@@ -799,6 +824,8 @@ function renderEquityResults(stocks) {
     const isUp = stock.changePercent >= 0;
 
     card.className = `glass-card fund-card ${bentoClass}`;
+    card.style.cursor = 'pointer';
+    card.title = 'View price chart';
     card.innerHTML = `
       <div>
         <div class="fund-header">
@@ -832,11 +859,15 @@ function renderEquityResults(stocks) {
         Invest Now
       </button>
     `;
+
+    card.addEventListener('click', () => openStockChartModal(stock));
+
     grid.appendChild(card);
   });
 
   document.querySelectorAll('.invest-stock-buy-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // don't also trigger the card's chart-open click
       const symbol = btn.getAttribute('data-symbol');
       const stock = stocks.find((s) => s.symbol === symbol);
       if (stock) openInvestCheckoutModal(stockToFundShape(stock));
@@ -864,38 +895,304 @@ function stockToFundShape(stock) {
   };
 }
 
-let equitySearchDebounce = null;
+// Live Mutual Fund Search Results Render (real NAV/returns from Yahoo, no mock data)
+function renderMutualFundResults(funds) {
+  const grid = document.getElementById('invest-funds-grid');
+  grid.innerHTML = '';
+
+  if (!funds.length) {
+    grid.innerHTML = `
+      <div class="glass-card b-c4 b-r1" style="text-align:center; padding:32px; color:var(--text-muted);">
+        Search for a mutual fund scheme name to see live NAV & returns.
+      </div>
+    `;
+    return;
+  }
+
+  funds.forEach((fund, index) => {
+    const card = document.createElement('div');
+    let bentoClass = 'b-c2 b-r1';
+    if (index === 0) bentoClass = 'b-c4 b-r2 bento-accent-sky';
+
+    const isUp = fund.ytdReturn >= 0;
+
+    card.className = `glass-card fund-card ${bentoClass}`;
+    card.style.cursor = 'pointer';
+    card.title = 'View NAV chart';
+    card.innerHTML = `
+      <div>
+        <div class="fund-header">
+          <div class="fund-logo" style="background:#059669; position:relative; overflow:hidden;">
+            <span>${fund.symbol.slice(0, 2)}</span>
+            ${fund.logoUrl ? `<img src="${fund.logoUrl}" alt="" loading="lazy" onerror="this.remove()" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; padding:4px;">` : ''}
+          </div>
+          <div class="fund-identity">
+            <h5 class="fund-title">${fund.name}</h5>
+            <span class="fund-category">${fund.symbol} · ${fund.exchange || 'LIVE'}</span>
+          </div>
+        </div>
+
+        <div class="fund-grid-stats">
+          <div class="fund-stat-item">
+            <span class="fund-stat-label">NAV</span>
+            <span class="fund-stat-val">${fund.price != null ? formatRupee(fund.price) : '—'}</span>
+          </div>
+          <div class="fund-stat-item">
+            <span class="fund-stat-label">YTD Return</span>
+            <span class="fund-stat-val ${isUp ? 'up' : 'down'}">${fund.ytdReturn != null ? fund.ytdReturn.toFixed(2) + '%' : '—'}</span>
+          </div>
+          <div class="fund-stat-item">
+            <span class="fund-stat-label">3M Return</span>
+            <span class="fund-stat-val">${fund.threeMonthReturn != null ? fund.threeMonthReturn.toFixed(2) + '%' : '—'}</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary invest-mf-buy-btn" data-symbol="${fund.symbol}" style="width:100%; justify-content:center;">
+        Invest Now
+      </button>
+    `;
+
+    card.addEventListener('click', () => openStockChartModal(fund));
+
+    grid.appendChild(card);
+  });
+
+  document.querySelectorAll('.invest-mf-buy-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const symbol = btn.getAttribute('data-symbol');
+      const fund = funds.find((f) => f.symbol === symbol);
+      if (fund) openInvestCheckoutModal(mutualFundToFundShape(fund));
+    });
+  });
+}
+
+// Adapts a live mutual fund quote into the shape openInvestCheckoutModal/holdings
+// expect, so real funds flow through the same simulated buy/portfolio logic.
+function mutualFundToFundShape(fund) {
+  const isUp = fund.ytdReturn >= 0;
+  return {
+    id: `mf_${fund.symbol}`,
+    symbol: fund.symbol,
+    name: fund.name,
+    category: 'mf',
+    subCategory: 'equity',
+    risk: 'Market-Linked Risk (Mutual Fund)',
+    ret1y: `${isUp ? '+' : ''}${fund.ytdReturn != null ? fund.ytdReturn.toFixed(2) : '0.00'}% YTD`,
+    ret3y: fund.price != null ? formatRupee(fund.price) : '—',
+    aum: fund.exchange || 'LIVE',
+    bg: '#059669',
+    initials: fund.symbol.slice(0, 2),
+    price: fund.price,
+  };
+}
+
+// Stock Price Chart Modal
+let stockChartInstance = null;
+let activeChartSymbol = null;
+
+function openStockChartModal(stock) {
+  activeChartSymbol = stock.symbol;
+  document.getElementById('stock-chart-title').textContent = `${stock.name} (${stock.symbol})`;
+  document.getElementById('modal-stock-chart').classList.add('active');
+
+  document.querySelectorAll('#stock-chart-range-tabs .chip-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === 0);
+  });
+
+  loadStockChart(stock.symbol, '1mo');
+}
+
+function loadStockChart(symbol, range) {
+  const wrap = document.querySelector('.stock-chart-canvas-wrap');
+  wrap.innerHTML = '<div class="stock-chart-loading">Loading price history…</div><canvas id="stockChartCanvas"></canvas>';
+  document.getElementById('stockChartCanvas').style.display = 'none';
+
+  getStockChart(symbol, { range })
+    .then((data) => {
+      if (activeChartSymbol !== symbol) return; // modal closed/changed before this resolved
+      wrap.querySelector('.stock-chart-loading')?.remove();
+      document.getElementById('stockChartCanvas').style.display = 'block';
+      renderStockChartCanvas(data);
+    })
+    .catch((err) => {
+      console.error('Failed to load chart:', err.message);
+      if (activeChartSymbol === symbol) {
+        wrap.innerHTML = '<div class="stock-chart-loading">Could not load price history.</div>';
+      }
+    });
+}
+
+function renderStockChartCanvas(data) {
+  const ctx = document.getElementById('stockChartCanvas');
+  if (!ctx) return;
+
+  if (stockChartInstance) {
+    stockChartInstance.destroy();
+  }
+
+  const labels = data.candles.map((c) => new Date(c.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }));
+  const closes = data.candles.map((c) => c.close);
+  const isUp = closes.length > 1 && closes[closes.length - 1] >= closes[0];
+  const strokeColor = isUp ? '#059669' : '#dc2626';
+
+  const chartCtx = ctx.getContext('2d');
+  const gradient = chartCtx.createLinearGradient(0, 0, 0, 280);
+  gradient.addColorStop(0, hexToRgba(strokeColor, 0.15));
+  gradient.addColorStop(1, hexToRgba(strokeColor, 0.0));
+
+  stockChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: `Price (${data.currency || 'INR'})`,
+        data: closes,
+        borderColor: strokeColor,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointBackgroundColor: strokeColor,
+        fill: true,
+        backgroundColor: gradient,
+        tension: 0.3,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          backgroundColor: '#0f1422',
+          borderColor: 'rgba(255,255,255,0.08)',
+          borderWidth: 1,
+        },
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+      },
+    },
+  });
+}
+
+function bindStockChartModalEvents() {
+  const overlay = document.getElementById('modal-stock-chart');
+  const closeBtn = document.getElementById('close-modal-stock-chart');
+
+  const close = () => {
+    overlay.classList.remove('active');
+    activeChartSymbol = null;
+  };
+
+  if (closeBtn) closeBtn.addEventListener('click', close);
+
+  document.querySelectorAll('#stock-chart-range-tabs .chip-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#stock-chart-range-tabs .chip-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (activeChartSymbol) loadStockChart(activeChartSymbol, btn.getAttribute('data-range'));
+    });
+  });
+}
+
+// Market Indices Ticker Strip (Dashboard)
+function renderMarketIndices() {
+  const strip = document.getElementById('market-indices-strip');
+  if (!strip) return;
+
+  getMarketIndices()
+    .then((indices) => {
+      strip.innerHTML = '';
+      indices.forEach((idx) => {
+        const isUp = idx.changePercent >= 0;
+        const pill = document.createElement('div');
+        pill.className = 'market-index-pill';
+        pill.innerHTML = `
+          <span class="market-index-name">${idx.name}</span>
+          <span class="market-index-price">${idx.price != null ? idx.price.toLocaleString('en-IN') : '—'}</span>
+          <span class="market-index-change ${isUp ? 'up' : 'down'}">${isUp ? '+' : ''}${idx.changePercent != null ? idx.changePercent.toFixed(2) : '0.00'}%</span>
+        `;
+        strip.appendChild(pill);
+      });
+    })
+    .catch((err) => {
+      console.error('Failed to load market indices:', err.message);
+      strip.innerHTML = '<div class="market-indices-loading">Live market indices unavailable right now.</div>';
+    });
+}
+
+// Shared debounced live-search runner for both the Equities and Mutual Funds
+// tabs: search by name/symbol, then fetch a real quote for each result (search
+// alone doesn't include price), guarding against stale responses if the tab or
+// query changed before the request resolved.
+const liveSearchDebounceTimers = {};
+
+function runLiveSymbolSearch({ query, category, searchFn, onResults }) {
+  clearTimeout(liveSearchDebounceTimers[category]);
+
+  if (!query) {
+    onResults([]);
+    renderInvestCatalog();
+    return;
+  }
+
+  liveSearchDebounceTimers[category] = setTimeout(() => {
+    searchFn(query)
+      .then((results) => {
+        const currentTab = document.querySelector('#invest-category-tabs .filter-tab.active');
+        if (!currentTab || currentTab.getAttribute('data-category') !== category) return;
+
+        Promise.all(
+          results.slice(0, 12).map((r) => getStockQuote(r.symbol).catch(() => null))
+        ).then((quotes) => {
+          onResults(quotes.filter(Boolean));
+          renderInvestCatalog();
+        });
+      })
+      .catch((err) => console.error(`${category} search failed:`, err.message));
+  }, 300);
+}
 
 function initInvestStockSearch() {
   const input = document.getElementById('invest-stock-search-input');
   if (!input) return;
 
   input.addEventListener('input', () => {
-    const query = input.value.trim();
+    const activeTab = document.querySelector('#invest-category-tabs .filter-tab.active');
+    const category = activeTab ? activeTab.getAttribute('data-category') : 'mf';
 
-    clearTimeout(equitySearchDebounce);
-
-    if (!query) {
-      lastEquitySearchResults = [];
+    // Digital Gold / Fixed Deposits are still mock data (no real backend for
+    // these yet) — just filter the local array.
+    if (category === 'gold' || category === 'fd') {
+      catalogSearchQuery = input.value.trim().toLowerCase();
       renderInvestCatalog();
       return;
     }
 
-    equitySearchDebounce = setTimeout(() => {
-      searchStocks(query)
-        .then((stocks) => {
-          const activeTab = document.querySelector('#invest-category-tabs .filter-tab.active');
-          if (!activeTab || activeTab.getAttribute('data-category') !== 'equity') return;
+    if (category === 'equity') {
+      runLiveSymbolSearch({
+        query: input.value.trim(),
+        category: 'equity',
+        searchFn: searchStocks,
+        onResults: (quotes) => { lastEquitySearchResults = quotes; },
+      });
+      return;
+    }
 
-          Promise.all(
-            stocks.slice(0, 12).map((s) => getStockQuote(s.symbol).catch(() => null))
-          ).then((quotes) => {
-            lastEquitySearchResults = quotes.filter(Boolean);
-            renderInvestCatalog();
-          });
-        })
-        .catch((err) => console.error('Equity search failed:', err.message));
-    }, 300);
+    if (category === 'mf') {
+      runLiveSymbolSearch({
+        query: input.value.trim(),
+        category: 'mf',
+        searchFn: searchMutualFunds,
+        onResults: (quotes) => { lastMutualFundSearchResults = quotes; },
+      });
+      return;
+    }
   });
 }
 
@@ -1743,11 +2040,17 @@ function bindPortfolioEvents() {
   }
 }
 
+const CATALOG_SEARCH_PLACEHOLDERS = {
+  mf: 'Search mutual funds by name…',
+  equity: 'Search live stocks e.g. RELIANCE, TCS, INFY…',
+  gold: 'Search digital gold products…',
+  fd: 'Search fixed deposits…',
+};
+
 function bindInvestEvents() {
   const categoryTabs = document.querySelectorAll('#invest-category-tabs .filter-tab');
   const subFiltersContainer = document.getElementById('invest-sub-filters');
   const subFilterChips = document.querySelectorAll('#invest-sub-filters .chip-btn');
-  const stockSearchWrap = document.getElementById('invest-stock-search-wrap');
   const stockSearchInput = document.getElementById('invest-stock-search-input');
 
   categoryTabs.forEach(tab => {
@@ -1764,11 +2067,12 @@ function bindInvestEvents() {
         if (subFiltersContainer) subFiltersContainer.style.display = 'none';
       }
 
-      // Show live stock search only for Equities tab
-      if (stockSearchWrap) stockSearchWrap.style.display = category === 'equity' ? 'flex' : 'none';
-      if (category !== 'equity') {
-        lastEquitySearchResults = [];
-        if (stockSearchInput) stockSearchInput.value = '';
+      // Reset search state when switching tabs — each tab searches its own data
+      lastEquitySearchResults = [];
+      catalogSearchQuery = '';
+      if (stockSearchInput) {
+        stockSearchInput.value = '';
+        stockSearchInput.placeholder = CATALOG_SEARCH_PLACEHOLDERS[category] || 'Search…';
       }
 
       renderInvestCatalog();
@@ -1877,15 +2181,27 @@ function initSearchAutocomplete() {
 
     dropdown.innerHTML = '';
 
-    // Mutual fund / mock catalog matches
+    // Mock catalog matches, grouped by their actual category so a gold or FD
+    // result never shows up mislabeled under a "Mutual Funds" heading.
     const matches = state.fundsCatalog.filter(f =>
       f.name.toLowerCase().includes(val) ||
       f.category.toLowerCase().includes(val)
     );
 
-    if (matches.length > 0) {
-      dropdown.appendChild(buildSearchSectionLabel('Mutual Funds & More'));
-      matches.slice(0, 4).forEach(m => {
+    const CATEGORY_SECTION_LABELS = {
+      mf: 'Mutual Funds',
+      equity: 'Equities',
+      gold: 'Digital Gold',
+      fd: 'Fixed Deposits',
+    };
+    const CATEGORY_ORDER = ['mf', 'equity', 'gold', 'fd'];
+
+    CATEGORY_ORDER.forEach((category) => {
+      const categoryMatches = matches.filter((m) => m.category === category);
+      if (!categoryMatches.length) return;
+
+      dropdown.appendChild(buildSearchSectionLabel(CATEGORY_SECTION_LABELS[category] || category.toUpperCase()));
+      categoryMatches.slice(0, 4).forEach(m => {
         const item = buildSearchResultItem({
           avatarBg: m.bg,
           avatarText: m.initials,
@@ -1906,9 +2222,37 @@ function initSearchAutocomplete() {
         });
         dropdown.appendChild(item);
       });
+    });
+
+    // Jumps to the Invest page, activates the given tab, and triggers that
+    // tab's own live search with the clicked result's symbol/name.
+    function goToInvestTabWithQuery(category, query) {
+      dropdown.classList.remove('active');
+      navigateToPage('invest');
+      document.querySelectorAll('#invest-category-tabs .filter-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-category') === category) tab.classList.add('active');
+      });
+      const subFiltersContainer = document.getElementById('invest-sub-filters');
+      if (subFiltersContainer) subFiltersContainer.style.display = category === 'mf' ? 'flex' : 'none';
+      const catalogInput = document.getElementById('invest-stock-search-input');
+      if (catalogInput) {
+        catalogInput.placeholder = CATALOG_SEARCH_PLACEHOLDERS[category] || 'Search…';
+        catalogInput.value = query;
+        catalogInput.dispatchEvent(new Event('input'));
+      }
     }
 
-    // Live stock section — shows a loading placeholder until the backend responds
+    // Two independent live sections (stocks + mutual funds), each with its own
+    // loading placeholder. The empty-state message only fires once BOTH have
+    // resolved with nothing — otherwise a fast-finishing empty section would
+    // wipe out the other section while it's still loading.
+    let pendingLiveSections = 2;
+    function onLiveSectionSettled() {
+      pendingLiveSections -= 1;
+      if (pendingLiveSections === 0) renderEmptyStateIfNeeded(val);
+    }
+
     const stockSection = document.createElement('div');
     stockSection.className = 'search-stock-section';
     stockSection.appendChild(buildSearchSectionLabel('Live Stocks'));
@@ -1917,6 +2261,15 @@ function initSearchAutocomplete() {
     stockLoading.textContent = 'Searching live stocks…';
     stockSection.appendChild(stockLoading);
     dropdown.appendChild(stockSection);
+
+    const mfSection = document.createElement('div');
+    mfSection.className = 'search-stock-section';
+    mfSection.appendChild(buildSearchSectionLabel('Live Mutual Funds'));
+    const mfLoading = document.createElement('div');
+    mfLoading.className = 'search-loading-state';
+    mfLoading.textContent = 'Searching live mutual funds…';
+    mfSection.appendChild(mfLoading);
+    dropdown.appendChild(mfSection);
 
     lucide.createIcons();
     dropdown.classList.add('active');
@@ -1929,7 +2282,7 @@ function initSearchAutocomplete() {
 
           if (!stocks.length) {
             stockSection.remove();
-            renderEmptyStateIfNeeded(val);
+            onLiveSectionSettled();
             return;
           }
 
@@ -1943,30 +2296,52 @@ function initSearchAutocomplete() {
               logoUrl: s.logoUrl,
               name: s.name,
               meta: `STOCK · ${s.symbol}`,
-              onClick: () => {
-                searchInput.value = s.name;
-                dropdown.classList.remove('active');
-                navigateToPage('invest');
-                document.querySelectorAll('#invest-category-tabs .filter-tab').forEach(tab => {
-                  tab.classList.remove('active');
-                  if (tab.getAttribute('data-category') === 'equity') tab.classList.add('active');
-                });
-                const stockSearchWrap = document.getElementById('invest-stock-search-wrap');
-                const stockSearchInput = document.getElementById('invest-stock-search-input');
-                if (stockSearchWrap) stockSearchWrap.style.display = 'flex';
-                if (stockSearchInput) stockSearchInput.value = s.symbol;
-                stockSearchInput?.dispatchEvent(new Event('input'));
-              },
+              onClick: () => goToInvestTabWithQuery('equity', s.symbol),
             });
             stockSection.appendChild(item);
           });
 
           lucide.createIcons();
+          onLiveSectionSettled();
         })
         .catch((err) => {
           console.error('Stock search failed:', err.message);
           stockSection.remove();
-          renderEmptyStateIfNeeded(val);
+          onLiveSectionSettled();
+        });
+
+      searchMutualFunds(rawVal)
+        .then((funds) => {
+          if (requestId !== searchRequestId) return;
+
+          if (!funds.length) {
+            mfSection.remove();
+            onLiveSectionSettled();
+            return;
+          }
+
+          mfSection.innerHTML = '';
+          mfSection.appendChild(buildSearchSectionLabel('Live Mutual Funds'));
+
+          funds.slice(0, 5).forEach((f) => {
+            const item = buildSearchResultItem({
+              avatarBg: '#059669',
+              avatarText: f.symbol.slice(0, 2),
+              logoUrl: f.logoUrl,
+              name: f.name,
+              meta: `MUTUAL FUND · ${f.symbol}`,
+              onClick: () => goToInvestTabWithQuery('mf', f.symbol),
+            });
+            mfSection.appendChild(item);
+          });
+
+          lucide.createIcons();
+          onLiveSectionSettled();
+        })
+        .catch((err) => {
+          console.error('Mutual fund search failed:', err.message);
+          mfSection.remove();
+          onLiveSectionSettled();
         });
     }, 250);
   });
@@ -2629,6 +3004,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initExportCSV();
   setupModals();
   bindInvestCheckoutEvents();
+  bindStockChartModalEvents();
+  renderMarketIndices();
   initCalculatorTabs();
   initLearnTabs();
   renderQuiz();
