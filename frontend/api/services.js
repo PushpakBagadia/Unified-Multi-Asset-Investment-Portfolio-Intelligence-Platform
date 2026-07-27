@@ -252,6 +252,32 @@ export function purchaseFund(payload) {
   });
 }
 
+// ─── Market Data ────────────────────────────────────────────────────────────────
+
+/**
+ * GET /api/market/search?q=...
+ * @param {string} query
+ * @returns {Promise<Array<{ symbol: string, name: string, exchange: string, type: string }>>}
+ */
+export function searchStocks(query) {
+  return apiRequest(ENDPOINTS.marketSearch, { params: { q: query } });
+}
+
+/** GET /api/market/quote/:symbol */
+export function getStockQuote(symbol) {
+  return apiRequest(ENDPOINTS.marketQuote(symbol));
+}
+
+/** GET /api/market/chart/:symbol */
+export function getStockChart(symbol, params) {
+  return apiRequest(ENDPOINTS.marketChart(symbol), { params });
+}
+
+/** GET /api/market/indices */
+export function getMarketIndices() {
+  return apiRequest(ENDPOINTS.marketIndices);
+}
+
 // ─── SIPs ───────────────────────────────────────────────────────────────────────
 
 /**

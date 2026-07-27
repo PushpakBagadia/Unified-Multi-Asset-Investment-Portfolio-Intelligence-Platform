@@ -49,6 +49,12 @@ export const ENDPOINTS = {
   catalogFundById: (fundId) => `${API_PREFIX}/catalog/funds/${fundId}`,
   ordersBuy: `${API_PREFIX}/orders/buy`,
 
+  // ─── Market Data (stocks, unversioned) ──────────────────────────────────────
+  marketSearch: '/api/market/search',
+  marketQuote: (symbol) => `/api/market/quote/${symbol}`,
+  marketChart: (symbol) => `/api/market/chart/${symbol}`,
+  marketIndices: '/api/market/indices',
+
   // ─── SIPs ───────────────────────────────────────────────────────────────────
   sips: `${API_PREFIX}/sips`,
 

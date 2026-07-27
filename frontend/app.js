@@ -1,6 +1,7 @@
 // AssetBridge Unified Investing Dashboard - App Core Logic
 //0. FIREBASE AUTH
 // 1. Firebase SDK Imports
+import { searchStocks, getStockQuote } from './api/index.js';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { 
   getAuth, 
@@ -119,8 +120,6 @@ const state = {
     { id: "f4", name: "ICICI Prudential Debt Fund", category: "mf", subCategory: "debt", risk: "Low-Moderate", ret1y: "7.2%", ret3y: "6.9%", aum: "12,400 Cr", bg: "#701a75", initials: "ICICI" },
     { id: "f5", name: "Kotak Equity Hybrid Fund", category: "mf", subCategory: "hybrid", risk: "Moderately High", ret1y: "12.8%", ret3y: "11.4%", aum: "15,800 Cr", bg: "#a21caf", initials: "K" },
     { id: "f6", name: "Quant Tax Saver Fund (ELSS)", category: "mf", subCategory: "elss", risk: "Very High", ret1y: "25.6%", ret3y: "22.3%", aum: "9,600 Cr", bg: "#854d0e", initials: "Q" },
-    { id: "f7", name: "Tata Motors Limited Direct Equity", category: "equity", subCategory: "equity", risk: "High", ret1y: "48.2%", ret3y: "32.4%", aum: "98,200 Cr (Mcap)", bg: "#0284c7", initials: "TM" },
-    { id: "f8", name: "Reliance Industries Direct Equity", category: "equity", subCategory: "equity", risk: "Moderate-High", ret1y: "11.6%", ret3y: "12.8%", aum: "18,40,000 Cr (Mcap)", bg: "#1e40af", initials: "RIL" },
     { id: "f9", name: "MMTC Digital Gold (24K)", category: "gold", subCategory: "gold", risk: "Low", ret1y: "14.8%", ret3y: "11.2%", aum: "PhonePe SafeGold", bg: "#b45309", initials: "DG" },
     { id: "f10", name: "HDFC Bank FD - 1 Year", category: "fd", subCategory: "debt", risk: "No risk", ret1y: "7.1%", ret3y: "7.0%", aum: "HDFC Bank", bg: "#312e81", initials: "HDFD" }
   ],
@@ -700,24 +699,31 @@ function renderPortfolioBreakdown() {
 }
 
 // C. Invest View Render
+let lastEquitySearchResults = [];
+
 function renderInvestCatalog() {
   const grid = document.getElementById('invest-funds-grid');
   grid.innerHTML = '';
-  
+
   // Category tab
   const activeTab = document.querySelector('#invest-category-tabs .filter-tab.active');
   const category = activeTab ? activeTab.getAttribute('data-category') : 'mf';
-  
+
+  if (category === 'equity') {
+    renderEquityResults(lastEquitySearchResults);
+    return;
+  }
+
   // Sub filter chip
   const activeChip = document.querySelector('#invest-sub-filters .chip-btn.active');
   const subFilter = activeChip ? activeChip.getAttribute('data-sub') : 'all';
-  
+
   let catalog = state.fundsCatalog.filter(f => f.category === category);
-  
+
   if (category === 'mf' && subFilter !== 'all') {
     catalog = catalog.filter(f => f.subCategory === subFilter);
   }
-  
+
   catalog.forEach((fund, index) => {
     const card = document.createElement('div');
     
@@ -768,6 +774,128 @@ function renderInvestCatalog() {
       const fund = state.fundsCatalog.find(f => f.id === fundId);
       openInvestCheckoutModal(fund);
     });
+  });
+}
+
+// C2. Live Equity Search Results Render (real stocks, no mock data)
+function renderEquityResults(stocks) {
+  const grid = document.getElementById('invest-funds-grid');
+  grid.innerHTML = '';
+
+  if (!stocks.length) {
+    grid.innerHTML = `
+      <div class="glass-card b-c4 b-r1" style="text-align:center; padding:32px; color:var(--text-muted);">
+        Search for a stock symbol or company name above to see live prices.
+      </div>
+    `;
+    return;
+  }
+
+  stocks.forEach((stock, index) => {
+    const card = document.createElement('div');
+    let bentoClass = 'b-c2 b-r1';
+    if (index === 0) bentoClass = 'b-c4 b-r2 bento-accent-sky';
+
+    const isUp = stock.changePercent >= 0;
+
+    card.className = `glass-card fund-card ${bentoClass}`;
+    card.innerHTML = `
+      <div>
+        <div class="fund-header">
+          <div class="fund-logo" style="background:#4f46e5; position:relative; overflow:hidden;">
+            <span>${stock.symbol.slice(0, 2)}</span>
+            ${stock.logoUrl ? `<img src="${stock.logoUrl}" alt="" loading="lazy" onerror="this.remove()" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; background:#fff; padding:4px;">` : ''}
+          </div>
+          <div class="fund-identity">
+            <h5 class="fund-title">${stock.name}</h5>
+            <span class="fund-category">${stock.symbol} · ${stock.exchange || 'LIVE'}</span>
+          </div>
+        </div>
+
+        <div class="fund-grid-stats">
+          <div class="fund-stat-item">
+            <span class="fund-stat-label">Price</span>
+            <span class="fund-stat-val">${stock.price != null ? formatRupee(stock.price) : '—'}</span>
+          </div>
+          <div class="fund-stat-item">
+            <span class="fund-stat-label">Change</span>
+            <span class="fund-stat-val ${isUp ? 'up' : 'down'}">${stock.changePercent != null ? stock.changePercent.toFixed(2) + '%' : '—'}</span>
+          </div>
+          <div class="fund-stat-item">
+            <span class="fund-stat-label">Type</span>
+            <span class="fund-stat-val">${stock.type || 'EQUITY'}</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary invest-stock-buy-btn" data-symbol="${stock.symbol}" style="width:100%; justify-content:center;">
+        Invest Now
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.querySelectorAll('.invest-stock-buy-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const symbol = btn.getAttribute('data-symbol');
+      const stock = stocks.find((s) => s.symbol === symbol);
+      if (stock) openInvestCheckoutModal(stockToFundShape(stock));
+    });
+  });
+}
+
+// Adapts a live stock quote into the shape openInvestCheckoutModal/holdings expect,
+// so real stocks flow through the same simulated buy/portfolio logic as mock funds.
+function stockToFundShape(stock) {
+  const isUp = stock.changePercent >= 0;
+  return {
+    id: `stock_${stock.symbol}`,
+    symbol: stock.symbol,
+    name: stock.name,
+    category: 'equity',
+    subCategory: 'equity',
+    risk: 'Market Risk (Direct Equity)',
+    ret1y: `${isUp ? '+' : ''}${stock.changePercent != null ? stock.changePercent.toFixed(2) : '0.00'}% today`,
+    ret3y: stock.price != null ? formatRupee(stock.price) : '—',
+    aum: stock.exchange || 'LIVE',
+    bg: '#4f46e5',
+    initials: stock.symbol.slice(0, 2),
+    price: stock.price,
+  };
+}
+
+let equitySearchDebounce = null;
+
+function initInvestStockSearch() {
+  const input = document.getElementById('invest-stock-search-input');
+  if (!input) return;
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim();
+
+    clearTimeout(equitySearchDebounce);
+
+    if (!query) {
+      lastEquitySearchResults = [];
+      renderInvestCatalog();
+      return;
+    }
+
+    equitySearchDebounce = setTimeout(() => {
+      searchStocks(query)
+        .then((stocks) => {
+          const activeTab = document.querySelector('#invest-category-tabs .filter-tab.active');
+          if (!activeTab || activeTab.getAttribute('data-category') !== 'equity') return;
+
+          Promise.all(
+            stocks.slice(0, 12).map((s) => getStockQuote(s.symbol).catch(() => null))
+          ).then((quotes) => {
+            lastEquitySearchResults = quotes.filter(Boolean);
+            renderInvestCatalog();
+          });
+        })
+        .catch((err) => console.error('Equity search failed:', err.message));
+    }, 300);
   });
 }
 
@@ -1619,21 +1747,30 @@ function bindInvestEvents() {
   const categoryTabs = document.querySelectorAll('#invest-category-tabs .filter-tab');
   const subFiltersContainer = document.getElementById('invest-sub-filters');
   const subFilterChips = document.querySelectorAll('#invest-sub-filters .chip-btn');
+  const stockSearchWrap = document.getElementById('invest-stock-search-wrap');
+  const stockSearchInput = document.getElementById('invest-stock-search-input');
 
   categoryTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       categoryTabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      
+
       const category = tab.getAttribute('data-category');
-      
+
       // Show sub-filters only for Mutual Funds (mf)
       if (category === 'mf') {
         if (subFiltersContainer) subFiltersContainer.style.display = 'flex';
       } else {
         if (subFiltersContainer) subFiltersContainer.style.display = 'none';
       }
-      
+
+      // Show live stock search only for Equities tab
+      if (stockSearchWrap) stockSearchWrap.style.display = category === 'equity' ? 'flex' : 'none';
+      if (category !== 'equity') {
+        lastEquitySearchResults = [];
+        if (stockSearchInput) stockSearchInput.value = '';
+      }
+
       renderInvestCatalog();
     });
   });
@@ -1648,72 +1785,192 @@ function bindInvestEvents() {
 }
 
 // 9. Autocomplete Search Utility
+
+// Builds an avatar with initials underneath and a real logo <img> on top.
+// The logo silently removes itself on load failure (unreliable name->domain
+// guess on the backend), leaving the initials visible as fallback.
+function buildAvatar(avatarBg, avatarText, logoUrl) {
+  const avatar = document.createElement('div');
+  avatar.className = 'search-result-avatar';
+  avatar.style.background = avatarBg;
+
+  const fallback = document.createElement('span');
+  fallback.className = 'avatar-fallback-text';
+  fallback.textContent = avatarText;
+  avatar.appendChild(fallback);
+
+  if (logoUrl) {
+    const img = document.createElement('img');
+    img.className = 'avatar-logo-img';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.addEventListener('error', () => img.remove());
+    img.src = logoUrl;
+    avatar.appendChild(img);
+  }
+
+  return avatar;
+}
+
+function buildSearchResultItem({ avatarBg, avatarText, logoUrl, name, meta, onClick }) {
+  const item = document.createElement('div');
+  item.className = 'search-result-item';
+
+  item.appendChild(buildAvatar(avatarBg, avatarText, logoUrl));
+
+  const textWrap = document.createElement('div');
+  textWrap.className = 'search-result-text';
+
+  const nameEl = document.createElement('span');
+  nameEl.className = 'search-result-name';
+  nameEl.textContent = name;
+
+  const metaEl = document.createElement('span');
+  metaEl.className = 'search-result-type';
+  metaEl.textContent = meta;
+
+  textWrap.appendChild(nameEl);
+  textWrap.appendChild(metaEl);
+  item.appendChild(textWrap);
+
+  const arrow = document.createElement('i');
+  arrow.setAttribute('data-lucide', 'arrow-right');
+  arrow.className = 'search-result-arrow';
+  item.appendChild(arrow);
+
+  if (onClick) item.addEventListener('click', onClick);
+  return item;
+}
+
+function buildSearchSectionLabel(text) {
+  const label = document.createElement('div');
+  label.className = 'search-section-label';
+  label.textContent = text;
+  return label;
+}
+
 function initSearchAutocomplete() {
   const searchInput = document.getElementById('global-search-input');
   const dropdown = document.getElementById('search-dropdown');
-  
+
   if (!searchInput || !dropdown) return;
-  
+
+  let searchRequestId = 0;
+  let stockDebounce = null;
+
+  function renderEmptyStateIfNeeded(val) {
+    if (!dropdown.querySelector('.search-result-item')) {
+      dropdown.innerHTML = `<div class="search-empty-state">No results found for "${val}"</div>`;
+    }
+  }
+
   searchInput.addEventListener('input', () => {
-    const val = searchInput.value.trim().toLowerCase();
-    
+    const rawVal = searchInput.value.trim();
+    const val = rawVal.toLowerCase();
+
+    clearTimeout(stockDebounce);
+
     if (val.length === 0) {
       dropdown.classList.remove('active');
       return;
     }
-    
-    // Filter matching assets from catalog
-    const matches = state.fundsCatalog.filter(f => 
-      f.name.toLowerCase().includes(val) || 
+
+    dropdown.innerHTML = '';
+
+    // Mutual fund / mock catalog matches
+    const matches = state.fundsCatalog.filter(f =>
+      f.name.toLowerCase().includes(val) ||
       f.category.toLowerCase().includes(val)
     );
-    
-    if (matches.length === 0) {
-      dropdown.innerHTML = `<div style="padding:12px; font-size:0.8rem; color:var(--text-muted); text-align:center;">No results found for "${val}"</div>`;
-      dropdown.classList.add('active');
-      return;
-    }
-    
-    dropdown.innerHTML = '';
-    matches.slice(0, 5).forEach(m => {
-      const item = document.createElement('div');
-      item.className = 'search-result-item';
-      item.innerHTML = `
-        <div class="search-result-info">
-          <div class="search-result-avatar" style="background:${m.bg}; color:#fff;">${m.initials}</div>
-          <div class="search-result-text">
-            <span class="search-result-name">${m.name}</span>
-            <span class="search-result-type">${m.category.toUpperCase()} · 1Y Ret: ${m.ret1y}</span>
-          </div>
-        </div>
-        <i data-lucide="arrow-right" style="width:14px;color:var(--text-muted);"></i>
-      `;
-      
-      item.addEventListener('click', () => {
-        searchInput.value = m.name;
-        dropdown.classList.remove('active');
-        
-        // Jump to Invest page with that category
-        navigateToPage('invest');
-        
-        // Activate respective invest tab
-        document.querySelectorAll('#invest-category-tabs .filter-tab').forEach(tab => {
-          tab.classList.remove('active');
-          if (tab.getAttribute('data-category') === m.category) {
-            tab.classList.add('active');
-          }
+
+    if (matches.length > 0) {
+      dropdown.appendChild(buildSearchSectionLabel('Mutual Funds & More'));
+      matches.slice(0, 4).forEach(m => {
+        const item = buildSearchResultItem({
+          avatarBg: m.bg,
+          avatarText: m.initials,
+          name: m.name,
+          meta: `${m.category.toUpperCase()} · 1Y Ret: ${m.ret1y}`,
+          onClick: () => {
+            searchInput.value = m.name;
+            dropdown.classList.remove('active');
+            navigateToPage('invest');
+            document.querySelectorAll('#invest-category-tabs .filter-tab').forEach(tab => {
+              tab.classList.remove('active');
+              if (tab.getAttribute('data-category') === m.category) {
+                tab.classList.add('active');
+              }
+            });
+            renderInvestCatalog();
+          },
         });
-        
-        renderInvestCatalog();
+        dropdown.appendChild(item);
       });
-      
-      dropdown.appendChild(item);
-    });
-    
+    }
+
+    // Live stock section — shows a loading placeholder until the backend responds
+    const stockSection = document.createElement('div');
+    stockSection.className = 'search-stock-section';
+    stockSection.appendChild(buildSearchSectionLabel('Live Stocks'));
+    const stockLoading = document.createElement('div');
+    stockLoading.className = 'search-loading-state';
+    stockLoading.textContent = 'Searching live stocks…';
+    stockSection.appendChild(stockLoading);
+    dropdown.appendChild(stockSection);
+
     lucide.createIcons();
     dropdown.classList.add('active');
+
+    const requestId = ++searchRequestId;
+    stockDebounce = setTimeout(() => {
+      searchStocks(rawVal)
+        .then((stocks) => {
+          if (requestId !== searchRequestId) return; // stale response, input changed since
+
+          if (!stocks.length) {
+            stockSection.remove();
+            renderEmptyStateIfNeeded(val);
+            return;
+          }
+
+          stockSection.innerHTML = '';
+          stockSection.appendChild(buildSearchSectionLabel('Live Stocks'));
+
+          stocks.slice(0, 5).forEach((s) => {
+            const item = buildSearchResultItem({
+              avatarBg: '#4f46e5',
+              avatarText: s.symbol.slice(0, 2),
+              logoUrl: s.logoUrl,
+              name: s.name,
+              meta: `STOCK · ${s.symbol}`,
+              onClick: () => {
+                searchInput.value = s.name;
+                dropdown.classList.remove('active');
+                navigateToPage('invest');
+                document.querySelectorAll('#invest-category-tabs .filter-tab').forEach(tab => {
+                  tab.classList.remove('active');
+                  if (tab.getAttribute('data-category') === 'equity') tab.classList.add('active');
+                });
+                const stockSearchWrap = document.getElementById('invest-stock-search-wrap');
+                const stockSearchInput = document.getElementById('invest-stock-search-input');
+                if (stockSearchWrap) stockSearchWrap.style.display = 'flex';
+                if (stockSearchInput) stockSearchInput.value = s.symbol;
+                stockSearchInput?.dispatchEvent(new Event('input'));
+              },
+            });
+            stockSection.appendChild(item);
+          });
+
+          lucide.createIcons();
+        })
+        .catch((err) => {
+          console.error('Stock search failed:', err.message);
+          stockSection.remove();
+          renderEmptyStateIfNeeded(val);
+        });
+    }, 250);
   });
-  
+
   // Close dropdown on click outside
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.search-container')) {
@@ -1997,9 +2254,13 @@ let activeFundForPurchase = null;
 
 function openInvestCheckoutModal(fund) {
   activeFundForPurchase = fund;
+  const isLiveStock = fund.price != null;
+
   document.getElementById('checkout-title').textContent = `Purchase units of ${fund.name}`;
   document.getElementById('checkout-asset-class').textContent = fund.category.toUpperCase();
-  document.getElementById('checkout-asset-nav').textContent = `1Y Yield: ${fund.ret1y}`;
+  document.getElementById('checkout-asset-nav').textContent = isLiveStock
+    ? `Live Price: ${formatRupee(fund.price)} · ${fund.ret1y}`
+    : `1Y Yield: ${fund.ret1y}`;
   document.getElementById('checkout-asset-risk').textContent = `${fund.risk} Risk level`;
   
   const amtInput = document.getElementById('checkout-amount-input');
@@ -2033,10 +2294,12 @@ function bindInvestCheckoutEvents() {
       }
       
       const fund = activeFundForPurchase;
-      
+      const navPrice = fund.price || 120; // live price for real stocks, dummy NAV for mock funds
+      const holdingKey = (fund.symbol || fund.initials).toLowerCase();
+
       // Update holding values dynamically
-      let existHolding = state.holdings.find(h => h.shortName.toLowerCase() === fund.initials.toLowerCase());
-      
+      let existHolding = state.holdings.find(h => (h.symbol || h.shortName).toLowerCase() === holdingKey);
+
       if (existHolding) {
         existHolding.invested += amount;
         existHolding.currentValue += amount;
@@ -2048,15 +2311,16 @@ function bindInvestCheckoutEvents() {
           id: `h_${Date.now()}`,
           name: fund.name,
           shortName: fund.initials,
+          symbol: fund.symbol,
           category: fund.category,
           subCategory: fund.subCategory,
           invested: amount,
           currentValue: amount,
-          units: amount / 120, // dummy price NAV factor
+          units: amount / navPrice,
           returnPct: 0.0
         });
       }
-      
+
       // Log Transaction
       state.transactions.unshift({
         type: "BUY",
@@ -2064,9 +2328,9 @@ function bindInvestCheckoutEvents() {
         date: "Just Now",
         category: fund.category,
         amount: amount,
-        units: parseFloat((amount / 120).toFixed(2)),
-        price: 120.0,
-        typeLabel: "Manual Order"
+        units: parseFloat((amount / navPrice).toFixed(2)),
+        price: navPrice,
+        typeLabel: fund.symbol ? "Live Stock Order" : "Manual Order"
       });
       
       // Notify
@@ -2360,6 +2624,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   bindPortfolioEvents();
   bindInvestEvents();
+  initInvestStockSearch();
   initSearchAutocomplete();
   initExportCSV();
   setupModals();
