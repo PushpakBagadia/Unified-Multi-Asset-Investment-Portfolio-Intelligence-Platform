@@ -354,39 +354,51 @@ function renderCard1AssetFlow() {
   const container = document.getElementById('card1-visual');
   if (!container) return;
   
-  // Just static visual with rotating active state for simplicity in Vanilla JS
   container.innerHTML = `
-    <svg class="w-full h-full absolute inset-0" viewBox="0 0 320 240" preserveAspectRatio="xMidYMid meet">
-      <!-- Grid -->
-      <pattern id="clean-grid" width="16" height="16" patternUnits="userSpaceOnUse">
-        <circle cx="1.5" cy="1.5" r="0.75" fill="rgba(0,0,0,0.1)"></circle>
+    <svg class="w-full h-full" style="width:100%; height:100%; min-height:220px;" viewBox="0 0 340 210" preserveAspectRatio="xMidYMid meet">
+      <!-- Clean Grid Pattern -->
+      <pattern id="clean-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+        <circle cx="3" cy="3" r="1.2" fill="#cbd5e1"></circle>
       </pattern>
       <rect width="100%" height="100%" fill="url(#clean-grid)"></rect>
       
-      <!-- Connectors -->
-      <path d="M 60 120 L 160 120" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
-      <path d="M 160 120 L 260 50" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
-      <path d="M 160 120 L 260 120" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
-      <path d="M 160 120 L 260 190" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="2"/>
+      <!-- Connectors with smooth paths -->
+      <path d="M 75 105 C 120 105, 120 105, 155 105" fill="none" stroke="#94a3b8" stroke-width="2.2" stroke-dasharray="5 5"/>
+      <path d="M 175 105 C 210 105, 210 42, 245 42" fill="none" stroke="#94a3b8" stroke-width="2.2" stroke-dasharray="5 5"/>
+      <path d="M 175 105 C 210 105, 210 105, 245 105" fill="none" stroke="#94a3b8" stroke-width="2.2" stroke-dasharray="5 5"/>
+      <path d="M 175 105 C 210 105, 210 168, 245 168" fill="none" stroke="#94a3b8" stroke-width="2.2" stroke-dasharray="5 5"/>
       
-      <!-- Nodes -->
-      <foreignObject x="40" y="100" width="40" height="40" class="overflow-visible">
-        <div class="w-full h-full rounded-xl bg-blue-600 text-white flex items-center justify-center text-xs font-bold shadow-md" style="background:var(--color-equity)">P</div>
-      </foreignObject>
-      <foreignObject x="150" y="110" width="20" height="20" class="overflow-visible">
-        <div id="router-node" class="w-full h-full rounded-full border-2 border-blue-400 bg-white shadow-sm flex items-center justify-center transition-all duration-300">
-           <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+      <!-- Source Node P -->
+      <foreignObject x="32" y="83" width="46" height="46" class="overflow-visible">
+        <div style="width:44px; height:44px; border-radius:14px; background:linear-gradient(135deg, #2563eb, #1d4ed8); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; box-shadow:0 4px 14px rgba(37,99,235,0.35); border:1px solid rgba(255,255,255,0.4);">
+          P
         </div>
       </foreignObject>
       
-      <foreignObject x="240" y="30" width="40" height="40" class="overflow-visible">
-        <div class="w-full h-full rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md transition-all duration-300 flow-node" style="background:var(--color-mf)">EQ</div>
+      <!-- Router Node -->
+      <foreignObject x="153" y="93" width="26" height="26" class="overflow-visible">
+        <div id="router-node" style="width:24px; height:24px; border-radius:50%; border:2px solid #2563eb; background:#ffffff; box-shadow:0 2px 10px rgba(37,99,235,0.25); display:flex; align-items:center; justify-content:center; transition:all 0.3s;">
+           <div style="width:8px; height:8px; border-radius:50%; background:#2563eb;"></div>
+        </div>
       </foreignObject>
-      <foreignObject x="240" y="100" width="40" height="40" class="overflow-visible">
-        <div class="w-full h-full rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md transition-all duration-300 flow-node" style="background:var(--color-gold)">GD</div>
+      
+      <!-- Target Asset Nodes -->
+      <foreignObject x="245" y="22" width="60" height="44" class="overflow-visible">
+        <div class="flow-node" style="width:54px; height:40px; border-radius:12px; background:linear-gradient(135deg, #10b981, #059669); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; box-shadow:0 4px 12px rgba(16,185,129,0.3); transition:transform 0.3s; border:1px solid rgba(255,255,255,0.4);">
+          EQ
+        </div>
       </foreignObject>
-      <foreignObject x="240" y="170" width="40" height="40" class="overflow-visible">
-        <div class="w-full h-full rounded-xl flex items-center justify-center text-xs font-bold text-white shadow-md transition-all duration-300 flow-node" style="background:var(--color-fd)">DB</div>
+      
+      <foreignObject x="245" y="85" width="60" height="44" class="overflow-visible">
+        <div class="flow-node" style="width:54px; height:40px; border-radius:12px; background:linear-gradient(135deg, #f59e0b, #d97706); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; box-shadow:0 4px 12px rgba(245,158,11,0.3); transition:transform 0.3s; border:1px solid rgba(255,255,255,0.4);">
+          GD
+        </div>
+      </foreignObject>
+      
+      <foreignObject x="245" y="148" width="60" height="44" class="overflow-visible">
+        <div class="flow-node" style="width:54px; height:40px; border-radius:12px; background:linear-gradient(135deg, #8b5cf6, #7c3aed); color:#ffffff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; box-shadow:0 4px 12px rgba(139,92,246,0.3); transition:transform 0.3s; border:1px solid rgba(255,255,255,0.4);">
+          DB
+        </div>
       </foreignObject>
     </svg>
   `;
@@ -397,7 +409,7 @@ function renderCard1AssetFlow() {
   flowInterval = setInterval(() => {
     if(nodes.length === 0) return;
     nodes.forEach(n => n.style.transform = 'scale(1)');
-    if (nodes[step]) nodes[step].style.transform = 'scale(1.15)';
+    if (nodes[step]) nodes[step].style.transform = 'scale(1.16)';
     step = (step + 1) % nodes.length;
   }, 2000);
 }
@@ -409,30 +421,31 @@ function renderCard2Metrics(metrics) {
   const labels = document.getElementById('card2-labels');
   if (!row || !bars || !labels) return;
   
-  const gainColor = metrics.overallGainVal >= 0 ? 'text-emerald-500' : 'text-rose-500';
+  const gainColor = metrics.overallGainVal >= 0 ? '#059669' : '#dc2626';
+  const gainBg = metrics.overallGainVal >= 0 ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)';
   const gainSign = metrics.overallGainVal >= 0 ? '+' : '';
   
   row.innerHTML = `
     <div class="metric-box">
       <div class="metric-box-inner active">
-        <div class="flex flex-col min-w-0">
-          <span class="text-[9px] text-gray-500 font-mono uppercase tracking-widest">Total Value</span>
-          <span class="text-[14px] font-bold font-mono text-gray-800 mt-1">${formatRupee(metrics.totalVal)}</span>
-          <div class="flex items-center gap-1.5 mt-1.5">
-            <span class="text-[9px] font-mono font-bold ${gainColor}">${gainSign}${metrics.overallGainPct.toFixed(2)}%</span>
-            <span class="text-[8px] text-gray-400 font-mono">overall</span>
+        <div style="display:flex; flex-direction:column; min-width:0;">
+          <span style="font-size:10px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.08em;">Total Value</span>
+          <span style="font-size:15px; font-weight:800; color:#0f172a; margin-top:2px;">${formatRupee(metrics.totalVal)}</span>
+          <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+            <span style="font-size:10px; font-weight:800; color:${gainColor}; background:${gainBg}; padding:2px 6px; border-radius:6px;">${gainSign}${metrics.overallGainPct.toFixed(2)}%</span>
+            <span style="font-size:10px; font-weight:600; color:#64748b;">overall</span>
           </div>
         </div>
       </div>
     </div>
     <div class="metric-box">
       <div class="metric-box-inner">
-        <div class="flex flex-col min-w-0">
-          <span class="text-[9px] text-gray-500 font-mono uppercase tracking-widest">Total Invested</span>
-          <span class="text-[14px] font-bold font-mono text-gray-800 mt-1">${formatRupee(metrics.totalInv)}</span>
-          <div class="flex items-center gap-1.5 mt-1.5">
-            <span class="text-[9px] font-mono font-bold text-violet-500">14.8%</span>
-            <span class="text-[8px] text-gray-400 font-mono">XIRR</span>
+        <div style="display:flex; flex-direction:column; min-width:0;">
+          <span style="font-size:10px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.08em;">Total Invested</span>
+          <span style="font-size:15px; font-weight:800; color:#0f172a; margin-top:2px;">${formatRupee(metrics.totalInv)}</span>
+          <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+            <span style="font-size:10px; font-weight:800; color:#7c3aed; background:rgba(139,92,246,0.12); padding:2px 6px; border-radius:6px;">14.8%</span>
+            <span style="font-size:10px; font-weight:600; color:#64748b;">XIRR</span>
           </div>
         </div>
       </div>
@@ -473,23 +486,24 @@ function renderCard3Transactions() {
   
   recent.forEach((t, i) => {
     const isBuy = t.type === 'BUY';
-    const color = isBuy ? 'var(--color-success)' : 'var(--color-danger)';
+    const color = isBuy ? '#059669' : '#dc2626';
+    const bgBadge = isBuy ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)';
     
     const div = document.createElement('div');
     div.className = 'tx-item';
     div.innerHTML = `
-      <div class="tx-item-icon" style="background:${color}">
-        <i data-lucide="${isBuy ? 'arrow-down-left' : 'arrow-up-right'}" style="width:16px; height:16px;"></i>
+      <div class="tx-item-icon" style="background:${isBuy ? '#10b981' : '#ef4444'};">
+        <i data-lucide="${isBuy ? 'arrow-down-left' : 'arrow-up-right'}" style="width:18px; height:18px;"></i>
       </div>
       <div class="tx-item-content">
         <div class="tx-item-top">
           <span class="tx-item-name">${t.assetName}</span>
-          <span class="tx-item-status" style="background:rgba(0,0,0,0.05); color:${color}">${t.type}</span>
+          <span class="tx-item-status" style="background:${bgBadge}; color:${color};">${t.type}</span>
         </div>
         <div class="tx-item-desc">${t.typeLabel} · ${t.units} units</div>
       </div>
-      <div class="flex flex-col items-end gap-1">
-        <span class="text-[11px] font-bold font-mono" style="color:${color}">${isBuy?'+':'-'}${formatRupee(t.amount)}</span>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+        <span style="font-size:12px; font-weight:800; color:${color};">${isBuy?'+':'-'}${formatRupee(t.amount)}</span>
         <span class="tx-item-time">${t.date}</span>
       </div>
     `;
@@ -510,9 +524,9 @@ function renderCard3Transactions() {
       
       const abs = Math.abs(slot);
       const isVisible = abs <= 2;
-      const yOffset = slot === 0 ? 0 : slot === 1 ? 40 : slot === 2 ? 70 : slot === -1 ? -40 : slot === -2 ? -70 : 150;
-      const scale = slot === 0 ? 1 : abs === 1 ? 0.93 : 0.87;
-      const opacity = slot === 0 ? 1 : abs === 1 ? 0.65 : 0.38;
+      const yOffset = slot === 0 ? 0 : slot === 1 ? 48 : slot === 2 ? 88 : slot === -1 ? -48 : slot === -2 ? -88 : 150;
+      const scale = slot === 0 ? 1 : abs === 1 ? 0.94 : 0.88;
+      const opacity = slot === 0 ? 1 : abs === 1 ? 0.75 : 0.45;
       const zIndex = slot === 0 ? 30 : abs === 1 ? 20 : 10;
       
       item.style.transform = `translateY(${yOffset}px) scale(${scale})`;
@@ -526,7 +540,7 @@ function renderCard3Transactions() {
   txInterval = setInterval(updateStack, 2500);
 }
 
-// Card 4: Asset Allocation Namespaces
+// Card 4: Asset Allocation
 let allocInterval;
 function renderCard4Allocation(totalVal) {
   const barsList = document.getElementById('card4-bars-list');
@@ -534,10 +548,10 @@ function renderCard4Allocation(totalVal) {
   if (!barsList || !logList) return;
   
   const categories = {
-    equity: { name: "Equities", val: 0, color: "bg-indigo-500" },
-    mf: { name: "Mut Funds", val: 0, color: "bg-emerald-500" },
-    gold: { name: "Gold", val: 0, color: "bg-amber-500" },
-    fd: { name: "Debt/FD", val: 0, color: "bg-violet-500" }
+    equity: { name: "Equities", val: 0, color: "#2563eb" },
+    mf: { name: "Mutual Funds", val: 0, color: "#10b981" },
+    gold: { name: "Digital Gold", val: 0, color: "#f59e0b" },
+    fd: { name: "Fixed Deposits", val: 0, color: "#8b5cf6" }
   };
   
   state.holdings.forEach(h => {
@@ -552,10 +566,10 @@ function renderCard4Allocation(totalVal) {
     
     barsList.innerHTML += `
       <div class="alloc-row" data-cat="${k}">
-        <div class="alloc-icon"><i data-lucide="layers" style="width:16px;"></i></div>
+        <div class="alloc-icon" style="color:${cat.color};"><i data-lucide="layers" style="width:16px;"></i></div>
         <div class="alloc-name">${cat.name}</div>
         <div class="alloc-track">
-          <div class="alloc-fill ${cat.color}" data-w="${pct}%"></div>
+          <div class="alloc-fill" style="background:${cat.color};" data-w="${pct}%"></div>
         </div>
         <div class="alloc-val">${pct.toFixed(0)}%</div>
       </div>
@@ -574,8 +588,26 @@ function renderCard4Allocation(totalVal) {
   let idx = 0;
   const rows = barsList.querySelectorAll('.alloc-row');
   allocInterval = setInterval(() => {
-    rows.forEach(r => r.classList.remove('active'));
-    if(rows[idx]) rows[idx].classList.add('active');
+    rows.forEach(r => {
+      r.classList.remove('active');
+      const icon = r.querySelector('.alloc-icon');
+      if(icon) {
+        icon.style.background = '#f8fafc';
+        icon.style.color = '#64748b';
+      }
+    });
+    if(rows[idx]) {
+      rows[idx].classList.add('active');
+      const catKey = rows[idx].getAttribute('data-cat');
+      const cat = categories[catKey];
+      if (cat) {
+        const icon = rows[idx].querySelector('.alloc-icon');
+        if (icon) {
+          icon.style.background = cat.color;
+          icon.style.color = '#ffffff';
+        }
+      }
+    }
     idx = (idx + 1) % rows.length;
   }, 2000);
   
@@ -586,7 +618,7 @@ function renderCard4Allocation(totalVal) {
     logList.innerHTML += `
       <div class="log-item">
         <div class="log-item-top">
-          <span class="log-badge" style="background:rgba(52,211,153,0.15); color:var(--color-success)">+${m.returnPct.toFixed(1)}%</span>
+          <span class="log-badge" style="background:rgba(16,185,129,0.12); color:#059669;">+${m.returnPct.toFixed(1)}%</span>
           <span class="log-time">${m.category.toUpperCase()}</span>
         </div>
         <div class="log-text">${m.name}</div>
@@ -603,7 +635,7 @@ function renderCard5TopHoldings(totalVal) {
   const top = [...state.holdings].sort((a, b) => b.currentValue - a.currentValue).slice(0, 4);
   grid.innerHTML = '';
   
-  const colors = ["bg-sky-500", "bg-emerald-500", "bg-amber-500", "bg-violet-500"];
+  const colors = ["#2563eb", "#10b981", "#f59e0b", "#8b5cf6"];
   
   top.forEach((h, i) => {
     const color = colors[i % colors.length];
@@ -612,7 +644,7 @@ function renderCard5TopHoldings(totalVal) {
     grid.innerHTML += `
       <div class="holding-card">
         <div class="hc-top">
-          <div class="hc-icon ${color}"><i data-lucide="briefcase" style="width:14px;"></i></div>
+          <div class="hc-icon" style="background:${color};"><i data-lucide="briefcase" style="width:15px;"></i></div>
           <div class="hc-val-col">
             <span class="hc-val">${formatRupee(h.currentValue)}</span>
             <span class="hc-sub">Valuation</span>
@@ -621,20 +653,22 @@ function renderCard5TopHoldings(totalVal) {
         <div class="hc-bot">
           <div class="hc-bot-text">
             <span class="hc-name">${h.shortName}</span>
-            <span class="hc-ret" style="color:${h.returnPct>=0?'var(--color-success)':'var(--color-danger)'}">${h.returnPct>=0?'+':''}${h.returnPct.toFixed(1)}%</span>
+            <span class="hc-ret" style="color:${h.returnPct>=0?'#059669':'#dc2626'}; font-weight:800;">${h.returnPct>=0?'+':''}${h.returnPct.toFixed(1)}%</span>
           </div>
           <div class="hc-track">
-            <div class="hc-fill ${color}" data-w="${pct}%"></div>
+            <div class="hc-fill" style="background:${color};" data-w="${pct}%"></div>
           </div>
         </div>
       </div>
     `;
   });
-  
   lucide.createIcons();
+  
   setTimeout(() => {
-    grid.querySelectorAll('.hc-fill').forEach(f => f.style.width = f.getAttribute('data-w'));
-  }, 150);
+    grid.querySelectorAll('.hc-fill').forEach(fill => {
+      fill.style.width = fill.getAttribute('data-w');
+    });
+  }, 100);
 }
 
 // B. Portfolio View Render

@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AssetBridge | Unified Investing Platform</title>
-  
+
   <!-- Modern Font from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=1.2">
-  
+  <link rel="stylesheet" href="styles.css?v=1.7">
+
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  
+
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
   <div class="app-container">
-    
+
     <!-- Redesigned Sticky Top Navbar -->
     <header class="navbar glass-nav">
       <div class="nav-container">
         <div class="brand-section" data-goto="hero">
           <img src="logo.png" alt="Asset Bridge Logo" class="brand-logo-img">
         </div>
-        
+
         <nav class="nav-links" id="spotlight-nav">
           <!-- Spotlight pill that slides to active item -->
           <div class="nav-spotlight-pill" id="nav-spotlight-pill"></div>
@@ -74,7 +77,7 @@
             </a>
           </li>
         </nav>
-        
+
         <div class="search-container">
           <i data-lucide="search"></i>
           <input type="text" class="search-input" id="global-search-input" placeholder="Search stocks, MF, gold…">
@@ -87,7 +90,7 @@
             <div class="unread-dot" id="topbar-bell-dot"></div>
             <span class="nav-badge count-badge" id="sidebar-notif-count">3</span>
           </button>
-          
+
           <div class="user-pill" id="sidebar-settings-btn">
             <div class="user-avatar" id="sidebar-avatar">AA</div>
             <div class="user-info-pill">
@@ -101,144 +104,230 @@
 
     <!-- Main Shell Wrapper -->
     <div class="main-wrapper">
-      
+
       <!-- Content Area -->
       <main class="content-area">
 
         <!-- 1. Hero Page / Section -->
         <section id="hero-page" class="page active landing-section">
           <div class="hero-container">
+
+            <!-- Left Column: Heading + CTA -->
             <div class="hero-left">
-              <span class="badge badge-success coming-soon-badge">COMING SOON</span>
-              <h1 class="hero-title">One App for All Your<br>Investments</h1>
-              <p class="hero-subtitle">Plan, track, and grow your investments in one simple, powerful workspace. Stay focused, collaborate better, and never miss a deadline again.</p>
-              <div class="hero-buttons">
-                <button class="btn btn-primary btn-download" id="action-hero-download">
-                  DOWNLOAD NOW <i data-lucide="arrow-right"></i>
+              <h1 class="hero-title">One Platform<br>for All Your<br><span class="hero-accent">Investments</span></h1>
+              <p class="hero-subtitle">Manage stocks, mutual funds, gold, crypto and more — all in one place.<br>Plan
+                better. Invest smarter. Grow faster.</p>
+              <div class="hero-cta-row">
+                <button class="hero-cta-pill-btn" id="action-hero-learn">
+                  Learn More
                 </button>
-                <button class="btn btn-secondary btn-learn-more" id="action-hero-learn">
-                  LEARN MORE
+                <button class="hero-cta-circle-btn" id="action-hero-arrow" aria-label="Explore Platform">
+                  <i data-lucide="arrow-up-right" style="width: 20px; height: 20px;"></i>
                 </button>
-              </div>
-              <div class="hero-rating">
-                <div class="stars">
-                  <i data-lucide="star" class="star-icon fill"></i>
-                  <i data-lucide="star" class="star-icon fill"></i>
-                  <i data-lucide="star" class="star-icon fill"></i>
-                  <i data-lucide="star" class="star-icon fill"></i>
-                  <i data-lucide="star" class="star-icon fill"></i>
-                </div>
-                <span class="rating-text"><strong>4.9/5</strong> AVERAGE RATING</span>
               </div>
             </div>
-            
-            <div class="hero-right">
-              <div class="phone-mockup">
-                <div class="phone-notch"></div>
-                <div class="phone-screen">
-                  <div class="phone-header">
-                    <span class="phone-time">9:41</span>
-                    <div class="phone-icons">
-                      <i data-lucide="signal" style="width: 12px; height: 12px;"></i>
-                      <i data-lucide="wifi" style="width: 12px; height: 12px;"></i>
-                      <i data-lucide="battery" style="width: 12px; height: 12px;"></i>
-                    </div>
+
+            <!-- Center Column: 3D Phone Mockup -->
+            <div class="hero-center">
+              <div class="phone-mockup-wrapper">
+                <div class="phone-mockup">
+                  <!-- Physical side buttons for 3D realism -->
+                  <div class="phone-side-btn phone-btn-silent" aria-hidden="true"></div>
+                  <div class="phone-side-btn phone-btn-volume-up" aria-hidden="true"></div>
+                  <div class="phone-side-btn phone-btn-volume-down" aria-hidden="true"></div>
+                  <div class="phone-side-btn phone-btn-power" aria-hidden="true"></div>
+                  <div class="phone-dynamic-island">
+                    <span class="dynamic-island-lens"></span>
                   </div>
-                  
-                  <div class="phone-app-content">
-                    <div class="phone-app-header">
-                      <span class="phone-app-title">My tasks</span>
-                      <div class="phone-app-actions">
-                        <i data-lucide="search" style="width: 16px; height: 16px;"></i>
-                        <div class="phone-avatar">AA</div>
+                  <div class="phone-screen">
+                    <div class="phone-header">
+                      <span class="phone-time">9:41</span>
+                      <div class="phone-icons">
+                        <i data-lucide="signal" style="width: 11px; height: 11px;"></i>
+                        <i data-lucide="wifi" style="width: 11px; height: 11px;"></i>
+                        <i data-lucide="battery-full" style="width: 11px; height: 11px;"></i>
                       </div>
                     </div>
-                    
-                    <div class="phone-section-title">TOP PRIORITY</div>
-                    
-                    <div class="phone-tasks-list">
-                      <div class="phone-task-card checked">
-                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
-                        <div class="phone-task-info">
-                          <span class="phone-task-name">Final Design Review</span>
-                          <span class="phone-task-project">Produlis App</span>
-                        </div>
-                        <span class="phone-priority-badge high">High Priority</span>
+
+                    <!-- App Greeting -->
+                    <div class="phone-greeting-row">
+                      <div class="phone-greeting-text">
+                        <span class="phone-greeting-hi">Hello, Arpit 👋</span>
+                        <span class="phone-greeting-sub">Welcome back!</span>
                       </div>
-                      
-                      <div class="phone-task-card">
-                        <div class="phone-task-check"></div>
-                        <div class="phone-task-info">
-                          <span class="phone-task-name">Landing page</span>
-                          <span class="phone-task-project">Feb 20</span>
-                        </div>
+                      <div class="phone-avatar-circle">AA</div>
+                    </div>
+
+                    <!-- Portfolio Value Card -->
+                    <div class="phone-portfolio-card">
+                      <button class="phone-portfolio-eye" type="button" aria-label="Toggle balance visibility">
+                        <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                      </button>
+                      <span class="phone-portfolio-label">Total Portfolio Value</span>
+                      <div class="phone-portfolio-value">₹2,45,678.90</div>
+                      <div class="phone-portfolio-change">
+                        <span class="phone-change-pill">▲ +4.35% (₹10,245.25) Today</span>
                       </div>
-                      
-                      <div class="phone-task-card checked">
-                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
-                        <div class="phone-task-info">
-                          <span class="phone-task-name">Wireframe Homepage</span>
-                          <span class="phone-task-project">Temlis</span>
+                      <svg class="phone-mini-chart" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true">
+                        <defs>
+                          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="rgba(96,165,250,0.45)" />
+                            <stop offset="100%" stop-color="rgba(96,165,250,0)" />
+                          </linearGradient>
+                        </defs>
+                        <path d="M0,42 C28,38 42,28 70,30 C98,32 112,18 140,16 C168,14 184,8 200,6" fill="none"
+                          stroke="#93c5fd" stroke-width="2.2" stroke-linecap="round" />
+                        <path d="M0,42 C28,38 42,28 70,30 C98,32 112,18 140,16 C168,14 184,8 200,6 L200,56 L0,56 Z"
+                          fill="url(#chartGrad)" />
+                      </svg>
+                    </div>
+
+                    <!-- Asset Allocation Row -->
+                    <div class="phone-section-row">
+                      <span class="phone-section-label">Asset Allocation</span>
+                      <span class="phone-section-link">View all</span>
+                    </div>
+                    <div class="phone-asset-chips">
+                      <div class="phone-asset-chip">
+                        <div class="phone-chip-icon" style="background: rgba(37,99,235,0.12); color: #2563eb;">
+                          <i data-lucide="bar-chart-2" style="width: 14px; height: 14px;"></i>
                         </div>
-                        <span class="phone-priority-badge high">High Priority</span>
+                        <span class="phone-chip-label">Stocks</span>
+                        <span class="phone-chip-pct">60%</span>
                       </div>
-                      
-                      <div class="phone-task-card checked">
-                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
-                        <div class="phone-task-info">
-                          <span class="phone-task-name">User Testing</span>
-                          <span class="phone-task-project">Produlis App</span>
+                      <div class="phone-asset-chip">
+                        <div class="phone-chip-icon" style="background: rgba(16,185,129,0.12); color: #10b981;">
+                          <i data-lucide="pie-chart" style="width: 14px; height: 14px;"></i>
                         </div>
-                        <span class="phone-priority-badge low">Low Priority</span>
+                        <span class="phone-chip-label">Mutual Funds</span>
+                        <span class="phone-chip-pct">20%</span>
                       </div>
-                      
-                      <div class="phone-task-card checked animate-pulse">
-                        <div class="phone-task-check"><i data-lucide="check" style="width: 10px; height: 10px;"></i></div>
-                        <div class="phone-task-info">
-                          <span class="phone-task-name">Final Design Review</span>
-                          <span class="phone-task-project">Produlis App</span>
+                      <div class="phone-asset-chip">
+                        <div class="phone-chip-icon" style="background: rgba(245,158,11,0.12); color: #f59e0b;">
+                          <i data-lucide="gem" style="width: 14px; height: 14px;"></i>
                         </div>
-                        <span class="phone-priority-badge high">High Priority</span>
+                        <span class="phone-chip-label">Gold</span>
+                        <span class="phone-chip-pct">10%</span>
+                      </div>
+                      <div class="phone-asset-chip">
+                        <div class="phone-chip-icon" style="background: rgba(236,72,153,0.12); color: #ec4899;">
+                          <i data-lucide="bitcoin" style="width: 14px; height: 14px;"></i>
+                        </div>
+                        <span class="phone-chip-label">Crypto</span>
+                        <span class="phone-chip-pct">10%</span>
                       </div>
                     </div>
-                  </div>
-                  
-                  <!-- Floating goals widget on phone screen -->
-                  <div class="phone-floating-widget">
-                    <div class="widget-header">
-                      <div class="widget-icon-bg">
-                        <i data-lucide="clock" style="width: 14px; height: 14px; color: var(--color-success);"></i>
+
+                    <!-- Watchlist -->
+                    <div class="phone-section-row">
+                      <span class="phone-section-label">Watchlist</span>
+                      <span class="phone-section-link">View all</span>
+                    </div>
+                    <div class="phone-watchlist">
+                      <div class="phone-watchlist-item">
+                        <div class="phone-wl-icon" style="background: #4c1d95;">N</div>
+                        <div class="phone-wl-meta">
+                          <span class="phone-wl-name">NIFTY 50</span>
+                          <span class="phone-wl-price">₹22,530.70</span>
+                        </div>
+                        <span class="phone-wl-change positive">▲ 1.25%</span>
                       </div>
-                      <div class="widget-meta">
-                        <span class="widget-label">Goals</span>
-                        <span class="widget-value-title">Rona Zepri</span>
+                      <div class="phone-watchlist-item">
+                        <div class="phone-wl-icon" style="background: #047857;">S</div>
+                        <div class="phone-wl-meta">
+                          <span class="phone-wl-name">SBI Life Gro..</span>
+                          <span class="phone-wl-price">₹1,345.60</span>
+                        </div>
+                        <span class="phone-wl-change positive">▲ 0.85%</span>
+                      </div>
+                      <div class="phone-watchlist-item">
+                        <div class="phone-wl-icon" style="background: #b45309;">G</div>
+                        <div class="phone-wl-meta">
+                          <span class="phone-wl-name">Gold (24K)</span>
+                          <span class="phone-wl-price">₹6,215/gm</span>
+                        </div>
+                        <span class="phone-wl-change positive">▲ 0.63%</span>
+                      </div>
+                      <div class="phone-watchlist-item">
+                        <div class="phone-wl-icon" style="background: #7e22ce;">₿</div>
+                        <div class="phone-wl-meta">
+                          <span class="phone-wl-name">Bitcoin</span>
+                          <span class="phone-wl-price">₹48,56,789</span>
+                        </div>
+                        <span class="phone-wl-change positive">▲ 2.35%</span>
                       </div>
                     </div>
-                    <div class="widget-stats-grid">
-                      <div class="widget-stat">
-                        <span class="widget-stat-lbl">Task</span>
-                        <span class="widget-stat-val">10/20</span>
+
+                    <!-- Phone Bottom Nav -->
+                    <div class="phone-bottom-nav">
+                      <div class="phone-bnav-item active">
+                        <i data-lucide="home" style="width: 18px; height: 18px;"></i>
+                        <span>Home</span>
                       </div>
-                      <div class="widget-stat">
-                        <span class="widget-stat-lbl">Time</span>
-                        <span class="widget-stat-val">10h/20h</span>
+                      <div class="phone-bnav-item">
+                        <i data-lucide="briefcase" style="width: 18px; height: 18px;"></i>
+                        <span>Portfolio</span>
                       </div>
-                      <div class="widget-stat">
-                        <span class="widget-stat-lbl">Projects</span>
-                        <span class="widget-stat-val">5/10</span>
+                      <div class="phone-bnav-fab-wrap">
+                        <div class="phone-bnav-fab">
+                          <i data-lucide="plus" style="width: 22px; height: 22px;"></i>
+                        </div>
+                        <span>Invest</span>
+                      </div>
+                      <div class="phone-bnav-item">
+                        <i data-lucide="heart" style="width: 18px; height: 18px;"></i>
+                        <span>Goals</span>
+                      </div>
+                      <div class="phone-bnav-item">
+                        <i data-lucide="user" style="width: 18px; height: 18px;"></i>
+                        <span>Buddy</span>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div class="phone-nav-bar">
-                    <i data-lucide="home" style="width: 18px; height: 18px; color: var(--color-equity);"></i>
-                    <i data-lucide="check-square" style="width: 18px; height: 18px;"></i>
-                    <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
-                    <i data-lucide="search" style="width: 18px; height: 18px;"></i>
-                    <i data-lucide="user" style="width: 18px; height: 18px;"></i>
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- Right Column: Info + Trust Stats -->
+            <div class="hero-right">
+              <div class="hero-info-block">
+                <div class="hero-crosshair-icon">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <line x1="16" y1="2" x2="16" y2="12" stroke="#2563eb" stroke-width="2" stroke-linecap="round" />
+                    <line x1="16" y1="20" x2="16" y2="30" stroke="#2563eb" stroke-width="2" stroke-linecap="round" />
+                    <line x1="2" y1="16" x2="12" y2="16" stroke="#2563eb" stroke-width="2" stroke-linecap="round" />
+                    <line x1="20" y1="16" x2="30" y2="16" stroke="#2563eb" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="16" cy="16" r="3" fill="#2563eb" />
+                  </svg>
+                </div>
+                <p class="hero-info-text">Your all-in-one platform to track, analyze and grow your wealth across
+                  multiple asset classes effortlessly.</p>
+              </div>
+
+              <div class="hero-trust-block">
+                <div class="hero-trust-avatars">
+                  <div class="hero-trust-avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop');">
+                  </div>
+                  <div class="hero-trust-avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop');">
+                  </div>
+                  <div class="hero-trust-avatar"
+                    style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop');">
+                  </div>
+                </div>
+                <div class="hero-trust-stat">2.3M+</div>
+                <p class="hero-trust-desc">Trusted by over 2.3 million users across 140+ countries</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Curved Dark Blue Bottom Container -->
+          <div class="hero-blue-container">
+            <div class="hero-blue-banner-content">
+              <span class="hero-blue-text">UNIFIED &nbsp;·&nbsp; INVEST &nbsp;·&nbsp; GROW</span>
+              <span class="hero-sparkle-icon">✦</span>
             </div>
           </div>
         </section>
@@ -246,10 +335,10 @@
         <!-- 1b. Profile Page (positioned after Home for scroll order) -->
         <section id="profile-page" class="page">
           <div class="profile-grid">
-            
+
             <!-- Left col: User Card & Risk profile -->
             <div style="display:flex; flex-direction:column; gap:24px;">
-              
+
               <!-- User Details card -->
               <div class="glass-card profile-card">
                 <div class="profile-avatar-lg" id="profile-avatar-letters">AA</div>
@@ -263,7 +352,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Risk profile card -->
               <div class="glass-card">
                 <div class="card-header-row">
@@ -271,215 +360,51 @@
                 </div>
                 <div class="risk-level-badge moderate" id="profile-risk-label">Moderate Risk Tolerance</div>
                 <p class="risk-desc" id="profile-risk-desc">
-                  You are comfortable with steady growth and moderate short-term fluctuations. Your suggested model allocation is 50% equities &amp; equity mutual funds, 30% fixed deposits/debt, and 20% gold/hedges.
+                  You are comfortable with steady growth and moderate short-term fluctuations. Your suggested model
+                  allocation is 50% equities &amp; equity mutual funds, 30% fixed deposits/debt, and 20% gold/hedges.
                 </p>
                 <button class="btn btn-secondary" id="profile-retake-quiz-btn">
                   Retake Risk Quiz
                 </button>
               </div>
-              
+
             </div>
-            
+
             <!-- Right col: Aggregated Accounts & Toggle Settings -->
             <div style="display:flex; flex-direction:column; gap:24px;">
-              
+
               <!-- Linked accounts card -->
               <div class="glass-card">
                 <div class="card-header-row">
                   <h4 class="card-title">Linked Data Consents</h4>
-                  <button class="btn btn-secondary" id="profile-link-consent-btn" style="padding:6px 12px; font-size:0.75rem;">
+                  <button class="btn btn-secondary" id="profile-link-consent-btn"
+                    style="padding:6px 12px; font-size:0.75rem;">
                     <i data-lucide="plus" style="width:14px;height:14px;"></i> Link More
                   </button>
                 </div>
-                
+
                 <div id="linked-accounts-container">
                   <!-- Populated via JS -->
                 </div>
               </div>
-              
+
               <!-- Notification toggles settings -->
               <div class="glass-card">
                 <div class="card-header-row" style="margin-bottom:20px;">
                   <h4 class="card-title">Alert &amp; Drift Rules</h4>
                 </div>
-                
+
                 <div class="toggle-settings-list" id="notification-settings-list">
                   <!-- Generated via JS -->
                 </div>
               </div>
-              
+
             </div>
-            
+
           </div>
         </section>
 
-        <!-- 2. Impacts Page / Section -->
-        <section id="impacts-page" class="page landing-section">
-          <div class="impacts-header-row">
-            <div class="impacts-intro">
-              <span class="badge badge-info">OUR IMPACTS</span>
-              <h2 class="section-title">Real Results.<br>Real Impact.</h2>
-            </div>
-            <div class="impacts-desc-container">
-              <p class="section-desc">See how thousands of users are transforming the way they work. From faster project completion to less stress, our platform helps you achieve more—every single day.</p>
-            </div>
-          </div>
-          
-          <div class="impacts-grid">
-            <!-- Card 1 -->
-            <div class="glass-card impact-card user-trust-card">
-              <div class="avatar-group-row">
-                <div class="avatar-group">
-                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop');"></div>
-                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop');"></div>
-                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop');"></div>
-                  <div class="group-avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&fit=crop');"></div>
-                </div>
-                <span class="trust-label">TRUST USER WORLD WIDE</span>
-              </div>
-              <p class="impact-text">Our platform helps you stay focused, meet deadlines, and achieve more every single day.</p>
-              <div class="impact-stat-big">10000+</div>
-              <span class="impact-stat-desc">Active users managing their daily work with ease</span>
-            </div>
-            
-            <!-- Card 2 (Dark styled glass card) -->
-            <div class="glass-card impact-card dark-impact-card">
-              <p class="impact-text text-white">Every task completed, every deadline met—our numbers reflect real progress made by real people like you.</p>
-              <div class="impact-rating-row">
-                <div class="impact-rating-val">4.9<span class="rating-max">/5</span></div>
-                <div class="rating-stars-column">
-                  <div class="stars gold">
-                    <i data-lucide="star" class="star-icon fill text-warning"></i>
-                    <i data-lucide="star" class="star-icon fill text-warning"></i>
-                    <i data-lucide="star" class="star-icon fill text-warning"></i>
-                    <i data-lucide="star" class="star-icon fill text-warning"></i>
-                    <i data-lucide="star" class="star-icon fill text-warning"></i>
-                  </div>
-                  <span class="stars-sub">Average user rating</span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Card 3 -->
-            <div class="glass-card impact-card">
-              <p class="impact-text">Our platform is built to deliver measurable results. From improved efficiency to stronger team collaboration, our impact is reflected in the numbers.</p>
-              <div class="impact-stat-large">99.9%</div>
-              <span class="impact-stat-desc">Uptime for reliable performance</span>
-            </div>
-            
-            <!-- Card 4 (Horizontal small card) -->
-            <div class="glass-card impact-card horizontal-impact-card">
-              <div class="stopwatch-icon-bg">
-                <i data-lucide="clock" class="text-success"></i>
-              </div>
-              <div class="horizontal-impact-text">
-                <strong>3X FASTER PROJECT COMPLETION</strong>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        <!-- 3. Features Page / Section -->
-        <section id="features-page" class="page landing-section">
-          <div class="section-center-header">
-            <span class="badge badge-info">OUR FEATURES</span>
-            <h2 class="section-title">Features designed for your success.</h2>
-            <p class="section-subtitle">Explore the features designed to keep you organized and on track.</p>
-          </div>
-          
-          <div class="features-grid">
-            <!-- Feature Card 1 -->
-            <div class="glass-card feature-card-item">
-              <div class="feature-icon-badge">
-                <i data-lucide="clock"></i>
-              </div>
-              <h3 class="feature-title">Smart Task Organization</h3>
-              <p class="feature-desc">Create, prioritize, and categorize tasks with ease. Use tags, due dates, and custom lists to stay on top of everything.</p>
-              
-              <div class="feature-mini-graphic">
-                <div class="mini-task-card">
-                  <div class="checked-dot"><i data-lucide="check" style="width:10px;height:10px;"></i></div>
-                  <span class="mini-task-name">User Testing</span>
-                  <span class="mini-priority normal">Normal</span>
-                </div>
-                <div class="mini-task-card">
-                  <div class="checked-dot"><i data-lucide="check" style="width:10px;height:10px;"></i></div>
-                  <span class="mini-task-name">Homepage Review</span>
-                  <span class="mini-priority high">High Priority</span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Feature Card 2 -->
-            <div class="glass-card feature-card-item">
-              <div class="feature-icon-badge">
-                <i data-lucide="clock"></i>
-              </div>
-              <h3 class="feature-title">Visual Progress Tracking</h3>
-              <p class="feature-desc">Kanban boards, timelines, and progress charts help you see what's done, what's next, and what needs attention.</p>
-              
-              <div class="feature-mini-graphic flex-center">
-                <div class="mini-phone-view">
-                  <div class="mini-phone-header">
-                    <span class="lbl-small">9:41</span>
-                    <i data-lucide="clock" style="width:10px;height:10px;color:var(--color-success)"></i>
-                  </div>
-                  <div class="mini-phone-body">
-                    <span class="welcome-lbl">Good morning, Rona 🔥</span>
-                    <div class="work-time-card">
-                      <span class="work-title">Work this week</span>
-                      <span class="work-timer font-mono">21:38:27</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Feature Card 3 -->
-            <div class="glass-card feature-card-item">
-              <div class="feature-icon-badge">
-                <i data-lucide="clock"></i>
-              </div>
-              <h3 class="feature-title">Smart Reminders & Notifications</h3>
-              <p class="feature-desc">Never miss a deadline again. Get notified at the right time, on the right device.</p>
-              
-              <div class="feature-mini-graphic flex-center">
-                <div class="mini-goals-widget">
-                  <div class="widget-header-small">
-                    <i data-lucide="clock" style="width:12px;height:12px;color:var(--color-success)"></i>
-                    <span class="widget-title-small">Goals - Rona Zepri</span>
-                  </div>
-                  <div class="widget-grid-small">
-                    <div class="grid-col"><span class="lbl-dim">Task</span><strong>10/20</strong></div>
-                    <div class="grid-col"><span class="lbl-dim">Time</span><strong>10h/20h</strong></div>
-                    <div class="grid-col"><span class="lbl-dim">Projects</span><strong>5/10</strong></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Feature Card 4 -->
-            <div class="glass-card feature-card-item">
-              <div class="feature-icon-badge">
-                <i data-lucide="clock"></i>
-              </div>
-              <h3 class="feature-title">Team Collaboration</h3>
-              <p class="feature-desc">Collaborate with your team in real time. Share tasks, projects, and files to get work done together.</p>
-              
-              <div class="feature-mini-graphic flex-center">
-                <div class="mini-collab-widget">
-                  <div class="collab-avatars">
-                    <div class="collab-avatar" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&fit=crop');"></div>
-                    <div class="collab-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&fit=crop');"></div>
-                    <div class="collab-avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&fit=crop');"></div>
-                    <div class="collab-icon-plus"><i data-lucide="plus" style="width:10px;height:10px;color:white;"></i></div>
-                  </div>
-                  <span class="collab-text">Team Assigned</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <!-- 4. How It Works Page / Section -->
         <section id="how-it-works-page" class="page landing-section">
@@ -488,79 +413,108 @@
             <h2 class="section-title">Get started in 3 simple steps.</h2>
             <p class="section-subtitle">Explore the features designed to keep you organized and on track.</p>
           </div>
-          
+
           <div class="steps-grid">
             <!-- Step 1 -->
-            <div class="glass-card step-card" style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+            <div class="glass-card step-card"
+              style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
               <div style="margin-bottom: 24px;">
-                <span class="step-num-badge" style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP 1</span>
+                <span class="step-num-badge"
+                  style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP
+                  1</span>
               </div>
-              
-              <div class="step-graphic" style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+
+              <div class="step-graphic"
+                style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                 <i data-lucide="smartphone" style="color: #a78bfa; width: 36px; height: 36px; margin-bottom: 12px;"></i>
-                <h4 style="color: white; font-size: 14px; font-weight: 600; text-align: center; margin-bottom: 16px;">Sign up with your mobile number</h4>
+                <h4 style="color: white; font-size: 14px; font-weight: 600; text-align: center; margin-bottom: 16px;">
+                  Sign up with your mobile number</h4>
                 <div style="display: flex; gap: 12px; justify-content: center;">
-                  <button style="background: rgba(0,208,156,0.15); border: 1px solid rgba(0,208,156,0.3); color: #00d09c; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">App Store</button>
-                  <button style="background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #3b82f6; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Play Store</button>
+                  <button
+                    style="background: rgba(0,208,156,0.15); border: 1px solid rgba(0,208,156,0.3); color: #00d09c; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">App
+                    Store</button>
+                  <button
+                    style="background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #3b82f6; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Play
+                    Store</button>
                 </div>
               </div>
-              
-              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">Create your account</h3>
-              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Sign up using your mobile number and OTP. Complete a quick KYC in under 2 minutes — fully digital, no paperwork needed.</p>
+
+              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">
+                Create your account</h3>
+              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Sign up using your mobile
+                number and OTP. Complete a quick KYC in under 2 minutes — fully digital, no paperwork needed.</p>
             </div>
-            
+
             <!-- Step 2 -->
-            <div class="glass-card step-card" style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+            <div class="glass-card step-card"
+              style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
               <div style="margin-bottom: 24px;">
-                <span class="step-num-badge" style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP 2</span>
+                <span class="step-num-badge"
+                  style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP
+                  2</span>
               </div>
-              
-              <div class="step-graphic" style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; gap: 12px; justify-content: center; position: relative; overflow: hidden;">
+
+              <div class="step-graphic"
+                style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; gap: 12px; justify-content: center; position: relative; overflow: hidden;">
                 <!-- Faded out item above -->
-                <div style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.4;">
+                <div
+                  style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); opacity: 0.4;">
                   <i data-lucide="bar-chart-2" style="color: #60a5fa; width: 18px; height: 18px;"></i>
                   <span style="color: white; font-size: 13px;">HDFC Bank — Linked ✓</span>
                 </div>
                 <!-- Main item -->
-                <div style="background: rgba(255,255,255,0.08); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                <div
+                  style="background: rgba(255,255,255,0.08); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
                   <i data-lucide="trending-up" style="color: #8b5cf6; width: 18px; height: 18px;"></i>
                   <span style="color: white; font-size: 13px; font-weight: 500;">Zerodha Demat — Linked ✓</span>
                 </div>
                 <!-- Pending item -->
-                <div style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <div
+                  style="background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05);">
                   <i data-lucide="pie-chart" style="color: #fbbf24; width: 18px; height: 18px;"></i>
                   <span style="color: white; font-size: 13px;">MF Central — Linking...</span>
                 </div>
               </div>
-              
-              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">Link all your accounts</h3>
-              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Use RBI's Account Aggregator framework to securely link your bank, demat, and mutual fund accounts — one consent, all your data.</p>
+
+              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">
+                Link all your accounts</h3>
+              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Use RBI's Account
+                Aggregator framework to securely link your bank, demat, and mutual fund accounts — one consent, all your
+                data.</p>
             </div>
-            
+
             <!-- Step 3 -->
-            <div class="glass-card step-card" style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+            <div class="glass-card step-card"
+              style="display: flex; flex-direction: column; text-align: left; background: #ffffff; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
               <div style="margin-bottom: 24px;">
-                <span class="step-num-badge" style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP 3</span>
+                <span class="step-num-badge"
+                  style="background: #00d09c; color: white; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; letter-spacing: 0.5px;">STEP
+                  3</span>
               </div>
-              
-              <div class="step-graphic" style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: flex-end; position: relative;">
-                <div style="position: absolute; top: 20px; left: 24px; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 1px;">YOUR NETWORTH GROWTH</div>
-                
-                <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 80px; margin-top: 30px;">
+
+              <div class="step-graphic"
+                style="background: #151e2b; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-height: 180px; display: flex; flex-direction: column; justify-content: flex-end; position: relative;">
+                <div
+                  style="position: absolute; top: 20px; left: 24px; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 1px;">
+                  YOUR NETWORTH GROWTH</div>
+
+                <div
+                  style="display: flex; align-items: flex-end; justify-content: space-between; height: 80px; margin-top: 30px;">
                   <!-- Bars with green, blue, purple colors -->
                   <div style="width: 12%; background: #10b981; height: 30%; border-radius: 3px 3px 0 0;"></div>
                   <div style="width: 12%; background: #10b981; height: 45%; border-radius: 3px 3px 0 0;"></div>
                   <div style="width: 12%; background: #10b981; height: 40%; border-radius: 3px 3px 0 0;"></div>
-                  
+
                   <div style="width: 12%; background: #3b82f6; height: 55%; border-radius: 3px 3px 0 0;"></div>
                   <div style="width: 12%; background: #3b82f6; height: 60%; border-radius: 3px 3px 0 0;"></div>
                   <div style="width: 12%; background: #3b82f6; height: 75%; border-radius: 3px 3px 0 0;"></div>
-                  
+
                   <div style="width: 12%; background: #8b5cf6; height: 85%; border-radius: 3px 3px 0 0;"></div>
                   <div style="width: 12%; background: #8b5cf6; height: 100%; border-radius: 3px 3px 0 0;"></div>
                 </div>
-                
-                <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.4);">
+
+                <div
+                  style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 11px; color: rgba(255,255,255,0.4);">
                   <span>Jan</span>
                   <span>Apr</span>
                   <span>Jul</span>
@@ -568,9 +522,11 @@
                   <span>Now</span>
                 </div>
               </div>
-              
-              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">Track, plan & grow</h3>
-              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Your unified dashboard is ready. Set goals, get AI insights, start SIPs, and watch your wealth compound — all in one place.</p>
+
+              <h3 class="step-title" style="font-size: 22px; margin-bottom: 12px; font-weight: 700; color: #111827;">
+                Track, plan & grow</h3>
+              <p class="step-desc" style="color: #4b5563; line-height: 1.6; font-size: 15px;">Your unified dashboard is
+                ready. Set goals, get AI insights, start SIPs, and watch your wealth compound — all in one place.</p>
             </div>
           </div>
         </section>
@@ -582,7 +538,8 @@
               <h3 id="dashboard-greeting">Good afternoon, Arpit</h3>
               <div class="welcome-sub">
                 <span id="dashboard-date">Thursday, June 25, 2026</span>
-                <span class="badge badge-success" id="market-status-badge"><i data-lucide="clock" style="width:12px;height:12px;"></i> Markets Open</span>
+                <span class="badge badge-success" id="market-status-badge"><i data-lucide="clock"
+                    style="width:12px;height:12px;"></i> Markets Open</span>
               </div>
             </div>
             <div class="welcome-actions">
@@ -594,7 +551,7 @@
               </button>
             </div>
           </div>
-          
+
           <!-- Live Market Indices Strip -->
           <div class="market-indices-strip" id="market-indices-strip">
             <div class="market-indices-loading">Loading live market indices…</div>
@@ -605,17 +562,18 @@
             <div class="nudge-content">
               <span class="nudge-icon"><i data-lucide="alert-triangle"></i></span>
               <div class="nudge-text">
-                <strong>Rebalancing suggested</strong> — equity is at 58%, above your 50% target. Consider moving ₹18,000 to debt funds.
+                <strong>Rebalancing suggested</strong> — equity is at 58%, above your 50% target. Consider moving
+                ₹18,000 to debt funds.
               </div>
             </div>
             <div class="nudge-close" id="close-dashboard-nudge">
               <i data-lucide="x"></i>
             </div>
           </div>
-          
+
           <!-- Agent-style Bento Grid for Finance -->
           <div class="agent-bento-grid" id="dashboard-agent-grid">
-            
+
             <!-- Card 1: Asset Flow (Agent Pipeline style) -->
             <div class="feat-card col-span-1 h-260">
               <div class="feat-card-header">
@@ -748,7 +706,8 @@
                 </div>
               </div>
               <div style="display:flex; gap:8px; margin-bottom:10px;">
-                <button class="btn btn-secondary" id="portfolio-export-csv-btn" style="padding:6px 12px; font-size:0.75rem; width:100%; justify-content:center;">
+                <button class="btn btn-secondary" id="portfolio-export-csv-btn"
+                  style="padding:6px 12px; font-size:0.75rem; width:100%; justify-content:center;">
                   <i data-lucide="download" style="width:14px;height:14px;"></i> Export CSV
                 </button>
               </div>
@@ -770,7 +729,7 @@
 
           </div>
         </section>
-        
+
         <!-- 5. Invest Page -->
         <section id="invest-page" class="page">
           <div class="filter-tabs-container" id="invest-category-tabs">
@@ -779,7 +738,7 @@
             <button class="filter-tab" data-category="gold">Digital Gold</button>
             <button class="filter-tab" data-category="fd">Fixed Deposits</button>
           </div>
-          
+
           <div class="chips-container" id="invest-sub-filters">
             <button class="chip-btn active" data-sub="all">All</button>
             <button class="chip-btn" data-sub="equity">Equity funds</button>
@@ -789,9 +748,11 @@
             <button class="chip-btn" data-sub="index">Index funds</button>
           </div>
 
-          <div class="search-container" id="invest-stock-search-wrap" style="display:flex; max-width:420px; margin-bottom:20px;">
+          <div class="search-container" id="invest-stock-search-wrap"
+            style="display:flex; max-width:420px; margin-bottom:20px;">
             <i data-lucide="search"></i>
-            <input type="text" class="search-input" id="invest-stock-search-input" placeholder="Search mutual funds by name…">
+            <input type="text" class="search-input" id="invest-stock-search-input"
+              placeholder="Search mutual funds by name…">
           </div>
 
           <!-- Fund Cards bento grid -->
@@ -799,7 +760,7 @@
             <!-- Dynamically populated from JS -->
           </div>
         </section>
-        
+
         <!-- 6. Goals Page -->
         <section id="goals-page" class="page">
           <div class="welcome-row">
@@ -813,41 +774,45 @@
               <i data-lucide="plus"></i> New Goal
             </button>
           </div>
-          
+
           <!-- Achievement Milestone Nudge -->
           <div class="nudge-card nudge-success" id="goals-milestone-nudge">
             <div class="nudge-content">
               <span class="nudge-icon"><i data-lucide="award"></i></span>
               <div class="nudge-text">
-                <strong>Europe Trip is on track!</strong> You'll hit your ₹3,00,000 target one month early based on recent extra SIP allocations.
+                <strong>Europe Trip is on track!</strong> You'll hit your ₹3,00,000 target one month early based on
+                recent extra SIP allocations.
               </div>
             </div>
             <div class="nudge-close" id="close-goals-nudge">
               <i data-lucide="x"></i>
             </div>
           </div>
-          
+
           <!-- Goal Cards Grid -->
           <div class="dashboard-grid" id="goals-cards-grid">
             <!-- Populated via JS -->
           </div>
         </section>
-        
+
         <!-- 7. Learn Page -->
         <section id="learn-page" class="page">
           <div class="learn-tabs">
-            <button class="learn-tab active" data-tab="explainers" onclick="switchLearnTab(this, 'explainers')">Explainers & Literacy</button>
-            <button class="learn-tab" data-tab="calculators" onclick="switchLearnTab(this, 'calculators')">Calculators</button>
-            <button class="learn-tab" data-tab="quizzes" onclick="switchLearnTab(this, 'quizzes')">Finance Quizzes</button>
+            <button class="learn-tab active" data-tab="explainers"
+              onclick="switchLearnTab(this, 'explainers')">Explainers & Literacy</button>
+            <button class="learn-tab" data-tab="calculators"
+              onclick="switchLearnTab(this, 'calculators')">Calculators</button>
+            <button class="learn-tab" data-tab="quizzes" onclick="switchLearnTab(this, 'quizzes')">Finance
+              Quizzes</button>
           </div>
-          
+
           <!-- TAB 1: Explainers -->
           <div class="learn-section active" id="learn-explainers-section">
             <div class="dashboard-grid" id="explainers-grid">
               <!-- Grid of 6 explainers (Populated from JS) -->
             </div>
           </div>
-          
+
           <!-- TAB 2: Calculators -->
           <div class="learn-section" id="learn-calculators-section">
             <div style="display:flex; gap:12px; margin-bottom:20px; overflow-x:auto; padding-bottom:4px;">
@@ -857,7 +822,7 @@
               <button class="chip-btn" id="calc-tab-fd">FD Returns</button>
               <button class="chip-btn" id="calc-tab-goals">Goal Planner</button>
             </div>
-            
+
             <!-- Calculator Container -->
             <div class="glass-card">
               <div class="calculator-grid" id="calculator-inner-box">
@@ -865,7 +830,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- TAB 3: Quizzes -->
           <div class="learn-section" id="learn-quizzes-section">
             <div class="glass-card quiz-container" id="quiz-container">
@@ -873,11 +838,11 @@
             </div>
           </div>
         </section>
-        
+
         <!-- 8. Finance Buddy Page -->
         <section id="buddy-page" class="page">
           <div class="chat-layout">
-            
+
             <!-- Left panel: Chat Interface (Wider) -->
             <div class="glass-card chat-panel">
               <div class="chat-header">
@@ -886,26 +851,28 @@
                     <span>AI Finance Buddy</span>
                     <span class="badge badge-info">AI Beta</span>
                   </div>
-                  <span class="chat-buddy-subtitle">Powered by AI · Educational purposes only, not formal investment advice</span>
+                  <span class="chat-buddy-subtitle">Powered by AI · Educational purposes only, not formal investment
+                    advice</span>
                 </div>
                 <div class="status-badge">
                   <div class="status-dot"></div>
                   <span>Online</span>
                 </div>
               </div>
-              
+
               <!-- Chat window messages -->
               <div class="chat-messages-container" id="chat-messages">
                 <!-- Initial welcome message from AI Buddy -->
                 <div class="message-wrapper ai">
                   <div class="message-avatar">AI</div>
                   <div class="message-bubble">
-                    <p>Namaste! I am your AssetBridge Finance Buddy. I can analyse your current portfolio and give you financial literacy tips, rebalancing guides, or tax estimates.</p>
+                    <p>Namaste! I am your AssetBridge Finance Buddy. I can analyse your current portfolio and give you
+                      financial literacy tips, rebalancing guides, or tax estimates.</p>
                     <p>How can I help you today?</p>
                   </div>
                 </div>
               </div>
-              
+
               <!-- Suggested Question Chips -->
               <div class="suggested-chips" id="suggested-questions-row">
                 <button class="suggested-chip">What is my portfolio risk?</button>
@@ -913,31 +880,34 @@
                 <button class="suggested-chip">Explain ELSS tax saving</button>
                 <button class="suggested-chip">Should I rebalance now?</button>
               </div>
-              
+
               <!-- Input bar -->
               <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chat-input-field" placeholder="Ask about asset allocation, SIP math, rebalancing...">
+                <input type="text" class="chat-input" id="chat-input-field"
+                  placeholder="Ask about asset allocation, SIP math, rebalancing...">
                 <button class="btn btn-primary" id="chat-send-btn" style="padding: 12px 20px;">
                   <i data-lucide="send"></i>
                 </button>
               </div>
-              
+
               <!-- Disclaimer footer -->
               <div class="disclaimer-box">
                 <i data-lucide="alert-circle" style="width:14px; height:14px; flex-shrink:0;"></i>
-                <span>Finance Buddy provides general financial information for educational purposes only. This is not formal investment advice. Please consult a SEBI Registered Investment Advisor (RIA) before making investment decisions.</span>
+                <span>Finance Buddy provides general financial information for educational purposes only. This is not
+                  formal investment advice. Please consult a SEBI Registered Investment Advisor (RIA) before making
+                  investment decisions.</span>
               </div>
             </div>
-            
+
             <!-- Right panel: Portfolio Health -->
             <div class="health-panel">
-              
+
               <!-- Health score card -->
               <div class="glass-card health-score-hero">
                 <div class="stat-label" style="margin-bottom:12px;">Portfolio Health Score</div>
                 <div class="health-score-val" id="health-score-num">7.2</div>
                 <div class="health-score-label" id="health-score-txt">Good Health</div>
-                
+
                 <div class="health-subscores">
                   <div class="health-subscore-item">
                     <div class="health-subscore-label">
@@ -948,17 +918,18 @@
                       <div class="health-subscore-bar-fill" id="health-bar-div" style="width: 80%;"></div>
                     </div>
                   </div>
-                  
+
                   <div class="health-subscore-item">
                     <div class="health-subscore-label">
                       <span>Risk Alignment</span>
                       <strong id="health-score-risk">6/10</strong>
                     </div>
                     <div class="health-subscore-bar-bg">
-                      <div class="health-subscore-bar-fill" id="health-bar-risk" style="width: 60%; background:var(--color-warning);"></div>
+                      <div class="health-subscore-bar-fill" id="health-bar-risk"
+                        style="width: 60%; background:var(--color-warning);"></div>
                     </div>
                   </div>
-                  
+
                   <div class="health-subscore-item">
                     <div class="health-subscore-label">
                       <span>Goal Progress</span>
@@ -970,7 +941,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Advisor connect nudge -->
               <div class="glass-card" style="border-color: rgba(59, 130, 246, 0.2);">
                 <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -978,18 +949,19 @@
                   <strong style="font-size:0.95rem;">Talk to a human advisor</strong>
                 </div>
                 <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.4; margin-bottom:16px;">
-                  Book a free 30-minute discovery call with a certified SEBI Registered Investment Advisor (RIA) to optimize your allocation plan.
+                  Book a free 30-minute discovery call with a certified SEBI Registered Investment Advisor (RIA) to
+                  optimize your allocation plan.
                 </p>
                 <button class="btn btn-primary" id="buddy-book-call-btn" style="width:100%; justify-content:center;">
                   Book Free RIA Session
                 </button>
               </div>
-              
+
             </div>
-            
+
           </div>
         </section>
-        
+
         <!-- 9. Notifications Page -->
         <section id="notifications-page" class="page">
           <div class="notif-header-row">
@@ -998,17 +970,17 @@
               <i data-lucide="check-check"></i> Mark all read
             </button>
           </div>
-          
+
           <div class="notif-list" id="notifications-feed">
             <!-- Populated via JS -->
           </div>
         </section>
-        
+
         <!-- (Profile page moved above, see section 1b) -->
-        
+
       </main>
     </div>
-    
+
   </div>
 
   <!-- MODALS OVERLAYS -->
@@ -1073,8 +1045,9 @@
     <div class="modal-content">
       <div class="modal-close-btn" id="close-modal-checkout"><i data-lucide="x"></i></div>
       <h3 class="modal-title" id="checkout-title">Confirm Purchase</h3>
-      
-      <div style="background:rgba(0,0,0,0.15); padding:16px; border-radius:var(--border-radius-md); margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-glass);">
+
+      <div
+        style="background:rgba(0,0,0,0.15); padding:16px; border-radius:var(--border-radius-md); margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-glass);">
         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
           <span style="color:var(--text-secondary)">Asset Class:</span>
           <strong id="checkout-asset-class">Mutual Fund</strong>
@@ -1088,7 +1061,7 @@
           <strong id="checkout-asset-risk" style="color:var(--color-warning);">Moderate Risk</strong>
         </div>
       </div>
-      
+
       <div class="modal-form-group">
         <label for="checkout-amount-input">Investment Amount (INR)</label>
         <input type="number" id="checkout-amount-input" value="10000" min="1000">
@@ -1159,11 +1132,11 @@
     <div class="modal-content" style="max-width:550px;">
       <div class="modal-close-btn" id="close-modal-quiz"><i data-lucide="x"></i></div>
       <h3 class="modal-title">Risk Profile Diagnostic</h3>
-      
+
       <div id="quiz-question-container">
         <!-- Swapped dynamically in JS -->
       </div>
-      
+
       <div class="modal-footer-actions">
         <button class="btn btn-secondary" id="quiz-modal-cancel">Cancel Quiz</button>
       </div>
@@ -1176,7 +1149,8 @@
       <div class="modal-close-btn" id="close-modal-call"><i data-lucide="x"></i></div>
       <h3 class="modal-title">Schedule Certified RIA Call</h3>
       <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.4; margin-bottom:20px;">
-        Connect with a certified SEBI Registered Investment Advisor (RIA) to align your mutual fund choices with your actual risk appetite and goal milestones.
+        Connect with a certified SEBI Registered Investment Advisor (RIA) to align your mutual fund choices with your
+        actual risk appetite and goal milestones.
       </p>
       <div class="modal-form-group">
         <label for="call-date-input">Select Date</label>
@@ -1197,37 +1171,39 @@
     </div>
   </div>
   <!-- Auth Modal -->
-<div class="modal-overlay" id="modal-auth">
-  <div class="modal-content">
-    <div class="modal-close-btn" id="close-modal-auth"><i data-lucide="x"></i></div>
-    <h3 class="modal-title" id="auth-modal-title">Sign In to AssetBridge</h3>
-    
-    <div class="modal-form-group" id="auth-name-group" style="display: none;">
-      <label for="auth-name-input">Full Name</label>
-      <input type="text" id="auth-name-input" placeholder="e.g. Arpit Agarwal">
-    </div>
+  <div class="modal-overlay" id="modal-auth">
+    <div class="modal-content">
+      <div class="modal-close-btn" id="close-modal-auth"><i data-lucide="x"></i></div>
+      <h3 class="modal-title" id="auth-modal-title">Sign In to AssetBridge</h3>
 
-    <div class="modal-form-group">
-      <label for="auth-email-input">Email Address</label>
-      <input type="email" id="auth-email-input" placeholder="name@example.com">
-    </div>
+      <div class="modal-form-group" id="auth-name-group" style="display: none;">
+        <label for="auth-name-input">Full Name</label>
+        <input type="text" id="auth-name-input" placeholder="e.g. Arpit Agarwal">
+      </div>
 
-    <div class="modal-form-group">
-      <label for="auth-password-input">Password</label>
-      <input type="password" id="auth-password-input" placeholder="••••••••">
-    </div>
+      <div class="modal-form-group">
+        <label for="auth-email-input">Email Address</label>
+        <input type="email" id="auth-email-input" placeholder="name@example.com">
+      </div>
 
-    <div class="modal-footer-actions" style="flex-direction: column; gap: 10px;">
-      <button class="btn btn-primary" id="auth-submit-btn" style="width:100%; justify-content:center;">Sign In</button>
-      <button class="btn btn-secondary" id="auth-toggle-mode-btn" style="width:100%; justify-content:center;">
-        Need an account? Sign Up
-      </button>
+      <div class="modal-form-group">
+        <label for="auth-password-input">Password</label>
+        <input type="password" id="auth-password-input" placeholder="••••••••">
+      </div>
+
+      <div class="modal-footer-actions" style="flex-direction: column; gap: 10px;">
+        <button class="btn btn-primary" id="auth-submit-btn" style="width:100%; justify-content:center;">Sign
+          In</button>
+        <button class="btn btn-secondary" id="auth-toggle-mode-btn" style="width:100%; justify-content:center;">
+          Need an account? Sign Up
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Update your script tag at the bottom of index.html -->
-<script type="module" src="app.js?v=1.2"></script>
+  <!-- Update your script tag at the bottom of index.html -->
+  <script type="module" src="app.js?v=1.2"></script>
 
 </body>
+
 </html>
